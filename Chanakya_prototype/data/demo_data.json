@@ -110,6 +110,160 @@
       },
       "source_url": "https://www.bis.gov.in/",
       "demo": true
+    },
+    {
+      "is_number": "IS 4984:2016",
+      "title": "High Density Polyethylene (HDPE) Pipes for Water Supply \u2014 Specification",
+      "category": "Pipes & Fittings",
+      "sector": "Civil & Water Infrastructure",
+      "status": "ACTIVE",
+      "edition": "2016 (Rev 4)",
+      "last_verified": "2026-09-15",
+      "currency_risk": 0.05,
+      "scope": "Covers requirements for HDPE pipes for potable water supplies, sewage and industrial effluents.",
+      "certification": {
+        "scheme": "Scheme-I (ISI Mark)",
+        "mandatory": true,
+        "source": "DPIIT QCO Order 2023"
+      },
+      "qco": {
+        "status": "MANDATORY_QCO",
+        "reference": "S.O. 1284(E)"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS 73:2013",
+      "title": "Paving Bitumen \u2014 Specification (Fourth Revision)",
+      "category": "Petroleum & Road Materials",
+      "sector": "Highways & Transport",
+      "status": "ACTIVE",
+      "edition": "2013 (Amended 2022)",
+      "last_verified": "2026-09-14",
+      "currency_risk": 0.04,
+      "scope": "Covers four viscosity grades (VG-10, VG-20, VG-30, VG-40) of paving bitumen for highway construction.",
+      "certification": {
+        "scheme": "Scheme-I (ISI Mark)",
+        "mandatory": true,
+        "source": "Ministry of Petroleum QCO"
+      },
+      "qco": {
+        "status": "MANDATORY_QCO",
+        "reference": "MoRTH Circular 2021/Bitumen"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS 2062:2011",
+      "title": "Hot Rolled Medium and High Tensile Structural Steel \u2014 Specification",
+      "category": "Structural Metallurgy",
+      "sector": "Heavy Engineering & Bridges",
+      "status": "ACTIVE",
+      "edition": "2011 (Rev 7)",
+      "last_verified": "2026-09-10",
+      "currency_risk": 0.09,
+      "scope": "Specifies requirements for steel plates, sections and bars for welded and bolted construction.",
+      "certification": {
+        "scheme": "Scheme-I (ISI Mark)",
+        "mandatory": true,
+        "source": "Ministry of Steel QCO 2020"
+      },
+      "qco": {
+        "status": "MANDATORY_QCO",
+        "reference": "Steel Quality Control Order S.O. 1823(E)"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS 269:2015",
+      "title": "Ordinary Portland Cement \u2014 Specification (Sixth Revision)",
+      "category": "Cement & Concrete",
+      "sector": "Construction Infrastructure",
+      "status": "ACTIVE",
+      "edition": "2015",
+      "last_verified": "2026-09-16",
+      "currency_risk": 0.03,
+      "scope": "Specifies chemical and physical requirements for 33, 43 and 53 grade ordinary Portland cement.",
+      "certification": {
+        "scheme": "Scheme-I (ISI Mark)",
+        "mandatory": true,
+        "source": "Cement Control Order"
+      },
+      "qco": {
+        "status": "MANDATORY_QCO",
+        "reference": "S.O. 883(E)"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS 694:2010",
+      "title": "Polyvinyl Chloride Insulated Cables with Rigid and Flexible Conductor",
+      "category": "Electrical Cables",
+      "sector": "Power & Energy",
+      "status": "ACTIVE",
+      "edition": "2010",
+      "last_verified": "2026-09-12",
+      "currency_risk": 0.07,
+      "scope": "Covers PVC cables for working voltages up to 1100 V for electric power and lighting.",
+      "certification": {
+        "scheme": "Scheme-I (ISI Mark)",
+        "mandatory": true,
+        "source": "DPIIT Electrical QCO"
+      },
+      "qco": {
+        "status": "MANDATORY_QCO",
+        "reference": "S.O. 2914(E)"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS 778:1984",
+      "title": "Copper Alloy Gate, Globe and Check Valves for Water Works Purposes",
+      "category": "Valves & Fluid Control",
+      "sector": "Industrial Utilities",
+      "status": "ACTIVE",
+      "edition": "1984 (Reaffirmed 2020)",
+      "last_verified": "2026-08-20",
+      "currency_risk": 0.18,
+      "scope": "Covers copper alloy gate, globe and check valves suitable for water and steam pipelines.",
+      "certification": {
+        "scheme": "ISI",
+        "mandatory": false,
+        "source": "Voluntary Certification"
+      },
+      "qco": {
+        "status": "NO_DEMO_MATCH",
+        "reference": "SYNTHETIC-FIXTURE"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS 800:2007",
+      "title": "General Construction in Steel \u2014 Code of Practice (Third Revision)",
+      "category": "Design Codes",
+      "sector": "Structural Civil",
+      "status": "ACTIVE",
+      "edition": "2007 (Reaffirmed 2021)",
+      "last_verified": "2026-09-17",
+      "currency_risk": 0.02,
+      "scope": "Comprehensive structural design code for hot-rolled steel frameworks.",
+      "certification": {
+        "scheme": "\u2014",
+        "mandatory": false,
+        "source": "National Building Code (NBC)"
+      },
+      "qco": {
+        "status": "NO_DEMO_MATCH",
+        "reference": "SYNTHETIC-FIXTURE"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
     }
   ],
   "relationships": [
@@ -140,6 +294,20 @@
       "type": "superseded_by",
       "verification": "VERIFIED",
       "evidence": "EV-DEMO-04"
+    },
+    {
+      "source": "IS 4984:2016",
+      "target": "IS DEMO-205:2023",
+      "type": "test_method",
+      "verification": "VERIFIED",
+      "evidence": "EV-PIPE-01"
+    },
+    {
+      "source": "IS 2062:2011",
+      "target": "IS 800:2007",
+      "type": "design_code",
+      "verification": "VERIFIED",
+      "evidence": "EV-STEEL-01"
     }
   ],
   "demo_response": {

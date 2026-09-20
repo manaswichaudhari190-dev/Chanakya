@@ -215,34 +215,196 @@ def recommend(req: RecommendRequest):
 
     low = text.lower()
 
-    # Deterministic query routing for interactive demo experience
-    if any(kw in low for kw in ["rubber", "lining", "vulcanized", "tank", "118"]):
-        # Canonical primary demo case
-        res["extracted"]["product"] = "vulcanized natural rubber sheet"
-        res["extracted"]["application"] = "water tank lining"
-        res["extracted"]["material"] = "NR"
-        res["extracted"]["category"] = "rubber products"
-        res["extracted"]["sector"] = "polymers"
-    elif any(kw in low for kw in ["steel", "sheet", "box", "pipe", "metal"]):
-        res["extracted"]["product"] = "steel fabricated component"
-        res["extracted"]["application"] = "structural support"
-        res["extracted"]["material"] = "Mild Steel"
-        res["extracted"]["category"] = "metal products"
-        res["extracted"]["sector"] = "metallurgy"
-        res["recommendations"] = res["recommendations"][:1]
-        res["recommendations"][0]["title"] = "Steel Product — Demo Retrieval Candidate"
-        res["recommendations"][0]["match"] = 76
-        res["recommendations"][0]["confidence"] = "MEDIUM"
-        res["recommendations"][0]["why"] = "Simulated candidate retrieval match for steel fabrication query."
+    # Deterministic query routing for rich interactive demo scenarios
+    if any(kw in low for kw in ["pipe", "hdpe", "water supply", "4984"]):
+        res["extracted"] = {
+            "product": "high density polyethylene pipe",
+            "material": "PE 100",
+            "application": "potable water distribution",
+            "parameters": [{"name": "nominal diameter", "value": "110", "unit": "mm"}, {"name": "pressure", "value": "PN 10", "unit": ""}],
+            "category": "pipes & fittings",
+            "sector": "civil infrastructure"
+        }
+        res["recommendations"] = [
+            {
+                "is_number": "IS 4984:2016",
+                "title": "High Density Polyethylene Pipes for Water Supply — Specification",
+                "match": 96,
+                "confidence": "HIGH",
+                "necessity": "ESSENTIAL",
+                "status": "ACTIVE",
+                "currency": "Current (Rev 4)",
+                "certification": "Scheme-I (ISI Mark) • Mandatory",
+                "coverage": ["PE 100 resin class", "PN 10 rating", "potable water conveyance"],
+                "evidence": ["DPIIT Quality Control Order 2023", "Gazette S.O. 1284(E)"],
+                "why": "Direct specification for HDPE potable water conveyance. Enforces mandatory ISI Mark under DPIIT QCO."
+            },
+            {
+                "is_number": "IS DEMO-205:2023",
+                "title": "Rubber & Polymer Pipe Test Methods",
+                "match": 85,
+                "confidence": "HIGH",
+                "necessity": "CONDITIONAL",
+                "status": "ACTIVE",
+                "currency": "Current",
+                "certification": "Normative Test Protocol",
+                "coverage": ["hydrostatic strength test at 80°C"],
+                "evidence": ["IS 4984 Normative Appendix B"],
+                "why": "Governs mandatory hydrostatic pressure verification protocols at 80°C for 165 hours."
+            }
+        ]
+        res["gaps"] = [
+            {"status": "OUTDATED", "severity": "HIGH", "cited": "IS 118:2018", "required": "IS 4984:2016", "message": "Superseded specification cited. Replace with current IS 4984:2016."},
+            {"status": "PRESENT", "severity": "INFO", "cited": "IS DEMO-205:2023", "required": "IS DEMO-205:2023", "message": "Test method verified under Clause 8.2."}
+        ]
+        res["clause_draft"] = "The supplied HDPE pipes shall strictly conform to IS 4984:2016 (PE 100, PN 10) with mandatory BIS Scheme-I (ISI Mark) certification as per Gazette Order S.O. 1284(E). Hydrostatic testing shall comply with IS DEMO-205:2023."
+
+    elif any(kw in low for kw in ["bitumen", "paving", "asphalt", "highway", "vg-30", "73"]):
+        res["extracted"] = {
+            "product": "viscosity grade paving bitumen",
+            "material": "Bitumen (VG-30)",
+            "application": "highway flexible pavement construction",
+            "parameters": [{"name": "softening point", "value": "47", "unit": "°C min"}, {"name": "viscosity", "value": "2400-3600", "unit": "Poises"}],
+            "category": "petroleum materials",
+            "sector": "highways & transport"
+        }
+        res["recommendations"] = [
+            {
+                "is_number": "IS 73:2013",
+                "title": "Paving Bitumen — Specification (Fourth Revision)",
+                "match": 98,
+                "confidence": "HIGH",
+                "necessity": "ESSENTIAL",
+                "status": "ACTIVE",
+                "currency": "Current (Amended 2022)",
+                "certification": "Scheme-I (ISI Mark) • Mandatory",
+                "coverage": ["VG-30 viscosity grade", "highway wearing course", "penetration requirements"],
+                "evidence": ["Ministry of Petroleum & Natural Gas Order", "MoRTH Section 500"],
+                "why": "Sole statutory standard governing viscosity grade paving bitumen for public roadway construction."
+            }
+        ]
+        res["gaps"] = [
+            {"status": "PRESENT", "severity": "INFO", "cited": "IS 73:2013", "required": "IS 73:2013", "message": "Cited standard is current and matches MoRTH specifications."}
+        ]
+        res["clause_draft"] = "Paving bitumen supplied shall conform to IS 73:2013 (Grade VG-30) with mandatory BIS Certification Mark. Test certificates for absolute viscosity at 60°C and kinematic viscosity at 135°C must accompany each tanker delivery."
+
+    elif any(kw in low for kw in ["steel", "structural", "plate", "bridge", "2062", "e350"]):
+        res["extracted"] = {
+            "product": "high tensile structural steel plates",
+            "material": "Steel Grade E350",
+            "application": "bridge fabrication & heavy structures",
+            "parameters": [{"name": "yield strength", "value": "350", "unit": "MPa min"}, {"name": "impact test", "value": "Charpy V-notch", "unit": "27J at 0°C"}],
+            "category": "structural metallurgy",
+            "sector": "heavy engineering"
+        }
+        res["recommendations"] = [
+            {
+                "is_number": "IS 2062:2011",
+                "title": "Hot Rolled Medium and High Tensile Structural Steel",
+                "match": 95,
+                "confidence": "HIGH",
+                "necessity": "ESSENTIAL",
+                "status": "ACTIVE",
+                "currency": "Current (Rev 7)",
+                "certification": "Scheme-I (ISI Mark) • Mandatory QCO",
+                "coverage": ["Grade E350 Quality B/C", "weldability guarantee", "Charpy V-notch impact"],
+                "evidence": ["Ministry of Steel QCO S.O. 1823(E)", "IRC:24 Bridge Code"],
+                "why": "Mandatory standard under Steel Quality Control Order for all structural and infrastructure fabrication."
+            },
+            {
+                "is_number": "IS 800:2007",
+                "title": "General Construction in Steel — Code of Practice",
+                "match": 88,
+                "confidence": "HIGH",
+                "necessity": "CONDITIONAL",
+                "status": "ACTIVE",
+                "currency": "Current",
+                "certification": "National Design Code",
+                "coverage": ["limit state design", "bolted and welded joints"],
+                "evidence": ["NBC Section 6"],
+                "why": "Authoritative design code governing fabrication tolerances and permissible limit states."
+            }
+        ]
+        res["gaps"] = [
+            {"status": "NOT_CITED", "severity": "MEDIUM", "cited": "—", "required": "IS 800:2007", "message": "Design code IS 800:2007 must be referenced for structural fabrication tolerances."}
+        ]
+        res["clause_draft"] = "All structural steel plates shall comply with IS 2062:2011 Grade E350 Quality B, bearing the ISI Mark under Steel QCO S.O. 1823(E). Charpy V-notch impact test values must verify minimum 27 Joules at 0°C in accordance with IS 800:2007."
+
+    elif any(kw in low for kw in ["cement", "portland", "concrete", "269", "opc"]):
+        res["extracted"] = {
+            "product": "ordinary portland cement",
+            "material": "OPC 53 Grade",
+            "application": "reinforced concrete infrastructure",
+            "parameters": [{"name": "compressive strength", "value": "53", "unit": "MPa (28 days)"}],
+            "category": "cementitious materials",
+            "sector": "civil engineering"
+        }
+        res["recommendations"] = [
+            {
+                "is_number": "IS 269:2015",
+                "title": "Ordinary Portland Cement — Specification",
+                "match": 97,
+                "confidence": "HIGH",
+                "necessity": "ESSENTIAL",
+                "status": "ACTIVE",
+                "currency": "Current (Sixth Revision)",
+                "certification": "Scheme-I (ISI Mark) • Mandatory",
+                "coverage": ["53 Grade OPC", "soundness test", "initial and final setting time"],
+                "evidence": ["Cement Quality Control Order S.O. 883(E)"],
+                "why": "Mandatory standard for Portland cement under Department for Promotion of Industry and Internal Trade (DPIIT)."
+            }
+        ]
+        res["gaps"] = [{"status": "PRESENT", "severity": "INFO", "cited": "IS 269:2015", "required": "IS 269:2015", "message": "OPC specification satisfies CPWD norms."}]
+        res["clause_draft"] = "The cement shall be Ordinary Portland Cement (OPC) 53 Grade conforming strictly to IS 269:2015, bearing the official BIS ISI Mark. Manufacturer test certificates for 3, 7 and 28 days compressive strengths must be submitted per batch."
+
+    elif any(kw in low for kw in ["cable", "wire", "pvc", "electrical", "694"]):
+        res["extracted"] = {
+            "product": "pvc insulated electric cable",
+            "material": "Copper Conductor + PVC",
+            "application": "building & industrial internal electrification",
+            "parameters": [{"name": "voltage grade", "value": "1100", "unit": "V"}],
+            "category": "electrical cables",
+            "sector": "power & energy"
+        }
+        res["recommendations"] = [
+            {
+                "is_number": "IS 694:2010",
+                "title": "Polyvinyl Chloride Insulated Cables for Working Voltages up to 1100 V",
+                "match": 95,
+                "confidence": "HIGH",
+                "necessity": "ESSENTIAL",
+                "status": "ACTIVE",
+                "currency": "Current",
+                "certification": "Scheme-I (ISI Mark) • Mandatory",
+                "coverage": ["Class 2 stranded copper", "flame retardant low smoke (FRLS)"],
+                "evidence": ["Electrical Wires & Cables QCO Order S.O. 2914(E)"],
+                "why": "Mandatory safety standard for all low-voltage distribution wiring in public buildings."
+            }
+        ]
+        res["gaps"] = [{"status": "PRESENT", "severity": "INFO", "cited": "IS 694:2010", "required": "IS 694:2010", "message": "Compliant low-voltage electrification cable."}]
+        res["clause_draft"] = "All building internal wiring conductors shall be FRLS PVC insulated single core copper cables conforming to IS 694:2010, rated 1100 V, carrying valid BIS certification under Scheme-I."
+
+    elif any(kw in low for kw in ["rubber", "lining", "vulcanized", "tank", "118"]):
+        res["extracted"] = {
+            "product": "vulcanized natural rubber sheet",
+            "material": "NR",
+            "application": "water tank lining",
+            "parameters": [{"name": "thickness", "value": "25", "unit": "mm"}],
+            "category": "rubber products",
+            "sector": "polymers"
+        }
     else:
-        res["extracted"]["product"] = "technical procurement item"
-        res["extracted"]["application"] = "general industrial use"
-        res["extracted"]["material"] = "unspecified"
-        res["extracted"]["category"] = "general engineering"
-        res["extracted"]["sector"] = "industrial"
+        res["extracted"] = {
+            "product": "general engineering item",
+            "material": "unspecified",
+            "application": "industrial utility",
+            "parameters": [{"name": "specification", "value": "general", "unit": ""}],
+            "category": "general engineering",
+            "sector": "industrial"
+        }
         res["recommendations"] = res["recommendations"][:2]
         for r in res["recommendations"]:
-            r["match"] = max(61, r["match"] - 12)
+            r["match"] = max(64, r["match"] - 10)
             r["confidence"] = "MEDIUM"
 
     res["audit"]["demo_input"] = True
