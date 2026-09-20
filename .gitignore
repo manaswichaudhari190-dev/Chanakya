@@ -36,3 +36,6 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Audit & Architecture docs
+*chanakya_v7_13_final_audit*

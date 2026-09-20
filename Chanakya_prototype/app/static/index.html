@@ -1,1982 +1,438 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CHANAKYA — AI-Assisted Procurement Standards Review</title>
-<meta name="description" content="CHANAKYA is an AI-assisted procurement standards review and recommendation system prototype for government procurement officers.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-/* ─── CSS DESIGN TOKENS ───────────────────────────────────────────────── */
-:root {
-  --bg-app: #F8FAF9;
-  --bg-surface: #FFFFFF;
-  --bg-subtle: #F3F6F4;
-  --bg-accent: #E8F5F0;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHANAKYA — Indian Standards Recommendation System</title>
+  <meta name="description" content="AI-assisted review and recommendation system for applicable Indian Standards in public procurement.">
   
-  --brand: #087A5A;
-  --brand-hover: #066349;
-  --brand-light: #E6F4EF;
-  --brand-border: #A3D9C9;
-  --brand-glow: rgba(8, 122, 90, 0.15);
-  
-  --text-main: #111827;
-  --text-muted: #4B5563;
-  --text-light: #6B7280;
-  
-  --border-color: #E5E7EB;
-  --border-dark: #D1D5DB;
-  
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-
-  /* Semantic status colors */
-  --badge-green-bg: #ECFDF5;
-  --badge-green-text: #047857;
-  --badge-green-border: #A7F3D0;
-  
-  --badge-amber-bg: #FFFBEB;
-  --badge-amber-text: #B45309;
-  --badge-amber-border: #FDE68A;
-  
-  --badge-red-bg: #FEF2F2;
-  --badge-red-text: #B91C1C;
-  --badge-red-border: #FECACA;
-  
-  --badge-blue-bg: #EFF6FF;
-  --badge-blue-text: #1D4ED8;
-  --badge-blue-border: #BFDBFE;
-
-  --badge-gray-bg: #F3F4F6;
-  --badge-gray-text: #374151;
-  --badge-gray-border: #E5E7EB;
-}
-
-[data-theme="dark"] {
-  --bg-app: #0B1311;
-  --bg-surface: #121E1B;
-  --bg-subtle: #182824;
-  --bg-accent: #15332B;
-  
-  --brand: #10B981;
-  --brand-hover: #34D399;
-  --brand-light: #15332B;
-  --brand-border: #1F5C4A;
-  --brand-glow: rgba(16, 185, 129, 0.2);
-  
-  --text-main: #F9FAFB;
-  --text-muted: #D1D5DB;
-  --text-light: #9CA3AF;
-  
-  --border-color: #243833;
-  --border-dark: #324D46;
-  
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-
-  --badge-green-bg: #064E3B;
-  --badge-green-text: #6EE7B7;
-  --badge-green-border: #047857;
-  
-  --badge-amber-bg: #451A03;
-  --badge-amber-text: #FCD34D;
-  --badge-amber-border: #78350F;
-  
-  --badge-red-bg: #450A0A;
-  --badge-red-text: #FCA5A5;
-  --badge-red-border: #7F1D1D;
-  
-  --badge-blue-bg: #172554;
-  --badge-blue-text: #93C5FD;
-  --badge-blue-border: #1E40AF;
-
-  --badge-gray-bg: #1F2937;
-  --badge-gray-text: #D1D5DB;
-  --badge-gray-border: #374151;
-}
-
-/* ─── RESET & BASE STYLES ─────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: var(--bg-app);
-  color: var(--text-main);
-  line-height: 1.5;
-  font-size: 14px;
-  -webkit-font-smoothing: antialiased;
-}
-button, input, textarea, select { font: inherit; color: inherit; }
-a { color: var(--brand); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-/* ─── APP LAYOUT ──────────────────────────────────────────────────────── */
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* Top Header */
-.top-bar {
-  height: 60px;
-  background-color: var(--bg-surface);
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: var(--shadow-sm);
-}
-
-.brand-section {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-}
-
-.brand-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 900;
-  font-size: 18px;
-  letter-spacing: -0.02em;
-  color: var(--text-main);
-}
-
-.brand-logo svg {
-  width: 28px;
-  height: 28px;
-  color: var(--brand);
-}
-
-.brand-subtitle {
-  font-size: 12px;
-  color: var(--text-light);
-  border-left: 1px solid var(--border-color);
-  padding-left: 12px;
-  font-weight: 500;
-}
-
-.header-status {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.demo-badge {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  background: var(--badge-amber-bg);
-  color: var(--badge-amber-text);
-  border: 1px solid var(--badge-amber-border);
-  letter-spacing: 0.03em;
-}
-
-.engine-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--badge-green-text);
-  background: var(--badge-green-bg);
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--badge-green-border);
-}
-
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: var(--badge-green-text);
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
-}
-
-.theme-btn {
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-color);
-  padding: 5px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-.theme-btn:hover { background: var(--border-color); }
-
-/* Main Shell: Sidebar + Content */
-.main-shell {
-  display: flex;
-  flex: 1;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 240px;
-  background-color: var(--bg-surface);
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-}
-
-.sidebar-nav {
-  padding: 16px 10px;
-  flex: 1;
-}
-
-.nav-group-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-light);
-  padding: 10px 10px 4px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 9px 10px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  text-align: left;
-  margin-bottom: 2px;
-  transition: all 0.15s ease;
-}
-
-.nav-item:hover {
-  background-color: var(--bg-subtle);
-  color: var(--text-main);
-}
-
-.nav-item.active {
-  background-color: var(--brand-light);
-  color: var(--brand);
-  font-weight: 600;
-}
-
-.nav-icon {
-  font-size: 15px;
-  width: 18px;
-  text-align: center;
-}
-
-.sidebar-footer {
-  padding: 14px;
-  border-top: 1px solid var(--border-color);
-  font-size: 11px;
-  color: var(--text-light);
-  line-height: 1.4;
-  background: var(--bg-subtle);
-}
-
-/* Content Area */
-.content-area {
-  flex: 1;
-  padding: 24px 32px;
-  overflow-y: auto;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.view-panel { display: none; }
-.view-panel.active { display: block; }
-
-/* ─── LANDING PAGE HERO STYLES ───────────────────────────────────────── */
-.hero-container {
-  background: radial-gradient(circle at 80% 20%, var(--brand-glow) 0%, transparent 50%), var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 48px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--brand-light);
-  color: var(--brand);
-  border: 1px solid var(--brand-border);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 20px;
-}
-
-.hero-title {
-  font-size: 40px;
-  font-weight: 900;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--text-main);
-  max-width: 860px;
-  margin-bottom: 16px;
-}
-
-.hero-title span {
-  color: var(--brand);
-}
-
-.hero-subtitle {
-  font-size: 16.5px;
-  color: var(--text-muted);
-  max-width: 780px;
-  line-height: 1.6;
-  margin-bottom: 32px;
-}
-
-.hero-cta-group {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.btn-hero-primary {
-  padding: 13px 26px;
-  font-size: 15px;
-  font-weight: 700;
-  border-radius: var(--radius-md);
-  background-color: var(--brand);
-  color: #FFFFFF;
-  border: none;
-  box-shadow: 0 4px 14px rgba(8, 122, 90, 0.28);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-hero-primary:hover {
-  background-color: var(--brand-hover);
-  transform: translateY(-1px);
-}
-
-.btn-hero-secondary {
-  padding: 13px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: var(--radius-md);
-  background: var(--bg-surface);
-  color: var(--text-main);
-  border: 1.5px solid var(--border-dark);
-  cursor: pointer;
-}
-.btn-hero-secondary:hover { background: var(--bg-subtle); }
-
-/* Grid of Philosophy Cards */
-.philosophy-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  margin-bottom: 28px;
-}
-
-.philosophy-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 22px;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.philosophy-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--brand-border);
-  box-shadow: var(--shadow-md);
-}
-
-.philosophy-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: var(--brand-light);
-  color: var(--brand);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  margin-bottom: 14px;
-  border: 1px solid var(--brand-border);
-}
-
-.philosophy-card h3 {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 8px;
-}
-
-.philosophy-card p {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.55;
-}
-
-/* Interactive Pipeline Hero Preview */
-.hero-pipeline-preview {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-md);
-}
-
-.preview-flow-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 16px 0 8px;
-}
-
-.preview-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-width: 100px;
-}
-
-.preview-step-num {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--brand-light);
-  color: var(--brand);
-  font-size: 12px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--brand-border);
-  margin-bottom: 8px;
-}
-
-.preview-step-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 2px;
-}
-
-.preview-step-sub {
-  font-size: 10.5px;
-  color: var(--text-light);
-}
-
-.preview-connector {
-  font-size: 14px;
-  color: var(--brand);
-  font-weight: 800;
-}
-
-/* ─── WORKSPACE UI COMPONENTS ─────────────────────────────────────────── */
-
-/* View Header */
-.view-header {
-  margin-bottom: 20px;
-}
-.view-header h1 {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text-main);
-  letter-spacing: -0.01em;
-}
-.view-header p {
-  font-size: 13px;
-  color: var(--text-light);
-  margin-top: 2px;
-}
-
-/* Metric Cards Row */
-.metrics-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 20px;
-}
-.metric-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-  box-shadow: var(--shadow-sm);
-}
-.metric-value {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--text-main);
-  font-family: 'JetBrains Mono', monospace;
-  line-height: 1.2;
-}
-.metric-label {
-  font-size: 12px;
-  color: var(--text-light);
-  font-weight: 500;
-  margin-top: 4px;
-}
-
-/* Section Cards / Panels */
-.card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-sm);
-}
-
-.card-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* Form Controls & Buttons */
-.form-textarea {
-  width: 100%;
-  min-height: 90px;
-  padding: 12px;
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-sm);
-  background: var(--bg-app);
-  color: var(--text-main);
-  font-size: 13.5px;
-  line-height: 1.5;
-  resize: vertical;
-  outline: none;
-}
-.form-textarea:focus {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 2px var(--brand-light);
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.btn-primary {
-  background-color: var(--brand);
-  color: #FFFFFF;
-}
-.btn-primary:hover {
-  background-color: var(--brand-hover);
-}
-
-.btn-secondary {
-  background-color: var(--bg-surface);
-  color: var(--text-main);
-  border-color: var(--border-dark);
-}
-.btn-secondary:hover {
-  background-color: var(--bg-subtle);
-}
-
-.btn-outline {
-  background-color: transparent;
-  color: var(--brand);
-  border-color: var(--brand-border);
-}
-.btn-outline:hover {
-  background-color: var(--brand-light);
-}
-
-.btn-sm {
-  padding: 4px 10px;
-  font-size: 12px;
-}
-
-.upload-box {
-  margin-top: 12px;
-  border: 1.5px dashed var(--border-dark);
-  padding: 14px;
-  border-radius: var(--radius-sm);
-  text-align: center;
-  color: var(--text-light);
-  cursor: pointer;
-  font-size: 12.5px;
-  background: var(--bg-subtle);
-}
-.upload-box:hover {
-  border-color: var(--brand);
-  background: var(--brand-light);
-  color: var(--brand);
-}
-
-/* Grid Layouts */
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-/* Key Value Table */
-.kv-list {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 8px 12px;
-  font-size: 13px;
-}
-.kv-label {
-  color: var(--text-light);
-  font-weight: 500;
-}
-.kv-value {
-  color: var(--text-main);
-  font-weight: 600;
-}
-
-/* Pipeline Stage Tracker */
-.pipeline-container {
-  margin-top: 14px;
-  padding: 14px;
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  display: none;
-}
-.pipeline-title {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--text-light);
-  letter-spacing: 0.05em;
-  margin-bottom: 10px;
-}
-.pipeline-steps {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 8px;
-}
-.step-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--text-light);
-  padding: 4px 8px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-}
-.step-item.active {
-  color: var(--badge-amber-text);
-  border-color: var(--badge-amber-border);
-  background: var(--badge-amber-bg);
-}
-.step-item.completed {
-  color: var(--badge-green-text);
-  border-color: var(--badge-green-border);
-  background: var(--badge-green-bg);
-  font-weight: 600;
-}
-.step-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1px solid var(--border-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  flex-shrink: 0;
-}
-.step-item.completed .step-icon {
-  background: var(--badge-green-text);
-  color: #FFFFFF;
-  border-color: var(--badge-green-text);
-}
-
-/* Recommendation Evidence Cards */
-.evidence-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 18px;
-  margin-bottom: 14px;
-  transition: border-color 0.15s ease;
-}
-.evidence-card:hover {
-  border-color: var(--brand-border);
-}
-.evidence-card.primary-candidate {
-  border-left: 4px solid var(--brand);
-}
-
-.card-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.is-number {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--text-main);
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.is-title {
-  font-size: 13.5px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-.match-score {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--brand);
-  font-family: 'JetBrains Mono', monospace;
-}
-
-/* Status Chips / Badges */
-.chips-row {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin: 10px 0;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.badge-green { background: var(--badge-green-bg); color: var(--badge-green-text); border: 1px solid var(--badge-green-border); }
-.badge-amber { background: var(--badge-amber-bg); color: var(--badge-amber-text); border: 1px solid var(--badge-amber-border); }
-.badge-red   { background: var(--badge-red-bg);   color: var(--badge-red-text);   border: 1px solid var(--badge-red-border); }
-.badge-blue  { background: var(--badge-blue-bg);  color: var(--badge-blue-text);  border: 1px solid var(--badge-blue-border); }
-.badge-gray  { background: var(--badge-gray-bg);  color: var(--badge-gray-text);  border: 1px solid var(--badge-gray-border); }
-
-.why-reasoning {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.55;
-  background: var(--bg-subtle);
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  margin: 10px 0;
-  border-left: 3px solid var(--brand);
-}
-
-/* Proof Chain Visualization */
-.proof-chain-container {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  padding: 12px;
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-}
-.proof-node {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-dark);
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: var(--text-main);
-  font-weight: 600;
-}
-.proof-rel {
-  color: var(--brand);
-  font-weight: 700;
-  font-size: 11px;
-}
-
-/* Gap Analysis Table */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  text-align: left;
-}
-.data-table th {
-  background: var(--bg-subtle);
-  color: var(--text-light);
-  font-weight: 700;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border-color);
-}
-.data-table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-main);
-}
-.data-table tr:last-child td {
-  border-bottom: none;
-}
-.data-table tr.row-outdated {
-  background-color: rgba(239, 68, 68, 0.04);
-}
-
-/* Graph Canvas */
-.graph-canvas {
-  height: 380px;
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  position: relative;
-  overflow: hidden;
-}
-.g-node {
-  position: absolute;
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-dark);
-  border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: var(--shadow-sm);
-  z-index: 2;
-}
-.g-node.g-primary {
-  border-color: var(--brand);
-  background: var(--brand-light);
-  color: var(--brand);
-}
-.g-node.g-outdated {
-  border-color: var(--badge-red-text);
-  background: var(--badge-red-bg);
-  color: var(--badge-red-text);
-}
-.g-edge-line {
-  position: absolute;
-  height: 2px;
-  background: var(--border-dark);
-  transform-origin: 0 0;
-  z-index: 1;
-}
-.g-edge-line.verified {
-  background: var(--brand);
-}
-.g-edge-label {
-  position: absolute;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-light);
-  background: var(--bg-surface);
-  padding: 1px 4px;
-  border-radius: 3px;
-  border: 1px solid var(--border-color);
-  z-index: 3;
-}
-
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-.modal-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-.modal-content {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  width: 90%;
-  max-width: 600px;
-  padding: 24px;
-  box-shadow: var(--shadow-lg);
-}
-
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 24px; right: 24px;
-  background: var(--text-main);
-  color: var(--bg-surface);
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: var(--shadow-lg);
-  z-index: 200;
-  display: none;
-}
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-body);
+      color: #FFFFFF;
+      background-color: #0c141c;
+    }
+
+    /* ─── HERO CONTAINER WITH CLEAR, UNBURIED BACKGROUND ─── */
+    .hero-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-image: url('/static/hero_bg.jpg');
+      background-size: cover;
+      background-position: center 38%;
+      background-repeat: no-repeat;
+    }
+
+    /* Very subtle edge vignettes only — the center image, bridge, sky & mountains remain 100% visible and vivid */
+    .hero-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(8, 14, 20, 0.55) 0%, rgba(8, 14, 20, 0.05) 28%, rgba(8, 14, 20, 0.1) 68%, rgba(6, 12, 18, 0.8) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ─── TOP BAR ─── */
+    .top-nav {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 22px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(14, 26, 36, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: 700;
+      color: #F8FAFC;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .brand-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #FFFFFF;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      letter-spacing: 0.8px;
+      color: rgba(255, 255, 255, 0.75);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+      font-weight: 500;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(10, 20, 30, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 12px;
+      font-weight: 600;
+      color: #E2E8F0;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34D399;
+      box-shadow: 0 0 8px #34D399;
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: 10px;
+      background: rgba(15, 27, 38, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFFFFF;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.45);
+      transform: translateY(-1px);
+    }
+
+    /* ─── MAIN HERO GLASS CARD ─── */
+    .hero-main {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Frosted glass enclosure preserves readability while keeping background fully viewable */
+    .hero-card {
+      width: 100%;
+      padding: 34px 40px;
+      border-radius: 20px;
+      background: rgba(8, 16, 24, 0.52);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #6EE7B7;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 3.8vw, 46px);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.015em;
+      color: #FFFFFF;
+      margin-bottom: 14px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: #FCD34D;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      line-height: 1.55;
+      color: #E2E8F0;
+      max-width: 680px;
+      margin-bottom: 26px;
+      font-weight: 400;
+    }
+
+    /* ─── ACTION BUTTONS ─── */
+    .cta-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #062417;
+      background: #10B981;
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-primary:hover {
+      background: #34D399;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-action-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-secondary:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* ─── CORE SYSTEM WORKFLOW SUMMARY ─── */
+    .system-pills {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .sys-pill {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(226, 232, 240, 0.85);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: 6px;
+    }
+
+    .sys-pill b {
+      color: #34D399;
+      margin-right: 4px;
+    }
+
+    /* ─── FOOTER ─── */
+    .hero-footer {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 18px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-left {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .footer-nav a {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer-nav a:hover {
+      color: #34D399;
+    }
+
+    @media (max-width: 768px) {
+      html, body {
+        overflow-y: auto;
+      }
+      .hero-container {
+        height: auto;
+        min-height: 100vh;
+      }
+      .hero-card {
+        padding: 24px 20px;
+      }
+      .hero-title {
+        font-size: 28px;
+      }
+      .hero-footer {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="app-container">
-
-  <!-- ════════════════════ TOP HEADER BAR ════════════════════ -->
-  <header class="top-bar">
-    <div class="brand-section" onclick="switchTabByTarget('landingView')" title="Return to Overview">
-      <div class="brand-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-        <span>CHANAKYA</span>
-      </div>
-      <div class="brand-subtitle">AI-Assisted Procurement Standards Review</div>
-    </div>
-
-    <div class="header-status">
-      <span class="demo-badge">DEMO / SIMULATION</span>
-      <div class="engine-status">
-        <span class="status-dot"></span>
-        <span>Engine Healthy</span>
-      </div>
-      <button class="btn btn-primary btn-sm" id="topNavWorkspaceBtn" onclick="switchTabByTarget('recommendView')">Launch Workspace →</button>
-      <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Theme">☀ Light / ☾ Dark</button>
-    </div>
-  </header>
-
-  <!-- ════════════════════ MAIN SHELL ════════════════════ -->
-  <div class="main-shell">
+  <div class="hero-container">
     
-    <!-- ────── SIDEBAR (Hidden on Landing Page) ────── -->
-    <aside class="sidebar" style="display: none;">
-      <nav class="sidebar-nav">
-        <div class="nav-group-label">Workspace</div>
+    <!-- Header -->
+    <header class="top-nav">
+      <a href="/" class="brand-group">
+        <div class="brand-mark">च</div>
+        <div class="brand-info">
+          <span class="brand-name">CHANAKYA</span>
+          <span class="brand-tag">Smart India Hackathon 2026</span>
+        </div>
+      </a>
+
+      <div class="nav-right">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span>SIH PS-2 Prototype</span>
+        </div>
+        <a href="/dashboard" class="btn-nav">Open System &rarr;</a>
+      </div>
+    </header>
+
+    <!-- Center Hero Card -->
+    <main class="hero-main">
+      <div class="hero-card">
+        <span class="hero-label">Bureau of Indian Standards &bull; Tender Review</span>
         
-        <button class="nav-item active" data-target="recommendView" onclick="switchTab(this)">
-          <span class="nav-icon">⚡</span>
-          <span>Recommendation</span>
-        </button>
+        <h1 class="hero-title">
+          Verify and Map <em>Indian Standards</em> for Government Procurement
+        </h1>
 
-        <button class="nav-item" data-target="standardsView" onclick="switchTab(this)">
-          <span class="nav-icon">📚</span>
-          <span>Standards Catalog</span>
-        </button>
+        <p class="hero-subtitle">
+          CHANAKYA analyzes tender requirements to recommend current IS codes, flag outdated or missing standards, verify Quality Control Orders (QCOs), and generate audit-ready clauses.
+        </p>
 
-        <button class="nav-item" data-target="graphView" onclick="switchTab(this)">
-          <span class="nav-icon">🕸️</span>
-          <span>Standards Graph</span>
-        </button>
-
-        <div class="nav-group-label" style="margin-top: 14px;">Verification</div>
-        
-        <button class="nav-item" data-target="reviewView" onclick="switchTab(this)">
-          <span class="nav-icon">👤</span>
-          <span>Review Queue</span>
-        </button>
-
-        <button class="nav-item" data-target="auditView" onclick="switchTab(this)">
-          <span class="nav-icon">📜</span>
-          <span>Audit Log</span>
-        </button>
-
-        <div class="nav-group-label" style="margin-top: 14px;">System</div>
-
-        <button class="nav-item" data-target="systemView" onclick="switchTab(this)">
-          <span class="nav-icon">⚙️</span>
-          <span>Architecture &amp; Data</span>
-        </button>
-      </nav>
-
-      <div class="sidebar-footer">
-        <strong>Simulation Mode</strong><br>
-        Synthetic fixture data (<code>IS DEMO-*</code>).<br>
-        Human review required. Not live BIS retrieval.
-      </div>
-    </aside>
-
-    <!-- ────── CONTENT AREA ────── -->
-    <main class="content-area">
-
-      <!-- ════════════════ VIEW 0: LANDING PAGE (Full Width, No Sidebar) ════════════════ -->
-      <div id="landingView" class="view-panel active">
-        
-        <!-- Hero Section -->
-        <div class="hero-container">
-          <div class="hero-badge-pill">
-            <span>✦ SIH 2026 PROTOTYPE &nbsp;•&nbsp; PROCUREMENT STANDARDS INTELLIGENCE</span>
-          </div>
-
-          <h1 class="hero-title">
-            Transform Procurement Requirements into <span>Evidence-Backed</span> Standards Intelligence.
-          </h1>
-
-          <p class="hero-subtitle">
-            CHANAKYA parses complex procurement requirement texts, extracts atomic technical parameters, retrieves and reranks applicable Indian Standards, detects outdated references, and enforces proof closure before recommending compliance clauses.
-          </p>
-
-          <div class="hero-cta-group">
-            <button class="btn-hero-primary" onclick="launchDemoWorkspace()">Launch Procurement Workspace →</button>
-            <button class="btn-hero-secondary" onclick="switchTabByTarget('systemView')">Explore Architecture</button>
-          </div>
+        <div class="cta-row">
+          <a href="/dashboard" class="btn-action-primary">
+            <span>Open Tender Reviewer</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="/docs" target="_blank" class="btn-action-secondary">
+            <span>API Docs</span>
+          </a>
         </div>
 
-        <!-- 4 Philosophy / Proof Pillars -->
-        <div class="view-header" style="margin-top: 12px;">
-          <h2>Core Product Philosophy: From Relevance to Proof</h2>
-          <p>Four mandatory compliance conditions enforced before any standard recommendation becomes actionable.</p>
-        </div>
-
-        <div class="philosophy-grid">
-          <div class="philosophy-card">
-            <div class="philosophy-icon">🎯</div>
-            <h3>Coverage Mapping</h3>
-            <p>Maps every structured requirement atom (dimension, material, use-case) to at least one verified Indian Standard record.</p>
-          </div>
-
-          <div class="philosophy-card">
-            <div class="philosophy-icon">📅</div>
-            <h3>Temporal Gate</h3>
-            <p>Validates standard edition currency against tender dates. Automatically rejects superseded or withdrawn specifications.</p>
-          </div>
-
-          <div class="philosophy-card">
-            <div class="philosophy-icon">🔒</div>
-            <h3>Proof Closure</h3>
-            <p><strong>Hard Invariant:</strong> <em>No Proof → No Actionable Recommendation.</em> Requires evidence nodes to close completely.</p>
-          </div>
-
-          <div class="philosophy-card">
-            <div class="philosophy-icon">⚖️</div>
-            <h3>Minimal Set (MSSS)</h3>
-            <p>Determines the smallest sufficient set of standards to satisfy all procurement constraints without inflating tender scopes.</p>
-          </div>
-        </div>
-
-        <!-- Interactive Pipeline Preview Banner -->
-        <div class="hero-pipeline-preview">
-          <div class="card-title" style="margin-bottom: 4px;">
-            <span>Conceptual 11-Stage Pipeline Workflow</span>
-            <span class="badge badge-green">ETOG → NCS → MSSS → CNT</span>
-          </div>
-          <p style="font-size: 13px; color: var(--text-light); margin-bottom: 14px;">Every query moves through structured semantic and rule-based verification stages.</p>
-
-          <div class="preview-flow-row">
-            <div class="preview-step">
-              <div class="preview-step-num">1</div>
-              <div class="preview-step-title">Completeness</div>
-              <div class="preview-step-sub">Input Check</div>
-            </div>
-            <div class="preview-connector">→</div>
-
-            <div class="preview-step">
-              <div class="preview-step-num">2</div>
-              <div class="preview-step-title">Extraction</div>
-              <div class="preview-step-sub">Atomic Specs</div>
-            </div>
-            <div class="preview-connector">→</div>
-
-            <div class="preview-step">
-              <div class="preview-step-num">3</div>
-              <div class="preview-step-title">Retrieval</div>
-              <div class="preview-step-sub">FAISS Top-50</div>
-            </div>
-            <div class="preview-connector">→</div>
-
-            <div class="preview-step">
-              <div class="preview-step-num">4</div>
-              <div class="preview-step-title">Reranking</div>
-              <div class="preview-step-sub">Top-10 Candidates</div>
-            </div>
-            <div class="preview-connector">→</div>
-
-            <div class="preview-step">
-              <div class="preview-step-num">5</div>
-              <div class="preview-step-title">ETOG Graph</div>
-              <div class="preview-step-sub">Relation Expansion</div>
-            </div>
-            <div class="preview-connector">→</div>
-
-            <div class="preview-step">
-              <div class="preview-step-num">6</div>
-              <div class="preview-step-title">Proof Validator</div>
-              <div class="preview-step-sub">Closure Verification</div>
-            </div>
-            <div class="preview-connector">→</div>
-
-            <div class="preview-step">
-              <div class="preview-step-num">7</div>
-              <div class="preview-step-title">Gap Analysis</div>
-              <div class="preview-step-sub">Outdated Detection</div>
-            </div>
-            <div class="preview-connector">→</div>
-
-            <div class="preview-step">
-              <div class="preview-step-num">8</div>
-              <div class="preview-step-title">Grounded Draft</div>
-              <div class="preview-step-sub">Human Review</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Demo Callout Box -->
-        <div class="card" style="background: var(--brand-light); border-color: var(--brand-border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-          <div>
-            <h3 style="font-size: 16px; font-weight: 800; color: var(--brand); margin-bottom: 4px;">Primary Demo Scenario: Rubber Sheet Tender Review</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Tender currently cites superseded standard <code>IS DEMO-118:2018</code>. Test how CHANAKYA detects the gap and resolves to <code>IS DEMO-101:2024</code>.</p>
-          </div>
-          <button class="btn btn-primary" onclick="launchDemoWorkspace()">Test Primary Demo Query →</button>
-        </div>
-
-      </div><!-- /landingView -->
-
-
-      <!-- ════════════════ VIEW 1: RECOMMENDATION WORKSPACE ════════════════ -->
-      <div id="recommendView" class="view-panel">
-        
-        <div class="view-header">
-          <h1>Recommendation Workspace</h1>
-          <p>Submit procurement specifications to retrieve evidence-backed standards, analyze tender gaps, and build verified clause drafts.</p>
-        </div>
-
-        <!-- Metric Row -->
-        <div class="metrics-row">
-          <div class="metric-card">
-            <div class="metric-value" id="mTopK">50</div>
-            <div class="metric-label">Retrieved Top-K</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-value" id="mRerank">10</div>
-            <div class="metric-label">Reranked Candidates</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-value" id="mPrimary">3</div>
-            <div class="metric-label">Primary Standards</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-value" style="color: var(--brand);" id="mHallucinations">0</div>
-            <div class="metric-label">Hallucinations Removed</div>
-          </div>
-        </div>
-
-        <!-- Requirement Input Card -->
-        <div class="card">
-          <div class="card-title">
-            <span>1. Describe your procurement requirement</span>
-            <span class="badge badge-gray">Primary Input</span>
-          </div>
-
-          <textarea id="queryInput" class="form-textarea" placeholder="Enter tender specification or product description...">Supply of 25 mm thick vulcanized natural rubber sheets for lining of a water tank. Tender currently cites IS DEMO-118:2018.</textarea>
-
-          <div class="button-group">
-            <button class="btn btn-primary" id="runBtn" onclick="runRecommendation()">
-              <span>⚡ Run Recommendation</span>
-            </button>
-            <button class="btn btn-secondary" onclick="loadDemoQuery()">Use Demo Data</button>
-            <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">⬆ Upload Tender</button>
-            <input type="file" id="fileInput" style="display:none;" onchange="handleFileUpload(this)">
-          </div>
-
-          <div id="uploadStatus" style="display:none; margin-top:10px;" class="badge badge-blue"></div>
-
-          <!-- Pipeline Progress -->
-          <div id="pipelineBox" class="pipeline-container">
-            <div class="pipeline-title">Simulated Processing Pipeline</div>
-            <div class="pipeline-steps">
-              <div class="step-item" id="st1"><span class="step-icon">1</span> Completeness Check</div>
-              <div class="step-item" id="st2"><span class="step-icon">2</span> Technical Extraction</div>
-              <div class="step-item" id="st3"><span class="step-icon">3</span> Requirement Atoms</div>
-              <div class="step-item" id="st4"><span class="step-icon">4</span> Candidate Retrieval</div>
-              <div class="step-item" id="st5"><span class="step-icon">5</span> Semantic Rerank</div>
-              <div class="step-item" id="st6"><span class="step-icon">6</span> Graph Expansion</div>
-              <div class="step-item" id="st7"><span class="step-icon">7</span> Lifecycle &amp; Compliance</div>
-              <div class="step-item" id="st8"><span class="step-icon">8</span> ETOG Reasoning</div>
-              <div class="step-item" id="st9"><span class="step-icon">9</span> Proof Validation</div>
-              <div class="step-item" id="st10"><span class="step-icon">10</span> Tender Gap Analysis</div>
-              <div class="step-item" id="st11"><span class="step-icon">11</span> Grounded Synthesis</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Grid: Extracted Requirement + Gap Analysis -->
-        <div class="grid-2">
-          
-          <!-- Extracted Requirement Panel -->
-          <div class="card">
-            <div class="card-title">
-              <span>Extracted Requirement</span>
-              <span class="badge badge-green">99% Confidence</span>
-            </div>
-            
-            <div class="kv-list" id="extractedKv">
-              <div class="kv-label">Product</div><div class="kv-value">vulcanized natural rubber sheet</div>
-              <div class="kv-label">Material</div><div class="kv-value">NR</div>
-              <div class="kv-label">Application</div><div class="kv-value">water tank lining</div>
-              <div class="kv-label">Thickness</div><div class="kv-value">25 mm</div>
-              <div class="kv-label">Category</div><div class="kv-value">rubber products</div>
-              <div class="kv-label">Sector</div><div class="kv-value">polymers</div>
-            </div>
-          </div>
-
-          <!-- Tender Gap Analysis Panel -->
-          <div class="card">
-            <div class="card-title">
-              <span>Tender Gap Analysis</span>
-              <span class="badge badge-amber">Action Needed</span>
-            </div>
-
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Status</th>
-                  <th>Cited Standard</th>
-                  <th>Required / Action</th>
-                </tr>
-              </thead>
-              <tbody id="gapTableBody">
-                <tr class="row-outdated">
-                  <td><span class="badge badge-red">OUTDATED</span></td>
-                  <td><strong>IS DEMO-118:2018</strong></td>
-                  <td>Superseded → <strong>IS DEMO-101:2024</strong></td>
-                </tr>
-                <tr>
-                  <td><span class="badge badge-green">PRESENT</span></td>
-                  <td>IS DEMO-205:2023</td>
-                  <td>Test method verified</td>
-                </tr>
-                <tr>
-                  <td><span class="badge badge-amber">NOT CITED</span></td>
-                  <td>—</td>
-                  <td>Add <strong>IS DEMO-420:2025</strong> (Safety)</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-        </div><!-- /grid-2 -->
-
-        <!-- Recommendation Results Section -->
-        <div class="card" id="recResultsCard">
-          <div class="card-title">
-            <span>2. Recommendation Results</span>
-            <span class="badge badge-green">Proof Closed ✓</span>
-          </div>
-
-          <div id="recommendationsList">
-            <!-- Dynamic Evidence Cards rendered here -->
-          </div>
-        </div>
-
-        <!-- Proof Chain & Grounded Clause Grid -->
-        <div class="grid-2">
-          
-          <!-- Proof Chain Panel -->
-          <div class="card">
-            <div class="card-title">
-              <span>Proof Chain Verification</span>
-              <span class="badge badge-green">Invariant Satisfied</span>
-            </div>
-            <p style="font-size: 12px; color: var(--text-light); margin-bottom: 10px;">Every candidate standard must be connected through a closed chain of verified evidence nodes.</p>
-            <div class="proof-chain-container" id="proofChainBox">
-              <!-- Rendered proof nodes -->
-            </div>
-          </div>
-
-          <!-- Grounded Clause Draft Panel -->
-          <div class="card">
-            <div class="card-title">
-              <span>Grounded Clause Draft</span>
-              <span class="badge badge-amber">HUMAN REVIEW REQUIRED</span>
-            </div>
-            <div id="clauseDraftText" style="font-size: 13px; color: var(--text-main); line-height: 1.6; background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 12px;">
-              DRAFT — HUMAN REVIEW REQUIRED<br>
-              For the specified vulcanized natural rubber sheet lining application, require the applicable current standard record identified by the procurement standards review, together with the associated verified test-method evidence. Confirm the final standard identifier and legal applicability against the authoritative source before tender issue.
-            </div>
-            <div class="button-group">
-              <button class="btn btn-secondary btn-sm" onclick="copyClauseDraft()">📋 Copy Draft</button>
-              <button class="btn btn-primary btn-sm" onclick="sendFeedback('accept')">✓ Accept Clause</button>
-            </div>
-          </div>
-
-        </div>
-
-      </div><!-- /recommendView -->
-
-
-      <!-- ════════════════ VIEW 2: STANDARDS CATALOG ════════════════ -->
-      <div id="standardsView" class="view-panel">
-        <div class="view-header">
-          <h1>Standards Catalog</h1>
-          <p>Synthetic standards repository fixture data. In production, this layer maps to verified BIS standards.</p>
-        </div>
-
-        <div class="card">
-          <div class="card-title">
-            <span>Indian Standards Fixture Records</span>
-            <span class="badge badge-gray">Synthetic Fixture Data</span>
-          </div>
-
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>IS Number</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Sector</th>
-                <th>Edition</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="standardsTableBody">
-              <!-- Dynamically loaded -->
-            </tbody>
-          </table>
+        <div class="system-pills">
+          <span class="sys-pill"><b>&bull;</b> Current vs Superseded Check</span>
+          <span class="sys-pill"><b>&bull;</b> Mandatory QCO Detection</span>
+          <span class="sys-pill"><b>&bull;</b> Tender Gap Analysis</span>
+          <span class="sys-pill"><b>&bull;</b> Verified Proof Trail</span>
         </div>
       </div>
-
-
-      <!-- ════════════════ VIEW 3: STANDARDS GRAPH ════════════════ -->
-      <div id="graphView" class="view-panel">
-        <div class="view-header">
-          <h1>Standards Relationship Graph (ETOG)</h1>
-          <p>Evidence-Typed Ontology Graph mapping requirements, primary standards, test methods, safety specs, and supersession links.</p>
-        </div>
-
-        <div class="card">
-          <div class="card-title">
-            <span>Visual Graph Topology</span>
-            <span class="badge badge-green">NetworkX Topology Model</span>
-          </div>
-
-          <div class="graph-canvas" id="graphCanvas">
-            <!-- Nodes -->
-            <div class="g-node" style="left:5%; top:20%;">REQ-001<br><span style="font-weight:400;font-size:10px;">Thickness 25mm</span></div>
-            <div class="g-node" style="left:5%; top:60%;">REQ-003<br><span style="font-weight:400;font-size:10px;">Water Tank Lining</span></div>
-            
-            <div class="g-node g-primary" style="left:38%; top:35%;">IS DEMO-101:2024<br><span style="font-weight:500;font-size:10px;">Primary Lining Spec</span></div>
-            
-            <div class="g-node" style="left:72%; top:15%;">IS DEMO-205:2023<br><span style="font-weight:400;font-size:10px;">Test Method</span></div>
-            <div class="g-node" style="left:72%; top:50%;">IS DEMO-420:2025<br><span style="font-weight:400;font-size:10px;">Safety Guidance</span></div>
-            <div class="g-node g-outdated" style="left:72%; top:80%;">IS DEMO-118:2018<br><span style="font-weight:400;font-size:10px;">SUPERSEDED</span></div>
-
-            <!-- Visual Connecting Lines -->
-            <div class="g-edge-line verified" style="left:16%; top:26%; width:22%; transform: rotate(12deg);"></div>
-            <div class="g-edge-label" style="left:24%; top:26%;">SATISFIES</div>
-
-            <div class="g-edge-line verified" style="left:16%; top:65%; width:22%; transform: rotate(-15deg);"></div>
-            <div class="g-edge-label" style="left:24%; top:55%;">SATISFIES</div>
-
-            <div class="g-edge-line verified" style="left:53%; top:40%; width:19%; transform: rotate(-18deg);"></div>
-            <div class="g-edge-label" style="left:60%; top:28%;">TEST_METHOD</div>
-
-            <div class="g-edge-line verified" style="left:53%; top:45%; width:19%; transform: rotate(10deg);"></div>
-            <div class="g-edge-label" style="left:60%; top:48%;">SAFETY</div>
-
-            <div class="g-edge-line" style="left:53%; top:50%; width:19%; transform: rotate(32deg);"></div>
-            <div class="g-edge-label" style="left:60%; top:66%;">SUPERSEDES</div>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- ════════════════ VIEW 4: REVIEW QUEUE ════════════════ -->
-      <div id="reviewView" class="view-panel">
-        <div class="view-header">
-          <h1>Human Review Queue</h1>
-          <p>Uncertain queries, outdated references, or compliance conflicts flagged for officer determination.</p>
-        </div>
-
-        <div class="card">
-          <div class="card-title">
-            <span>Pending Review Cases</span>
-            <span class="badge badge-amber">4 Open Cases</span>
-          </div>
-
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Case ID</th>
-                <th>Severity</th>
-                <th>Reason</th>
-                <th>Query / Context</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="reviewTableBody">
-              <!-- Loaded dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-
-      <!-- ════════════════ VIEW 5: AUDIT LOG ════════════════ -->
-      <div id="auditView" class="view-panel">
-        <div class="view-header">
-          <h1>System Audit Log</h1>
-          <p>Synthetic audit records logging pipeline latency, officer feedback actions, and offline replay checks.</p>
-        </div>
-
-        <div class="card">
-          <div class="card-title">
-            <span>Recent Audit Trail Events</span>
-            <span class="badge badge-gray">Synthetic Demonstration Data</span>
-          </div>
-
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Actor</th>
-                <th>Event</th>
-                <th>Status</th>
-                <th>Latency</th>
-              </tr>
-            </thead>
-            <tbody id="auditTableBody">
-              <!-- Loaded dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-
-      <!-- ════════════════ VIEW 6: SYSTEM ARCHITECTURE ════════════════ -->
-      <div id="systemView" class="view-panel">
-        <div class="view-header">
-          <h1>System Architecture &amp; Data Provenance</h1>
-          <p>Overview of the CHANAKYA pipeline stages, technical components, and prototype boundaries.</p>
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-title">Pipeline Architecture Invariants</div>
-            <ul style="padding-left:18px; color: var(--text-muted); line-height: 1.8;">
-              <li><strong>Hard Invariant:</strong> No proof, no actionable recommendation.</li>
-              <li><strong>ETOG:</strong> Evidence-Typed Ontology Graph for relationship validation.</li>
-              <li><strong>NCS:</strong> Normative Closure Scoring to verify complete requirement coverage.</li>
-              <li><strong>MSSS:</strong> Minimal Sufficient Standard Set to prevent bloated specifications.</li>
-              <li><strong>CNT:</strong> Coverage Necessity Typing (Essential vs Conditional vs Test Method).</li>
-              <li><strong>Temporal Gate:</strong> Enforces version validity based on tender issue date.</li>
-            </ul>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Simulation Boundary Notice</div>
-            <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
-              This prototype is designed for SIH 2026 presentation and evaluation. It intentionally simulates vector search, embedding models, OCR, and external BIS API calls using deterministic local fixtures in <code>data/demo_data.json</code>.
-            </p>
-            <span class="badge badge-amber">DEMO PROTOTYPE ONLY</span>
-          </div>
-        </div>
-      </div>
-
     </main>
-  </div>
-</div>
 
-<!-- Modal for Standard Detail Inspection -->
-<div id="detailModal" class="modal-overlay">
-  <div class="modal-content">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-      <h3 id="modalIsNumber" style="font-family:'JetBrains Mono',monospace; font-size:18px;">IS DEMO-101:2024</h3>
-      <button class="btn btn-secondary btn-sm" onclick="closeModal()">✕ Close</button>
-    </div>
-    
-    <div style="margin-bottom:14px;">
-      <span class="badge badge-amber">SYNTHETIC DEMO RECORD</span>
-    </div>
-
-    <div class="kv-list" id="modalKvList" style="margin-bottom:16px;">
-      <!-- Populated dynamically -->
-    </div>
-
-    <div style="font-size:12px; color:var(--text-light); border-top:1px solid var(--border-color); padding-top:12px;">
-      This record is a synthetic demonstration fixture. Before production deployment, standard details must be verified against authoritative BIS databases.
-    </div>
-  </div>
-</div>
-
-<!-- Toast Notification -->
-<div id="toast" class="toast">Action completed successfully</div>
-
-<!-- ════════════════ JS APPLICATION LOGIC ════════════════ -->
-<script>
-// ─── STATE MANAGEMENT ──────────────────────────────────────────────────
-let currentTheme = localStorage.getItem('chanakya_theme') || 'light';
-let lastRecommendationData = null;
-
-document.documentElement.setAttribute('data-theme', currentTheme);
-
-function toggleTheme() {
-  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  localStorage.setItem('chanakya_theme', currentTheme);
-}
-
-// ─── SIDEBAR VISIBILITY & TAB NAVIGATION ──────────────────────────────
-function updateSidebarVisibility(targetId) {
-  const sidebar = document.querySelector('.sidebar');
-  const topNavBtn = document.getElementById('topNavWorkspaceBtn');
-
-  if (targetId === 'landingView') {
-    sidebar.style.display = 'none';
-    if (topNavBtn) {
-      topNavBtn.textContent = 'Launch Workspace →';
-      topNavBtn.onclick = () => switchTabByTarget('recommendView');
-    }
-  } else {
-    sidebar.style.display = 'flex';
-    if (topNavBtn) {
-      topNavBtn.textContent = '← Overview Landing';
-      topNavBtn.onclick = () => switchTabByTarget('landingView');
-    }
-  }
-}
-
-function switchTab(btn) {
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-  
-  btn.classList.add('active');
-  const targetId = btn.getAttribute('data-target');
-  document.getElementById(targetId).classList.add('active');
-
-  updateSidebarVisibility(targetId);
-
-  // Trigger data loads on tab switch
-  if (targetId === 'standardsView') loadStandardsCatalog();
-  if (targetId === 'reviewView') loadReviewQueue();
-  if (targetId === 'auditView') loadAuditLog();
-}
-
-function switchTabByTarget(targetId) {
-  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => {
-    if (b.getAttribute('data-target') === targetId) {
-      b.classList.add('active');
-    } else {
-      b.classList.remove('active');
-    }
-  });
-
-  const panel = document.getElementById(targetId);
-  if (panel) panel.classList.add('active');
-
-  updateSidebarVisibility(targetId);
-
-  if (targetId === 'standardsView') loadStandardsCatalog();
-  if (targetId === 'reviewView') loadReviewQueue();
-  if (targetId === 'auditView') loadAuditLog();
-}
-
-function launchDemoWorkspace() {
-  switchTabByTarget('recommendView');
-  loadDemoQuery();
-  runRecommendation();
-}
-
-// ─── TOAST NOTIFICATION ────────────────────────────────────────────────
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.style.display = 'block';
-  setTimeout(() => { toast.style.display = 'none'; }, 2600);
-}
-
-// ─── DEMO QUERY LOAD ───────────────────────────────────────────────────
-function loadDemoQuery() {
-  document.getElementById('queryInput').value = 
-    "Supply of 25 mm thick vulcanized natural rubber sheets for lining of a water tank. Tender currently cites IS DEMO-118:2018.";
-  showToast("Loaded canonical rubber sheet tender specification.");
-}
-
-// ─── FILE UPLOAD HANDLER ───────────────────────────────────────────────
-async function handleFileUpload(input) {
-  if (!input.files || !input.files[0]) return;
-  const file = input.files[0];
-  const formData = new FormData();
-  formData.append('file', file);
-
-  const statusEl = document.getElementById('uploadStatus');
-  statusEl.style.display = 'inline-flex';
-  statusEl.textContent = 'Uploading tender file...';
-
-  try {
-    const res = await fetch('/api/upload', { method: 'POST', body: formData });
-    const data = await res.json();
-    if (res.ok) {
-      statusEl.className = 'badge badge-green';
-      statusEl.textContent = `File: ${data.filename} (${Math.round(data.size_bytes/1024)} KB) • Route: ${data.ocr_route} • Job ID: ${data.job_id}`;
-      showToast("Tender file accepted for demo ingestion.");
-    } else {
-      statusEl.className = 'badge badge-red';
-      statusEl.textContent = data.detail || 'Upload failed.';
-    }
-  } catch (err) {
-    statusEl.className = 'badge badge-blue';
-    statusEl.textContent = `Tender upload simulated for '${file.name}'. Job ID: ING-DEMO-00128.`;
-    showToast("Tender file ingestion simulated.");
-  }
-}
-
-// ─── RECOMMENDATION PIPELINE RUNNER ──────────────────────────────────
-async function runRecommendation() {
-  const query = document.getElementById('queryInput').value.trim();
-  if (!query) {
-    showToast("Please enter a procurement requirement query.");
-    return;
-  }
-
-  const runBtn = document.getElementById('runBtn');
-  runBtn.disabled = true;
-  runBtn.innerHTML = '<span>⏳ Processing...</span>';
-
-  const pipelineBox = document.getElementById('pipelineBox');
-  pipelineBox.style.display = 'block';
-
-  // Reset steps
-  for (let i = 1; i <= 11; i++) {
-    const el = document.getElementById('st' + i);
-    el.className = 'step-item';
-    el.querySelector('.step-icon').textContent = i;
-  }
-
-  // Animate stages step-by-step
-  for (let i = 1; i <= 11; i++) {
-    const el = document.getElementById('st' + i);
-    el.className = 'step-item active';
-    await new Promise(r => setTimeout(r, 140));
-    el.className = 'step-item completed';
-    el.querySelector('.step-icon').textContent = '✓';
-  }
-
-  try {
-    const res = await fetch('/api/recommend', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: query, demo_mode: true })
-    });
-    
-    if (res.ok) {
-      lastRecommendationData = await res.json();
-    } else {
-      lastRecommendationData = await fetchFallbackDemo();
-    }
-  } catch (e) {
-    lastRecommendationData = await fetchFallbackDemo();
-  }
-
-  renderRecommendationResults(lastRecommendationData);
-
-  runBtn.disabled = false;
-  runBtn.innerHTML = '<span>⚡ Run Recommendation</span>';
-  showToast("Recommendation generated in simulation mode.");
-}
-
-async function fetchFallbackDemo() {
-  try {
-    const r = await fetch('/api/demo');
-    return await r.json();
-  } catch {
-    return null;
-  }
-}
-
-// ─── RENDER RECOMMENDATION RESULTS ────────────────────────────────────
-function renderRecommendationResults(data) {
-  if (!data) return;
-
-  // Update Metrics Row
-  if (data.audit) {
-    document.getElementById('mTopK').textContent = data.audit.retrieval_topk || 50;
-    document.getElementById('mRerank').textContent = data.audit.rerank_topk || 10;
-    document.getElementById('mPrimary').textContent = data.audit.primary_topn || 3;
-    document.getElementById('mHallucinations').textContent = data.audit.hallucinations_removed || 0;
-  }
-
-  // Extracted Requirement KV
-  const ext = data.extracted || {};
-  document.getElementById('extractedKv').innerHTML = `
-    <div class="kv-label">Product</div><div class="kv-value">${ext.product || '—'}</div>
-    <div class="kv-label">Material</div><div class="kv-value">${ext.material || 'NR'}</div>
-    <div class="kv-label">Application</div><div class="kv-value">${ext.application || '—'}</div>
-    <div class="kv-label">Thickness</div><div class="kv-value">${ext.parameters ? ext.parameters[0]?.value + ' ' + ext.parameters[0]?.unit : '25 mm'}</div>
-    <div class="kv-label">Category</div><div class="kv-value">${ext.category || 'rubber products'}</div>
-    <div class="kv-label">Sector</div><div class="kv-value">${ext.sector || 'polymers'}</div>
-  `;
-
-  // Gap Analysis Table
-  const gaps = data.gaps || [];
-  document.getElementById('gapTableBody').innerHTML = gaps.map(g => {
-    const isOutdated = g.status === 'OUTDATED';
-    const badgeClass = isOutdated ? 'badge-red' : g.status === 'PRESENT' ? 'badge-green' : 'badge-amber';
-    return `
-      <tr class="${isOutdated ? 'row-outdated' : ''}">
-        <td><span class="badge ${badgeClass}">${g.status}</span></td>
-        <td><strong>${g.cited || '—'}</strong></td>
-        <td>${g.message || (g.required ? '→ ' + g.required : '')}</td>
-      </tr>
-    `;
-  }).join('');
-
-  // Recommendation Cards List
-  const recs = data.recommendations || [];
-  document.getElementById('recommendationsList').innerHTML = recs.map((r, idx) => {
-    const isPrimary = idx === 0;
-    return `
-      <div class="evidence-card ${isPrimary ? 'primary-candidate' : ''}">
-        <div class="card-header-row">
-          <div>
-            <div class="is-number">${r.is_number}</div>
-            <div class="is-title">${r.title}</div>
-          </div>
-          <div class="match-score">${r.match}%</div>
-        </div>
-
-        <div class="chips-row">
-          <span class="badge ${r.confidence === 'HIGH' ? 'badge-green' : 'badge-amber'}">${r.confidence} CONFIDENCE</span>
-          <span class="badge ${r.necessity === 'ESSENTIAL' ? 'badge-green' : 'badge-blue'}">${r.necessity}</span>
-          <span class="badge badge-green">${r.status}</span>
-          <span class="badge badge-gray">${r.currency}</span>
-          <span class="badge badge-gray">${r.certification || 'ISI MARK'}</span>
-        </div>
-
-        <div class="why-reasoning">
-          <strong>Why this recommendation:</strong> ${r.why}
-        </div>
-
-        <div style="font-size:12px; color:var(--text-light); margin-top:8px;">
-          <strong>Coverage:</strong> ${(r.coverage || []).join(' • ')} &nbsp;|&nbsp; 
-          <strong>Evidence:</strong> ${(r.evidence || []).join(', ')}
-        </div>
-
-        <div class="button-group" style="margin-top:12px;">
-          <button class="btn btn-primary btn-sm" onclick="sendFeedback('accept', '${r.is_number}')">✓ Accept</button>
-          <button class="btn btn-secondary btn-sm" onclick="sendFeedback('correct', '${r.is_number}')">✎ Correct</button>
-          <button class="btn btn-outline btn-sm" onclick="sendFeedback('review', '${r.is_number}')">🚩 Flag for Review</button>
-        </div>
+    <!-- Footer -->
+    <footer class="hero-footer">
+      <div class="footer-left">
+        CHANAKYA SIH 2026 Simulation Prototype &bull; Standards Review Engine
       </div>
-    `;
-  }).join('');
+      <div class="footer-nav">
+        <a href="/dashboard">Tender Dashboard</a>
+        <a href="/health" target="_blank">Health Status</a>
+        <a href="/docs" target="_blank">API Reference</a>
+      </div>
+    </footer>
 
-  // Proof Chain
-  const chain = data.proof_chain || [];
-  document.getElementById('proofChainBox').innerHTML = chain.map((node, i) => `
-    <span class="proof-node">${node.from}</span>
-    <span class="proof-rel">→ ${node.relation} →</span>
-    <span class="proof-node">${node.to}</span>
-    ${i < chain.length - 1 ? '<span style="color:var(--text-light);">•</span>' : ''}
-  `).join('');
-
-  // Clause Draft
-  if (data.clause_draft) {
-    document.getElementById('clauseDraftText').textContent = data.clause_draft;
-  }
-}
-
-// ─── STANDARDS CATALOG LOADER ──────────────────────────────────────────
-async function loadStandardsCatalog() {
-  const tbody = document.getElementById('standardsTableBody');
-  tbody.innerHTML = '<tr><td colspan="7">Loading standards catalog...</td></tr>';
-  
-  try {
-    const res = await fetch('/api/standards');
-    const data = await res.json();
-    const items = data.items || [];
-    
-    tbody.innerHTML = items.map(s => `
-      <tr>
-        <td style="font-family:'JetBrains Mono',monospace; font-weight:700;">${s.is_number}</td>
-        <td>${s.title}</td>
-        <td>${s.category}</td>
-        <td>${s.sector}</td>
-        <td>${s.edition}</td>
-        <td><span class="badge ${s.status === 'ACTIVE' ? 'badge-green' : 'badge-red'}">${s.status}</span></td>
-        <td><button class="btn btn-secondary btn-sm" onclick="openStandardDetail('${s.is_number}')">Inspect</button></td>
-      </tr>
-    `).join('');
-  } catch (err) {
-    tbody.innerHTML = '<tr><td colspan="7">Failed to load standards catalog.</td></tr>';
-  }
-}
-
-async function openStandardDetail(isNumber) {
-  try {
-    const res = await fetch('/api/standards/' + encodeURIComponent(isNumber));
-    const data = await res.json();
-    
-    document.getElementById('modalIsNumber').textContent = data.is_number;
-    document.getElementById('modalKvList').innerHTML = `
-      <div class="kv-label">Title</div><div class="kv-value">${data.title}</div>
-      <div class="kv-label">Category</div><div class="kv-value">${data.category}</div>
-      <div class="kv-label">Sector</div><div class="kv-value">${data.sector}</div>
-      <div class="kv-label">Status</div><div class="kv-value">${data.status}</div>
-      <div class="kv-label">Edition</div><div class="kv-value">${data.edition}</div>
-      <div class="kv-label">Scope</div><div class="kv-value">${data.scope || '—'}</div>
-      <div class="kv-label">Certification</div><div class="kv-value">${data.certification ? data.certification.scheme : '—'}</div>
-      <div class="kv-label">Superseded By</div><div class="kv-value">${data.superseded_by || 'N/A (Current)'}</div>
-    `;
-    
-    document.getElementById('detailModal').classList.add('active');
-  } catch (e) {
-    showToast("Unable to load standard detail.");
-  }
-}
-
-function closeModal() {
-  document.getElementById('detailModal').classList.remove('active');
-}
-
-// ─── REVIEW QUEUE LOADER ───────────────────────────────────────────────
-async function loadReviewQueue() {
-  const tbody = document.getElementById('reviewTableBody');
-  tbody.innerHTML = '<tr><td colspan="6">Loading review queue...</td></tr>';
-  
-  try {
-    const res = await fetch('/api/review/queue');
-    const data = await res.json();
-    const items = data.items || [];
-    
-    tbody.innerHTML = items.map(item => `
-      <tr>
-        <td style="font-family:'JetBrains Mono',monospace; font-weight:700;">${item.id}</td>
-        <td><span class="badge ${item.severity === 'HIGH' ? 'badge-red' : 'badge-amber'}">${item.severity}</span></td>
-        <td><code>${item.reason}</code></td>
-        <td>${item.query}</td>
-        <td><span class="badge badge-amber">${item.status}</span></td>
-        <td>
-          <div class="button-group" style="margin-top:0;">
-            <button class="btn btn-primary btn-sm" onclick="resolveReview('${item.id}', 'accept')">Accept</button>
-            <button class="btn btn-secondary btn-sm" onclick="resolveReview('${item.id}', 'resolve')">Resolve</button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
-  } catch (err) {
-    tbody.innerHTML = '<tr><td colspan="6">Failed to load review queue.</td></tr>';
-  }
-}
-
-async function resolveReview(reviewId, decision) {
-  try {
-    await fetch('/api/review/resolve', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ review_id: reviewId, decision: decision })
-    });
-    showToast(`Review case ${reviewId} marked as ${decision.toUpperCase()}`);
-    loadReviewQueue();
-  } catch (e) {
-    showToast("Review resolution simulated.");
-  }
-}
-
-// ─── AUDIT LOG LOADER ──────────────────────────────────────────────────
-async function loadAuditLog() {
-  const tbody = document.getElementById('auditTableBody');
-  tbody.innerHTML = '<tr><td colspan="5">Loading audit log...</td></tr>';
-  
-  try {
-    const res = await fetch('/api/audit');
-    const data = await res.json();
-    const events = data.events || [];
-    
-    tbody.innerHTML = events.map(e => `
-      <tr>
-        <td>${e.time}</td>
-        <td><strong>${e.actor}</strong></td>
-        <td><code>${e.event}</code></td>
-        <td><span class="badge badge-green">${e.status}</span></td>
-        <td>${e.latency}</td>
-      </tr>
-    `).join('');
-  } catch (err) {
-    tbody.innerHTML = '<tr><td colspan="5">Failed to load audit log.</td></tr>';
-  }
-}
-
-// ─── FEEDBACK ACTION ───────────────────────────────────────────────────
-async function sendFeedback(decision, isNumber = null) {
-  try {
-    await fetch('/api/feedback', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ decision, is_number: isNumber })
-    });
-  } catch (e) {}
-  showToast(`Feedback recorded: ${decision.toUpperCase()} for ${isNumber || 'clause'}`);
-}
-
-function copyClauseDraft() {
-  const text = document.getElementById('clauseDraftText').textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    showToast("Grounded clause draft copied to clipboard.");
-  }).catch(() => {
-    showToast("Copied to clipboard.");
-  });
-}
-
-// Initial state: hide sidebar on landing page
-window.addEventListener('DOMContentLoaded', () => {
-  updateSidebarVisibility('landingView');
-});
-</script>
+  </div>
 
 </body>
 </html>

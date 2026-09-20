@@ -277,3 +277,11 @@ def read_index():
     if not index_path.exists():
         raise HTTPException(status_code=404, detail="Frontend index.html not found.")
     return FileResponse(index_path)
+
+@app.get("/dashboard")
+def read_dashboard():
+    """Serve the full Chanakya prototype dashboard."""
+    dashboard_path = BASE_DIR / "app" / "static" / "app_dashboard.html"
+    if not dashboard_path.exists():
+        dashboard_path = BASE_DIR / "app" / "static" / "index.html"
+    return FileResponse(dashboard_path)
