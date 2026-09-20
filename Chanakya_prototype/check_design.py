@@ -2,15 +2,9 @@
 CHANAKYA — SIH 2026 Prototype Quality & Integrity Verification Script
 """
 
-import sys
 from pathlib import Path
 
-# Resolve base directory (works whether run from workspace root or inside Chanakya_prototype)
-CURRENT_DIR = Path(__file__).resolve().parent
-if (CURRENT_DIR / "Chanakya_prototype").exists():
-    BASE_DIR = CURRENT_DIR / "Chanakya_prototype"
-else:
-    BASE_DIR = CURRENT_DIR
+BASE_DIR = Path(__file__).resolve().parent
 
 print("=== CHANAKYA PROTOTYPE INTEGRITY CHECK ===")
 print(f"Target Root: {BASE_DIR}\n")
