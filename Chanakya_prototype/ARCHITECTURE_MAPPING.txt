@@ -1,0 +1,13 @@
+Chanakya v7.13 prototype mapping
+
+Core pipeline:
+English tender text → Requirement Atoms → bge-large-en-v1.5 → FAISS → bge-reranker-large → ETOG/NCS → MSSS → CNT → proof validation → GPT-OSS 120B
+
+Hard invariant:
+No proof, no actionable recommendation.
+
+Demo flow:
+input → extraction → recommendation → relationship expansion → lifecycle → QCO/certification → tender gap audit → evidence → clause draft → human review → offline replay.
+
+Demo data:
+synthetic records are allowed as fixtures but must be clearly labeled and replaced with verified source records before a legal/compliance demo.

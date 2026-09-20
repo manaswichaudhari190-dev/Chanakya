@@ -1,0 +1,308 @@
+{
+  "standards": [
+    {
+      "is_number": "IS DEMO-101:2024",
+      "title": "Vulcanized Rubber Sheets for Industrial Lining \u2014 Synthetic Demo Record",
+      "category": "Rubber Products",
+      "sector": "Polymers",
+      "status": "ACTIVE",
+      "edition": "2024",
+      "last_verified": "2026-09-12",
+      "currency_risk": 0.08,
+      "scope": "Synthetic demo scope for vulcanized natural rubber sheets used for industrial lining and protective applications.",
+      "certification": {
+        "scheme": "ISI",
+        "mandatory": false,
+        "source": "SYNTHETIC-FIXTURE"
+      },
+      "qco": {
+        "status": "NO_DEMO_MATCH",
+        "reference": "SYNTHETIC-FIXTURE"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS DEMO-205:2023",
+      "title": "Rubber Sheet Test Methods \u2014 Synthetic Demo Record",
+      "category": "Rubber Products",
+      "sector": "Polymers",
+      "status": "ACTIVE",
+      "edition": "2023",
+      "last_verified": "2026-09-08",
+      "currency_risk": 0.12,
+      "scope": "Synthetic demo test-method scope covering thickness, tensile and hardness checks for rubber sheets.",
+      "certification": {
+        "scheme": "\u2014",
+        "mandatory": false,
+        "source": "SYNTHETIC-FIXTURE"
+      },
+      "qco": {
+        "status": "NO_DEMO_MATCH",
+        "reference": "SYNTHETIC-FIXTURE"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS DEMO-310:2021",
+      "title": "Terminology for Rubber Products \u2014 Synthetic Demo Record",
+      "category": "Rubber Products",
+      "sector": "Polymers",
+      "status": "ACTIVE",
+      "edition": "2021",
+      "last_verified": "2026-08-30",
+      "currency_risk": 0.21,
+      "scope": "Synthetic terminology record for rubber product descriptions and technical specifications.",
+      "certification": {
+        "scheme": "\u2014",
+        "mandatory": false,
+        "source": "SYNTHETIC-FIXTURE"
+      },
+      "qco": {
+        "status": "NO_DEMO_MATCH",
+        "reference": "SYNTHETIC-FIXTURE"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS DEMO-118:2018",
+      "title": "Legacy Rubber Sheet Specification \u2014 Synthetic Superseded Record",
+      "category": "Rubber Products",
+      "sector": "Polymers",
+      "status": "SUPERSEDED",
+      "edition": "2018",
+      "last_verified": "2026-07-14",
+      "currency_risk": 0.84,
+      "scope": "Synthetic legacy record retained to demonstrate lifecycle and outdated-reference detection.",
+      "certification": {
+        "scheme": "ISI",
+        "mandatory": false,
+        "source": "SYNTHETIC-FIXTURE"
+      },
+      "qco": {
+        "status": "NO_DEMO_MATCH",
+        "reference": "SYNTHETIC-FIXTURE"
+      },
+      "superseded_by": "IS DEMO-101:2024",
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    },
+    {
+      "is_number": "IS DEMO-420:2025",
+      "title": "Industrial Tank Lining Safety Guidance \u2014 Synthetic Demo Record",
+      "category": "Industrial Safety",
+      "sector": "Mechanical",
+      "status": "ACTIVE",
+      "edition": "2025",
+      "last_verified": "2026-09-11",
+      "currency_risk": 0.06,
+      "scope": "Synthetic safety guidance for lining applications in industrial liquid-holding systems.",
+      "certification": {
+        "scheme": "\u2014",
+        "mandatory": false,
+        "source": "SYNTHETIC-FIXTURE"
+      },
+      "qco": {
+        "status": "NO_DEMO_MATCH",
+        "reference": "SYNTHETIC-FIXTURE"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": true
+    }
+  ],
+  "relationships": [
+    {
+      "source": "IS DEMO-101:2024",
+      "target": "IS DEMO-205:2023",
+      "type": "test_method",
+      "verification": "VERIFIED",
+      "evidence": "EV-DEMO-01"
+    },
+    {
+      "source": "IS DEMO-101:2024",
+      "target": "IS DEMO-310:2021",
+      "type": "terminology",
+      "verification": "VERIFIED",
+      "evidence": "EV-DEMO-02"
+    },
+    {
+      "source": "IS DEMO-101:2024",
+      "target": "IS DEMO-420:2025",
+      "type": "safety",
+      "verification": "VERIFIED",
+      "evidence": "EV-DEMO-03"
+    },
+    {
+      "source": "IS DEMO-118:2018",
+      "target": "IS DEMO-101:2024",
+      "type": "superseded_by",
+      "verification": "VERIFIED",
+      "evidence": "EV-DEMO-04"
+    }
+  ],
+  "demo_response": {
+    "query": "Supply of 25 mm thick vulcanized natural rubber sheets for lining of a water tank. Tender currently cites IS DEMO-118:2018.",
+    "language": {
+      "code": "en",
+      "confidence": 0.99
+    },
+    "extracted": {
+      "product": "vulcanized natural rubber sheet",
+      "material": "NR",
+      "application": "water tank lining",
+      "parameters": [
+        {
+          "name": "thickness",
+          "value": "25",
+          "unit": "mm"
+        }
+      ],
+      "category": "rubber products",
+      "sector": "polymers"
+    },
+    "recommendations": [
+      {
+        "is_number": "IS DEMO-101:2024",
+        "title": "Vulcanized Rubber Sheets for Industrial Lining",
+        "match": 94,
+        "confidence": "HIGH",
+        "necessity": "ESSENTIAL",
+        "status": "ACTIVE",
+        "currency": "Current",
+        "qco": "No demo match",
+        "certification": "ISI \u2022 Not mandatory in demo",
+        "coverage": [
+          "REQ-001 thickness 25 mm",
+          "REQ-002 vulcanized rubber sheet",
+          "REQ-003 tank lining use-case"
+        ],
+        "evidence": [
+          "EV-DEMO-01",
+          "EV-DEMO-02"
+        ],
+        "proof": {
+          "closure_state": "CLOSED",
+          "validity": "VALID",
+          "rules": [
+            "scope_match",
+            "effective_on_date",
+            "not_superseded"
+          ]
+        },
+        "why": "Scope aligns with vulcanized rubber sheets and the stated lining use-case. The demo graph also closes the test-method relationship."
+      },
+      {
+        "is_number": "IS DEMO-205:2023",
+        "title": "Rubber Sheet Test Methods",
+        "match": 87,
+        "confidence": "HIGH",
+        "necessity": "CONDITIONAL",
+        "status": "ACTIVE",
+        "currency": "Current",
+        "qco": "No demo match",
+        "certification": "\u2014",
+        "coverage": [
+          "REQ-004 test evidence"
+        ],
+        "evidence": [
+          "EV-DEMO-01"
+        ],
+        "proof": {
+          "closure_state": "CLOSED",
+          "validity": "VALID",
+          "rules": [
+            "verified_edge",
+            "test_method_relation"
+          ]
+        },
+        "why": "Included as an allied test-method standard linked from the primary candidate."
+      },
+      {
+        "is_number": "IS DEMO-420:2025",
+        "title": "Industrial Tank Lining Safety Guidance",
+        "match": 72,
+        "confidence": "MEDIUM",
+        "necessity": "CONDITIONAL",
+        "status": "ACTIVE",
+        "currency": "Current",
+        "qco": "No demo match",
+        "certification": "\u2014",
+        "coverage": [
+          "REQ-005 safety context"
+        ],
+        "evidence": [
+          "EV-DEMO-03"
+        ],
+        "proof": {
+          "closure_state": "CLOSED",
+          "validity": "VALID",
+          "rules": [
+            "scope_match",
+            "verified_edge"
+          ]
+        },
+        "why": "Adds a verified safety relationship for the stated tank-lining application."
+      }
+    ],
+    "gaps": [
+      {
+        "status": "OUTDATED",
+        "severity": "HIGH",
+        "cited": "IS DEMO-118:2018",
+        "required": "IS DEMO-101:2024",
+        "message": "Tender cites a superseded demo record; current demo record should be reviewed."
+      },
+      {
+        "status": "PRESENT",
+        "severity": "INFO",
+        "cited": "IS DEMO-205:2023",
+        "required": "IS DEMO-205:2023",
+        "message": "Test-method relationship is present in the demo packet."
+      },
+      {
+        "status": "NOT_CITED",
+        "severity": "MEDIUM",
+        "cited": "\u2014",
+        "required": "IS DEMO-420:2025",
+        "message": "Related safety guidance is not explicitly cited in the demo tender."
+      }
+    ],
+    "proof_chain": [
+      {
+        "from": "REQ-001",
+        "relation": "SATISFIES",
+        "to": "IS DEMO-101:2024",
+        "state": "VERIFIED"
+      },
+      {
+        "from": "IS DEMO-101:2024",
+        "relation": "SUPPORTED_BY",
+        "to": "EV-DEMO-01",
+        "state": "VERIFIED"
+      },
+      {
+        "from": "IS DEMO-101:2024",
+        "relation": "VALID_DURING",
+        "to": "2026 tender date",
+        "state": "VERIFIED"
+      },
+      {
+        "from": "IS DEMO-101:2024",
+        "relation": "TEST_METHOD",
+        "to": "IS DEMO-205:2023",
+        "state": "VERIFIED"
+      }
+    ],
+    "audit": {
+      "retrieval_topk": 50,
+      "rerank_topk": 10,
+      "primary_topn": 3,
+      "closure_state": "CLOSED",
+      "hallucinations_removed": 0,
+      "pipeline": "completeness \u2192 extraction \u2192 atoms \u2192 retrieve \u2192 rerank \u2192 graph \u2192 lifecycle \u2192 ETOG \u2192 NCS \u2192 MSSS \u2192 CNT \u2192 proof \u2192 gap \u2192 synthesis"
+    },
+    "clause_draft": "DRAFT \u2014 HUMAN REVIEW REQUIRED\nFor the specified vulcanized natural rubber sheet lining application, require the applicable current standard record identified by the procurement standards review, together with the associated verified test-method evidence. Confirm the final standard identifier and legal applicability against the authoritative source before tender issue."
+  }
+}
