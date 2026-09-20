@@ -8,7 +8,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after {
@@ -19,7 +19,7 @@
 
     :root {
       --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     html, body {
@@ -28,10 +28,10 @@
       overflow: hidden;
       font-family: var(--font-body);
       color: #FFFFFF;
-      background-color: #0c141c;
+      background-color: #0b1219;
     }
 
-    /* ─── HERO CONTAINER WITH CLEAR, UNBURIED BACKGROUND ─── */
+    /* ─── HERO CONTAINER WITH NATURAL BACKGROUND IMAGE ─── */
     .hero-container {
       position: relative;
       width: 100vw;
@@ -39,18 +39,19 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      align-items: center;
       background-image: url('/static/hero_bg.jpg');
       background-size: cover;
-      background-position: center 38%;
+      background-position: center 36%;
       background-repeat: no-repeat;
     }
 
-    /* Very subtle edge vignettes only — the center image, bridge, sky & mountains remain 100% visible and vivid */
+    /* Light, natural linear gradient solely for top/bottom edge navigation legibility */
     .hero-container::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(8, 14, 20, 0.55) 0%, rgba(8, 14, 20, 0.05) 28%, rgba(8, 14, 20, 0.1) 68%, rgba(6, 12, 18, 0.8) 100%);
+      background: linear-gradient(180deg, rgba(5, 10, 15, 0.45) 0%, rgba(5, 10, 15, 0) 25%, rgba(5, 10, 15, 0) 70%, rgba(5, 10, 15, 0.6) 100%);
       pointer-events: none;
       z-index: 1;
     }
@@ -61,8 +62,7 @@
       z-index: 10;
       width: 100%;
       max-width: 1400px;
-      margin: 0 auto;
-      padding: 22px 36px;
+      padding: 24px 36px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -79,17 +79,16 @@
       width: 40px;
       height: 40px;
       border-radius: 10px;
-      background: rgba(14, 26, 36, 0.65);
+      background: rgba(10, 20, 28, 0.55);
       border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 19px;
       font-weight: 700;
       color: #F8FAFC;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
     }
 
     .brand-info {
@@ -102,21 +101,21 @@
       font-weight: 800;
       letter-spacing: 1.5px;
       color: #FFFFFF;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
     }
 
     .brand-tag {
       font-size: 11px;
       letter-spacing: 0.8px;
-      color: rgba(255, 255, 255, 0.75);
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
       font-weight: 500;
     }
 
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
 
     .status-pill {
@@ -125,8 +124,8 @@
       gap: 8px;
       padding: 6px 14px;
       border-radius: 9999px;
-      background: rgba(10, 20, 30, 0.55);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(10, 20, 30, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       font-size: 12px;
@@ -148,10 +147,10 @@
       gap: 8px;
       padding: 9px 20px;
       border-radius: 10px;
-      background: rgba(15, 27, 38, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(10, 22, 32, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       font-size: 13px;
       font-weight: 600;
       color: #FFFFFF;
@@ -160,148 +159,71 @@
     }
 
     .btn-nav:hover {
-      background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
       transform: translateY(-1px);
     }
 
-    /* ─── MAIN HERO GLASS CARD ─── */
+    /* ─── MAIN HERO TEXT (NO BOX / NO CONTAINER) ─── */
     .hero-main {
       position: relative;
       z-index: 10;
-      width: 100%;
-      max-width: 860px;
-      margin: 0 auto;
+      max-width: 960px;
       padding: 0 24px;
-      display: flex;
-      justify-content: center;
-    }
-
-    /* Frosted glass enclosure preserves readability while keeping background fully viewable */
-    .hero-card {
-      width: 100%;
-      padding: 34px 40px;
-      border-radius: 20px;
-      background: rgba(8, 16, 24, 0.52);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5);
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
-
-    .hero-label {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: #6EE7B7;
-      margin-bottom: 12px;
+      transform: translateY(-10px);
     }
 
     .hero-title {
-      font-size: clamp(28px, 3.8vw, 46px);
-      font-weight: 800;
-      line-height: 1.18;
+      font-family: var(--font-heading);
+      font-size: clamp(34px, 4.8vw, 56px);
+      font-weight: 700;
+      line-height: 1.15;
       letter-spacing: -0.015em;
       color: #FFFFFF;
-      margin-bottom: 14px;
-      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      text-shadow: 0 3px 20px rgba(0, 0, 0, 0.85), 0 1px 4px rgba(0, 0, 0, 0.9);
     }
 
-    .hero-title em {
-      font-style: normal;
+    .hero-title span {
       color: #FCD34D;
     }
 
     .hero-subtitle {
-      font-size: 16px;
-      line-height: 1.55;
-      color: #E2E8F0;
-      max-width: 680px;
-      margin-bottom: 26px;
-      font-weight: 400;
+      font-size: clamp(16px, 1.6vw, 19px);
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.95);
+      max-width: 780px;
+      margin-bottom: 32px;
+      font-weight: 500;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.9);
     }
 
-    /* ─── ACTION BUTTONS ─── */
-    .cta-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 22px;
-    }
-
-    .btn-action-primary {
+    /* ─── ACTION BUTTON ─── */
+    .btn-launch {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 13px 28px;
-      border-radius: 10px;
-      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-size: 16px;
       font-weight: 700;
-      color: #062417;
+      color: #041f14;
       background: #10B981;
       border: none;
       text-decoration: none;
       cursor: pointer;
-      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
-      transition: all 0.2s ease;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4), 0 2px 8px rgba(0, 0, 0, 0.4);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .btn-action-primary:hover {
+    .btn-launch:hover {
       background: #34D399;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
-    }
-
-    .btn-action-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 24px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #FFFFFF;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-
-    .btn-action-secondary:hover {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-1px);
-    }
-
-    /* ─── CORE SYSTEM WORKFLOW SUMMARY ─── */
-    .system-pills {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .sys-pill {
-      font-size: 12px;
-      font-weight: 500;
-      color: rgba(226, 232, 240, 0.85);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 4px 12px;
-      border-radius: 6px;
-    }
-
-    .sys-pill b {
-      color: #34D399;
-      margin-right: 4px;
+      box-shadow: 0 12px 30px rgba(16, 185, 129, 0.55), 0 4px 12px rgba(0, 0, 0, 0.5);
     }
 
     /* ─── FOOTER ─── */
@@ -310,29 +232,31 @@
       z-index: 10;
       width: 100%;
       max-width: 1400px;
-      margin: 0 auto;
-      padding: 18px 36px;
+      padding: 20px 36px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .footer-left {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+      font-weight: 500;
     }
 
     .footer-nav {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 20px;
     }
 
     .footer-nav a {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
       text-decoration: none;
+      font-weight: 500;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
       transition: color 0.15s ease;
     }
 
@@ -348,15 +272,16 @@
         height: auto;
         min-height: 100vh;
       }
-      .hero-card {
-        padding: 24px 20px;
+      .hero-main {
+        transform: none;
+        padding: 40px 20px;
       }
       .hero-title {
-        font-size: 28px;
+        font-size: 32px;
       }
       .hero-footer {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         text-align: center;
       }
     }
@@ -385,39 +310,23 @@
       </div>
     </header>
 
-    <!-- Center Hero Card -->
+    <!-- Main Hero Text (No Box) -->
     <main class="hero-main">
-      <div class="hero-card">
-        <span class="hero-label">Bureau of Indian Standards &bull; Tender Review</span>
-        
-        <h1 class="hero-title">
-          Verify and Map <em>Indian Standards</em> for Government Procurement
-        </h1>
+      <h1 class="hero-title">
+        Verify and Map <span>Indian Standards</span> for Government Procurement
+      </h1>
 
-        <p class="hero-subtitle">
-          CHANAKYA analyzes tender requirements to recommend current IS codes, flag outdated or missing standards, verify Quality Control Orders (QCOs), and generate audit-ready clauses.
-        </p>
+      <p class="hero-subtitle">
+        CHANAKYA analyzes tender requirements to recommend current IS codes, flag outdated or missing standards, verify Quality Control Orders (QCOs), and generate audit-ready clauses.
+      </p>
 
-        <div class="cta-row">
-          <a href="/dashboard" class="btn-action-primary">
-            <span>Open Tender Reviewer</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-          <a href="/docs" target="_blank" class="btn-action-secondary">
-            <span>API Docs</span>
-          </a>
-        </div>
-
-        <div class="system-pills">
-          <span class="sys-pill"><b>&bull;</b> Current vs Superseded Check</span>
-          <span class="sys-pill"><b>&bull;</b> Mandatory QCO Detection</span>
-          <span class="sys-pill"><b>&bull;</b> Tender Gap Analysis</span>
-          <span class="sys-pill"><b>&bull;</b> Verified Proof Trail</span>
-        </div>
-      </div>
+      <a href="/dashboard" class="btn-launch">
+        <span>Open Tender Reviewer</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
     </main>
 
     <!-- Footer -->
