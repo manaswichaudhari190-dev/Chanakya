@@ -3,2120 +3,1979 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chanakya — Procurement Standards Intelligence</title>
-<meta name="description" content="Chanakya is an AI-powered procurement standards intelligence platform. Identify applicable Indian Standards, check lifecycle validity, and get evidence-backed recommendations for procurement officers.">
+<title>CHANAKYA — AI-Assisted Procurement Standards Review</title>
+<meta name="description" content="CHANAKYA is an AI-assisted procurement standards review and recommendation system prototype for government procurement officers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ─── DESIGN TOKENS ──────────────────────────────────────────────────── */
+/* ─── CSS DESIGN TOKENS ───────────────────────────────────────────────── */
 :root {
-  /* Light Mode */
-  --bg: #FFFFFF;
-  --bg2: #F7FBF9;
-  --card: #FFFFFF;
-  --card2: #E7F7F0;
+  --bg-app: #F8FAF9;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F3F6F4;
+  --bg-accent: #E8F5F0;
+  
   --brand: #087A5A;
-  --brand-cta: #0B8F68;
-  --brand-bright: #0B8F68;
-  --heading: #14231F;
-  --text: #2C3B36;
-  --muted: #66756F;
-  --mint: #E7F7F0;
-  --border: #DCE6E1;
-  --border2: #C5D9D1;
-  --white: #FFFFFF;
-  --shadow: 0 4px 24px rgba(8,122,90,0.08);
-  --shadow-lg: 0 12px 48px rgba(8,122,90,0.12);
+  --brand-hover: #066349;
+  --brand-light: #E6F4EF;
+  --brand-border: #A3D9C9;
+  --brand-glow: rgba(8, 122, 90, 0.15);
+  
+  --text-main: #111827;
+  --text-muted: #4B5563;
+  --text-light: #6B7280;
+  
+  --border-color: #E5E7EB;
+  --border-dark: #D1D5DB;
+  
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
 
-  /* Status colors */
-  --green-badge-bg: #E0F5EC;
-  --green-badge-text: #065F46;
-  --amber-badge-bg: #FEF3C7;
-  --amber-badge-text: #92400E;
-  --red-badge-bg: #FEE2E2;
-  --red-badge-text: #991B1B;
-  --blue-badge-bg: #DBEAFE;
-  --blue-badge-text: #1E40AF;
-  --orange-badge-bg: #FFEDD5;
-  --orange-badge-text: #9A3412;
+  /* Semantic status colors */
+  --badge-green-bg: #ECFDF5;
+  --badge-green-text: #047857;
+  --badge-green-border: #A7F3D0;
+  
+  --badge-amber-bg: #FFFBEB;
+  --badge-amber-text: #B45309;
+  --badge-amber-border: #FDE68A;
+  
+  --badge-red-bg: #FEF2F2;
+  --badge-red-text: #B91C1C;
+  --badge-red-border: #FECACA;
+  
+  --badge-blue-bg: #EFF6FF;
+  --badge-blue-text: #1D4ED8;
+  --badge-blue-border: #BFDBFE;
 
-  /* Graph / status indicators */
-  --indicator: #10B981;
-  --indicator-glow: rgba(16,185,129,0.3);
-
-  --radius: 16px;
-  --radius-sm: 10px;
-  --radius-pill: 999px;
+  --badge-gray-bg: #F3F4F6;
+  --badge-gray-text: #374151;
+  --badge-gray-border: #E5E7EB;
 }
 
 [data-theme="dark"] {
-  --bg: #07110E;
-  --bg2: #0D1B17;
-  --card: #10231D;
-  --card2: #0D1B17;
-  --brand: #087A5A;
-  --brand-cta: #0B8F68;
-  --brand-bright: #32D583;
-  --heading: #F2F8F5;
-  --text: #D4EDE4;
-  --muted: #9FB5AC;
-  --mint: #D8F5E6;
-  --border: #203B32;
-  --border2: #2C5244;
-  --white: #F2F8F5;
-  --shadow: 0 4px 24px rgba(0,0,0,0.36);
-  --shadow-lg: 0 16px 60px rgba(0,0,0,0.48);
+  --bg-app: #0B1311;
+  --bg-surface: #121E1B;
+  --bg-subtle: #182824;
+  --bg-accent: #15332B;
+  
+  --brand: #10B981;
+  --brand-hover: #34D399;
+  --brand-light: #15332B;
+  --brand-border: #1F5C4A;
+  --brand-glow: rgba(16, 185, 129, 0.2);
+  
+  --text-main: #F9FAFB;
+  --text-muted: #D1D5DB;
+  --text-light: #9CA3AF;
+  
+  --border-color: #243833;
+  --border-dark: #324D46;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
 
-  --green-badge-bg: #053825;
-  --green-badge-text: #6EE7B7;
-  --amber-badge-bg: #2D1F05;
-  --amber-badge-text: #FCD34D;
-  --red-badge-bg: #2B0E0E;
-  --red-badge-text: #FCA5A5;
-  --blue-badge-bg: #0F1F3D;
-  --blue-badge-text: #93C5FD;
-  --orange-badge-bg: #2D1500;
-  --orange-badge-text: #FDBA74;
+  --badge-green-bg: #064E3B;
+  --badge-green-text: #6EE7B7;
+  --badge-green-border: #047857;
+  
+  --badge-amber-bg: #451A03;
+  --badge-amber-text: #FCD34D;
+  --badge-amber-border: #78350F;
+  
+  --badge-red-bg: #450A0A;
+  --badge-red-text: #FCA5A5;
+  --badge-red-border: #7F1D1D;
+  
+  --badge-blue-bg: #172554;
+  --badge-blue-text: #93C5FD;
+  --badge-blue-border: #1E40AF;
 
-  --indicator: #32D583;
-  --indicator-glow: rgba(50,213,131,0.25);
+  --badge-gray-bg: #1F2937;
+  --badge-gray-text: #D1D5DB;
+  --badge-gray-border: #374151;
 }
 
-/* ─── RESET & BASE ───────────────────────────────────────────────────── */
+/* ─── RESET & BASE STYLES ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  line-height: 1.6;
-  transition: background 0.3s ease, color 0.3s ease;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  line-height: 1.5;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
 }
-button, input, textarea, select { font: inherit; }
-a { color: inherit; text-decoration: none; }
-img { max-width: 100%; }
-.hidden { display: none !important; }
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
 
-/* ─── UTILITIES ──────────────────────────────────────────────────────── */
-.container { width: min(1200px, 92%); margin: 0 auto; }
-.section { padding: 88px 0; }
-.section-sm { padding: 56px 0; }
-
-.eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--mint); color: var(--brand);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius-pill);
-  padding: 6px 14px; font-size: 12px; font-weight: 700;
-  letter-spacing: 0.04em; text-transform: uppercase;
-}
-[data-theme="dark"] .eyebrow {
-  background: rgba(8,122,90,0.18);
-  color: var(--brand-bright);
-  border-color: rgba(50,213,131,0.2);
+/* ─── APP LAYOUT ──────────────────────────────────────────────────────── */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.chip {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 11px; font-weight: 700; padding: 4px 9px;
-  border-radius: var(--radius-pill);
-  border: 1px solid transparent;
-  text-transform: uppercase; letter-spacing: 0.04em;
-}
-.chip-green { background: var(--green-badge-bg); color: var(--green-badge-text); border-color: rgba(16,185,129,0.2); }
-.chip-amber { background: var(--amber-badge-bg); color: var(--amber-badge-text); border-color: rgba(245,158,11,0.2); }
-.chip-red   { background: var(--red-badge-bg);   color: var(--red-badge-text);   border-color: rgba(220,38,38,0.2); }
-.chip-blue  { background: var(--blue-badge-bg);  color: var(--blue-badge-text);  border-color: rgba(59,130,246,0.2); }
-.chip-orange{ background: var(--orange-badge-bg);color: var(--orange-badge-text);border-color: rgba(234,88,12,0.2); }
-.chip-muted { background: var(--card2); color: var(--muted); border-color: var(--border); }
-
-.callout {
-  padding: 14px 16px;
-  border-left: 3px solid var(--brand-cta);
-  background: var(--mint);
-  color: var(--heading);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-size: 13px; line-height: 1.6;
-}
-[data-theme="dark"] .callout {
-  background: rgba(8,122,90,0.12);
-  color: var(--text);
-}
-
-/* ─── BUTTONS ────────────────────────────────────────────────────────── */
-.btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  border: none; cursor: pointer; font-weight: 700; font-size: 14px;
-  border-radius: var(--radius-sm); padding: 12px 20px;
-  transition: all 0.2s ease; white-space: nowrap;
-}
-.btn:active { transform: translateY(1px); }
-.btn-primary {
-  background: var(--brand-cta); color: #fff;
-  box-shadow: 0 8px 24px rgba(11,143,104,0.28);
-}
-.btn-primary:hover { background: #098F65; box-shadow: 0 12px 32px rgba(11,143,104,0.38); transform: translateY(-1px); }
-[data-theme="dark"] .btn-primary { color: #052918; }
-.btn-secondary {
-  background: transparent; color: var(--heading);
-  border: 1.5px solid var(--border2);
-}
-.btn-secondary:hover { background: var(--card2); border-color: var(--brand); }
-.btn-ghost {
-  background: var(--card2); color: var(--text);
-  border: 1px solid var(--border);
-}
-.btn-ghost:hover { border-color: var(--brand-cta); color: var(--brand-cta); }
-.btn-sm { padding: 7px 13px; font-size: 12px; border-radius: 8px; }
-.btn-danger { background: var(--red-badge-bg); color: var(--red-badge-text); border: 1px solid rgba(220,38,38,0.2); }
-.btn-danger:hover { background: #FCA5A5; }
-
-/* ─── NAVBAR ─────────────────────────────────────────────────────────── */
-.navbar {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,0.88);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  transition: background 0.3s, border-color 0.3s;
-}
-[data-theme="dark"] .navbar {
-  background: rgba(7,17,14,0.88);
-}
-.navbar-inner {
-  display: flex; align-items: center;
+/* Top Header */
+.top-bar {
+  height: 60px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  height: 72px; gap: 24px;
-}
-.brand {
-  display: flex; align-items: center; gap: 10px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 900; font-size: 20px;
-  color: var(--heading); white-space: nowrap;
-}
-.brand-icon {
-  width: 40px; height: 40px; flex-shrink: 0;
-}
-.nav-links {
-  display: flex; align-items: center; gap: 28px;
-  list-style: none;
-}
-.nav-links a {
-  font-size: 14px; font-weight: 600;
-  color: var(--muted);
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--brand-cta); }
-
-/* Theme Toggle */
-.theme-toggle {
-  display: flex; align-items: center;
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  padding: 4px; gap: 2px;
-}
-.theme-btn {
-  border: none; background: transparent; cursor: pointer;
-  padding: 5px 10px; border-radius: var(--radius-pill);
-  font-size: 13px; color: var(--muted); font-weight: 600;
-  transition: all 0.2s;
-}
-.theme-btn.active {
-  background: var(--white); color: var(--heading);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-[data-theme="dark"] .theme-btn.active {
-  background: var(--card); color: var(--heading);
-  box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow-sm);
 }
 
-.nav-cta { margin-left: 8px; }
-.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--heading); }
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
 
-/* ─── HERO ───────────────────────────────────────────────────────────── */
-.hero {
-  padding: 96px 0 80px;
-}
-.hero-inner {
-  display: grid; grid-template-columns: 1.1fr 0.9fr;
-  gap: 56px; align-items: center;
-}
-.hero-badge { margin-bottom: 20px; }
-.hero h1 {
-  font-family: 'Manrope', sans-serif;
-  font-size: clamp(36px, 5vw, 64px);
-  font-weight: 900; line-height: 1.06;
-  color: var(--heading); margin: 0 0 20px;
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+  font-size: 18px;
   letter-spacing: -0.02em;
-}
-.hero h1 em { font-style: normal; color: var(--brand-cta); }
-[data-theme="dark"] .hero h1 em { color: var(--brand-bright); }
-.hero-lead {
-  font-size: 17px; color: var(--muted); line-height: 1.7;
-  max-width: 560px; margin-bottom: 32px;
-}
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
-.trust-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 600; color: var(--muted);
-}
-.trust-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--brand-bright);
+  color: var(--text-main);
 }
 
-/* Hero Pipeline Card */
-.hero-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: var(--shadow-lg);
-  position: relative; overflow: hidden;
+.brand-logo svg {
+  width: 28px;
+  height: 28px;
+  color: var(--brand);
 }
-[data-theme="dark"] .hero-card {
-  background: linear-gradient(160deg, #10231D, #0B1714);
+
+.brand-subtitle {
+  font-size: 12px;
+  color: var(--text-light);
+  border-left: 1px solid var(--border-color);
+  padding-left: 12px;
+  font-weight: 500;
 }
-.hero-card::before {
-  content: '';
-  position: absolute;
-  top: -80px; right: -80px;
-  width: 220px; height: 220px;
-  background: radial-gradient(circle, rgba(11,143,104,0.15), transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.hero-card-label {
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--muted); margin-bottom: 4px;
-}
-.hero-card-metric {
-  font-family: 'Manrope', sans-serif;
-  font-size: 36px; font-weight: 900; color: var(--heading);
-  margin-bottom: 4px;
-}
-.hero-card-sub {
-  font-size: 12px; color: var(--muted); margin-bottom: 18px;
-}
-.pipeline-flow {
-  display: flex; flex-direction: column; gap: 6px;
-}
-.pipe-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
+
+.demo-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
-  font-size: 13px; font-weight: 500;
-  color: var(--text);
-  transition: border-color 0.2s;
-}
-.pipe-item:hover { border-color: var(--brand-cta); }
-.pipe-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--indicator);
-  box-shadow: 0 0 0 3px var(--indicator-glow);
-  flex-shrink: 0;
-}
-.pipe-connector {
-  display: flex; align-items: center; justify-content: center;
-  color: var(--brand-cta); font-size: 11px; height: 6px;
-  margin-left: 15px;
+  background: var(--badge-amber-bg);
+  color: var(--badge-amber-text);
+  border: 1px solid var(--badge-amber-border);
+  letter-spacing: 0.03em;
 }
 
-/* ─── PROOF MESSAGE SECTION ──────────────────────────────────────────── */
-.proof-section { background: var(--bg2); }
-.proof-section-title {
-  font-family: 'Manrope', sans-serif;
-  font-size: clamp(28px, 4vw, 44px);
-  font-weight: 900; color: var(--heading);
-  margin-bottom: 12px;
-  letter-spacing: -0.02em;
-}
-.proof-section-title em { font-style: normal; color: var(--brand-cta); }
-[data-theme="dark"] .proof-section-title em { color: var(--brand-bright); }
-.proof-cards {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 16px; margin-top: 40px;
-}
-.proof-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px 20px;
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-}
-.proof-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--brand); }
-.proof-card-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  background: var(--mint); display: grid; place-items: center;
-  font-size: 22px; margin-bottom: 14px;
-}
-[data-theme="dark"] .proof-card-icon { background: rgba(8,122,90,0.18); }
-.proof-card h3 {
-  font-family: 'Manrope', sans-serif;
-  font-size: 16px; font-weight: 800; color: var(--heading);
-  margin-bottom: 8px;
-}
-.proof-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
-.proof-card-tag {
-  margin-top: 14px;
-  display: inline-block;
+.engine-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--badge-green-text);
+  background: var(--badge-green-bg);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--badge-green-border);
 }
 
-/* ─── ARCHITECTURE SECTION ───────────────────────────────────────────── */
-.arch-section { background: var(--bg); }
-.arch-title {
-  font-family: 'Manrope', sans-serif;
-  font-size: clamp(28px, 4vw, 44px);
-  font-weight: 900; color: var(--heading);
-  margin-bottom: 10px; letter-spacing: -0.02em;
-}
-.section-lead { color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 700px; }
-
-.arch-flow {
-  display: flex; align-items: flex-start;
-  gap: 0; margin-top: 48px;
-  overflow-x: auto; padding-bottom: 16px;
-}
-.arch-step {
-  display: flex; flex-direction: column; align-items: center;
-  min-width: 100px; flex: 1; position: relative;
-}
-.arch-step-connector {
-  display: flex; align-items: center; flex: 0 0 24px;
-  margin-top: 30px;
-}
-.arch-connector-line {
-  width: 24px; height: 2px;
-  background: linear-gradient(90deg, var(--brand-cta), var(--brand-bright));
-  position: relative;
-}
-.arch-connector-line::after {
-  content: '▶';
-  position: absolute; right: -5px; top: -6px;
-  font-size: 9px; color: var(--brand-cta);
-}
-.arch-step-num {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--brand-cta); color: #fff;
-  display: grid; place-items: center;
-  font-size: 11px; font-weight: 800;
-  margin-bottom: 8px; flex-shrink: 0;
-}
-[data-theme="dark"] .arch-step-num { color: #052918; }
-.arch-step-icon {
-  width: 52px; height: 52px; border-radius: 14px;
-  background: var(--mint);
-  border: 1px solid var(--border2);
-  display: grid; place-items: center;
-  font-size: 22px; margin-bottom: 10px;
-  transition: background 0.2s, transform 0.2s;
-}
-[data-theme="dark"] .arch-step-icon { background: rgba(8,122,90,0.16); }
-.arch-step:hover .arch-step-icon { background: var(--brand-cta); transform: scale(1.05); }
-[data-theme="dark"] .arch-step:hover .arch-step-icon { background: rgba(50,213,131,0.25); }
-.arch-step-name {
-  font-size: 11px; font-weight: 700; color: var(--heading);
-  text-align: center; margin-bottom: 4px;
-  text-transform: uppercase; letter-spacing: 0.04em;
-}
-.arch-step-desc {
-  font-size: 10.5px; color: var(--muted);
-  text-align: center; line-height: 1.5; max-width: 84px;
-}
-.arch-step-verify {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--green-badge-bg); color: var(--green-badge-text);
-  display: grid; place-items: center; font-size: 9px; font-weight: 800;
-  margin-top: 8px;
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--badge-green-text);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
-/* ─── TECH STACK ─────────────────────────────────────────────────────── */
-.tech-section { background: var(--bg2); }
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 14px; margin-top: 40px;
+.theme-btn {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
 }
-.tech-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 16px;
-  transition: border-color 0.2s, transform 0.2s;
-}
-.tech-card:hover { border-color: var(--brand); transform: translateY(-2px); }
-.tech-card-icon { font-size: 24px; margin-bottom: 10px; }
-.tech-card-name {
-  font-weight: 700; font-size: 13px; color: var(--heading); margin-bottom: 4px;
-}
-.tech-card-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
-.tech-status {
-  display: inline-block; margin-top: 10px;
-  font-size: 10px; font-weight: 700; padding: 3px 8px;
-  border-radius: var(--radius-pill);
-}
-.tech-demo { background: var(--amber-badge-bg); color: var(--amber-badge-text); }
-.tech-impl { background: var(--green-badge-bg); color: var(--green-badge-text); }
-.tech-spec { background: var(--blue-badge-bg); color: var(--blue-badge-text); }
+.theme-btn:hover { background: var(--border-color); }
 
-/* ─── DASHBOARD APP ──────────────────────────────────────────────────── */
-.app-section { background: var(--bg); border-top: 1px solid var(--border); }
-.app-section .container { max-width: 1440px; }
-
-.app-shell {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: 900px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  margin-top: 40px;
+/* Main Shell: Sidebar + Content */
+.main-shell {
+  display: flex;
+  flex: 1;
 }
 
 /* Sidebar */
 .sidebar {
-  background: var(--card);
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  position: sticky; top: 72px;
-  height: calc(100vh - 72px);
-  overflow-y: auto;
+  width: 240px;
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
 }
-.sidebar-header {
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid var(--border);
+
+.sidebar-nav {
+  padding: 16px 10px;
+  flex: 1;
 }
-.sidebar-brand {
-  display: flex; align-items: center; gap: 8px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 900; font-size: 17px;
-  color: var(--heading);
-}
-.sidebar-nav { padding: 12px; flex: 1; }
-.side-group-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--muted);
-  padding: 10px 12px 6px;
-}
-.sideitem {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; text-align: left;
-  padding: 10px 12px;
-  background: transparent; border: none;
-  color: var(--muted); border-radius: var(--radius-sm);
-  cursor: pointer; margin: 2px 0;
-  font-size: 13px; font-weight: 600;
-  transition: all 0.15s;
-}
-.sideitem:hover { background: var(--bg2); color: var(--heading); }
-.sideitem.active {
-  background: var(--mint); color: var(--brand-cta);
+
+.nav-group-label {
+  font-size: 11px;
   font-weight: 700;
-}
-[data-theme="dark"] .sideitem.active {
-  background: rgba(8,122,90,0.18);
-  color: var(--brand-bright);
-}
-.sideitem small {
-  display: block; font-size: 10px;
-  color: var(--muted); font-weight: 400;
-  margin-top: 1px;
-}
-.side-icon { font-size: 16px; flex-shrink: 0; width: 20px; text-align: center; }
-.sidebar-demo-badge {
-  margin: 12px; padding: 12px;
-  background: var(--amber-badge-bg);
-  border: 1px solid rgba(245,158,11,0.25);
-  border-radius: var(--radius-sm);
-  font-size: 11px; color: var(--amber-badge-text);
-  line-height: 1.5;
-}
-[data-theme="dark"] .sidebar-demo-badge {
-  background: rgba(45,31,5,0.8);
-}
-
-/* Main content */
-.main-content { display: flex; flex-direction: column; overflow: hidden; }
-.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 28px;
-  border-bottom: 1px solid var(--border);
-  background: var(--card);
-  gap: 12px;
-}
-.topbar-left { display: flex; align-items: center; gap: 12px; }
-.topbar-title {
-  font-family: 'Manrope', sans-serif;
-  font-size: 20px; font-weight: 900; color: var(--heading);
-}
-.topbar-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
-.engine-status {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 700;
-  background: var(--green-badge-bg); color: var(--green-badge-text);
-  border: 1px solid rgba(16,185,129,0.25);
-  padding: 6px 12px; border-radius: var(--radius-pill);
-}
-.engine-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--indicator);
-  box-shadow: 0 0 0 3px var(--indicator-glow);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 3px var(--indicator-glow); }
-  50% { box-shadow: 0 0 0 6px transparent; }
-}
-
-.view-content { padding: 24px 28px; flex: 1; overflow-y: auto; }
-.view { display: none; }
-.view.active { display: block; }
-
-/* Stats */
-.stats-row {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 14px; margin-bottom: 20px;
-}
-.stat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 16px;
-}
-.stat-value {
-  font-family: 'Manrope', sans-serif;
-  font-size: 30px; font-weight: 900;
-  color: var(--heading); margin-bottom: 4px;
-}
-.stat-label { font-size: 12px; color: var(--muted); }
-
-/* Workspace Grid */
-.workspace-grid {
-  display: grid; grid-template-columns: 1fr 0.7fr;
-  gap: 16px;
-}
-.panel {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px;
-}
-.panel-title {
-  font-family: 'Manrope', sans-serif;
-  font-size: 15px; font-weight: 800;
-  color: var(--heading); margin-bottom: 12px;
-}
-.panel-sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
-
-.query-textarea {
-  width: 100%; min-height: 120px;
-  background: var(--bg2);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text); padding: 14px;
-  resize: vertical; outline: none;
-  font-size: 14px; line-height: 1.6;
-  transition: border-color 0.2s;
-}
-.query-textarea:focus { border-color: var(--brand-cta); }
-.query-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-
-.upload-drop {
-  border: 1.5px dashed var(--border2);
-  padding: 16px; border-radius: var(--radius-sm);
-  text-align: center; color: var(--muted);
-  cursor: pointer; margin-top: 10px; font-size: 13px;
-  transition: border-color 0.2s, background 0.2s;
-}
-.upload-drop:hover { border-color: var(--brand-cta); background: var(--mint); }
-
-/* Pipeline stages */
-.pipeline-stages { margin-top: 14px; display: none; }
-.stage-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 7px 0; font-size: 13px; color: var(--muted);
-  border-bottom: 1px solid var(--border);
-}
-.stage-item:last-child { border-bottom: none; }
-.stage-item.done { color: var(--text); }
-.stage-check {
-  width: 20px; height: 20px; border-radius: 50%;
-  border: 1.5px solid var(--border2);
-  display: grid; place-items: center;
-  font-size: 10px; font-weight: 800;
-  flex-shrink: 0; color: var(--muted);
-  transition: all 0.3s;
-}
-.stage-item.done .stage-check {
-  background: var(--indicator); color: #fff;
-  border-color: var(--indicator);
-  box-shadow: 0 0 0 3px var(--indicator-glow);
-}
-[data-theme="dark"] .stage-item.done .stage-check { color: #03150A; }
-
-/* KV pairs */
-.kv-grid { display: grid; grid-template-columns: 130px 1fr; gap: 8px; font-size: 13px; }
-.kv-grid dt { color: var(--muted); font-weight: 600; }
-.kv-grid dd { color: var(--text); }
-
-/* Recommendation Cards */
-.rec-results { margin-top: 16px; display: none; }
-.rec-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px; margin-bottom: 12px;
-  transition: border-color 0.2s;
-}
-.rec-card:hover { border-color: var(--brand); }
-.rec-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
-.rec-is { font-family: 'Manrope', sans-serif; font-size: 17px; font-weight: 900; color: var(--heading); }
-.rec-title { font-size: 13px; color: var(--muted); margin-top: 3px; }
-.rec-match { font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 900; color: var(--brand-cta); white-space: nowrap; }
-[data-theme="dark"] .rec-match { color: var(--brand-bright); }
-.rec-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-.rec-why { font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 12px; }
-.proof-box {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px;
-}
-.proof-box-head {
-  display: flex; justify-content: space-between;
-  font-size: 12px; color: var(--muted); margin-bottom: 8px;
-}
-.proof-chain { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.proof-node {
-  padding: 6px 10px;
-  background: var(--card);
-  border: 1px solid var(--border2);
-  border-radius: 8px; font-size: 11px;
-  color: var(--text);
-}
-.proof-arrow { color: var(--brand-cta); font-size: 12px; }
-[data-theme="dark"] .proof-arrow { color: var(--brand-bright); }
-
-/* ─── PROOF CHAIN VIEW ───────────────────────────────────────────────── */
-.proof-chain-hero {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 32px; text-align: center; margin-bottom: 20px;
-}
-.proof-chain-slogan {
-  font-family: 'Manrope', sans-serif;
-  font-size: clamp(16px, 2.5vw, 24px);
-  font-weight: 900; letter-spacing: -0.01em;
-  color: var(--heading);
-}
-.proof-chain-slogan .no { color: var(--red-badge-text); }
-.proof-chain-full {
-  display: flex; align-items: center; gap: 8px;
-  flex-wrap: wrap; justify-content: center;
-  margin-top: 28px;
-}
-.proof-chain-node {
-  background: var(--card);
-  border: 1.5px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 14px 16px; text-align: center;
-  min-width: 110px;
-}
-.proof-chain-node.verified { border-color: var(--indicator); }
-.proof-chain-node-icon { font-size: 22px; margin-bottom: 6px; }
-.proof-chain-node-label { font-size: 11px; font-weight: 700; color: var(--heading); text-transform: uppercase; letter-spacing: 0.05em; }
-.proof-chain-node-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
-.proof-chain-arrow {
-  font-size: 18px; color: var(--brand-cta); flex-shrink: 0;
-}
-[data-theme="dark"] .proof-chain-arrow { color: var(--brand-bright); }
-
-/* ─── AUDIT TABLE ────────────────────────────────────────────────────── */
-.audit-table-wrap { overflow-x: auto; border-radius: var(--radius-sm); }
-.audit-table {
-  width: 100%; border-collapse: collapse; font-size: 13px;
-}
-.audit-table th {
-  text-align: left; padding: 11px 12px;
-  background: var(--bg2);
-  color: var(--muted); font-weight: 700;
-  font-size: 11px; text-transform: uppercase;
+  text-transform: uppercase;
   letter-spacing: 0.06em;
-  border-bottom: 1px solid var(--border);
+  color: var(--text-light);
+  padding: 10px 10px 4px;
 }
-.audit-table td {
-  padding: 12px; border-bottom: 1px solid var(--border);
-  color: var(--text); vertical-align: top;
-}
-.audit-table tr:last-child td { border-bottom: none; }
-.audit-table tr:hover td { background: var(--bg2); }
 
-/* ─── GRAPH VIEW ─────────────────────────────────────────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 2px;
+  transition: all 0.15s ease;
+}
+
+.nav-item:hover {
+  background-color: var(--bg-subtle);
+  color: var(--text-main);
+}
+
+.nav-item.active {
+  background-color: var(--brand-light);
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 14px;
+  border-top: 1px solid var(--border-color);
+  font-size: 11px;
+  color: var(--text-light);
+  line-height: 1.4;
+  background: var(--bg-subtle);
+}
+
+/* Content Area */
+.content-area {
+  flex: 1;
+  padding: 24px 32px;
+  overflow-y: auto;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.view-panel { display: none; }
+.view-panel.active { display: block; }
+
+/* ─── LANDING PAGE HERO STYLES ───────────────────────────────────────── */
+.hero-container {
+  background: radial-gradient(circle at 80% 20%, var(--brand-glow) 0%, transparent 50%), var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--brand-light);
+  color: var(--brand);
+  border: 1px solid var(--brand-border);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+}
+
+.hero-title {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  max-width: 860px;
+  margin-bottom: 16px;
+}
+
+.hero-title span {
+  color: var(--brand);
+}
+
+.hero-subtitle {
+  font-size: 16.5px;
+  color: var(--text-muted);
+  max-width: 780px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-hero-primary {
+  padding: 13px 26px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  background-color: var(--brand);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 4px 14px rgba(8, 122, 90, 0.28);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-hero-primary:hover {
+  background-color: var(--brand-hover);
+  transform: translateY(-1px);
+}
+
+.btn-hero-secondary {
+  padding: 13px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1.5px solid var(--border-dark);
+  cursor: pointer;
+}
+.btn-hero-secondary:hover { background: var(--bg-subtle); }
+
+/* Grid of Philosophy Cards */
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.philosophy-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.philosophy-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--brand-border);
+  box-shadow: var(--shadow-md);
+}
+
+.philosophy-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--brand-light);
+  color: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 14px;
+  border: 1px solid var(--brand-border);
+}
+
+.philosophy-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.philosophy-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* Interactive Pipeline Hero Preview */
+.hero-pipeline-preview {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.preview-flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 16px 0 8px;
+}
+
+.preview-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 100px;
+}
+
+.preview-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brand-light);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--brand-border);
+  margin-bottom: 8px;
+}
+
+.preview-step-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.preview-step-sub {
+  font-size: 10.5px;
+  color: var(--text-light);
+}
+
+.preview-connector {
+  font-size: 14px;
+  color: var(--brand);
+  font-weight: 800;
+}
+
+/* ─── WORKSPACE UI COMPONENTS ─────────────────────────────────────────── */
+
+/* View Header */
+.view-header {
+  margin-bottom: 20px;
+}
+.view-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+.view-header p {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
+/* Metric Cards Row */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.metric-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+}
+.metric-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-main);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.2;
+}
+.metric-label {
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Section Cards / Panels */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Form Controls & Buttons */
+.form-textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  background: var(--bg-app);
+  color: var(--text-main);
+  font-size: 13.5px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+}
+.form-textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--brand-light);
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--brand);
+  color: #FFFFFF;
+}
+.btn-primary:hover {
+  background-color: var(--brand-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border-color: var(--border-dark);
+}
+.btn-secondary:hover {
+  background-color: var(--bg-subtle);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--brand);
+  border-color: var(--brand-border);
+}
+.btn-outline:hover {
+  background-color: var(--brand-light);
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.upload-box {
+  margin-top: 12px;
+  border: 1.5px dashed var(--border-dark);
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 12.5px;
+  background: var(--bg-subtle);
+}
+.upload-box:hover {
+  border-color: var(--brand);
+  background: var(--brand-light);
+  color: var(--brand);
+}
+
+/* Grid Layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Key Value Table */
+.kv-list {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px 12px;
+  font-size: 13px;
+}
+.kv-label {
+  color: var(--text-light);
+  font-weight: 500;
+}
+.kv-value {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+/* Pipeline Stage Tracker */
+.pipeline-container {
+  margin-top: 14px;
+  padding: 14px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  display: none;
+}
+.pipeline-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-light);
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+.pipeline-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+}
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-light);
+  padding: 4px 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+.step-item.active {
+  color: var(--badge-amber-text);
+  border-color: var(--badge-amber-border);
+  background: var(--badge-amber-bg);
+}
+.step-item.completed {
+  color: var(--badge-green-text);
+  border-color: var(--badge-green-border);
+  background: var(--badge-green-bg);
+  font-weight: 600;
+}
+.step-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+.step-item.completed .step-icon {
+  background: var(--badge-green-text);
+  color: #FFFFFF;
+  border-color: var(--badge-green-text);
+}
+
+/* Recommendation Evidence Cards */
+.evidence-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 14px;
+  transition: border-color 0.15s ease;
+}
+.evidence-card:hover {
+  border-color: var(--brand-border);
+}
+.evidence-card.primary-candidate {
+  border-left: 4px solid var(--brand);
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.is-number {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.is-title {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.match-score {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--brand);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Status Chips / Badges */
+.chips-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge-green { background: var(--badge-green-bg); color: var(--badge-green-text); border: 1px solid var(--badge-green-border); }
+.badge-amber { background: var(--badge-amber-bg); color: var(--badge-amber-text); border: 1px solid var(--badge-amber-border); }
+.badge-red   { background: var(--badge-red-bg);   color: var(--badge-red-text);   border: 1px solid var(--badge-red-border); }
+.badge-blue  { background: var(--badge-blue-bg);  color: var(--badge-blue-text);  border: 1px solid var(--badge-blue-border); }
+.badge-gray  { background: var(--badge-gray-bg);  color: var(--badge-gray-text);  border: 1px solid var(--badge-gray-border); }
+
+.why-reasoning {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  background: var(--bg-subtle);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  margin: 10px 0;
+  border-left: 3px solid var(--brand);
+}
+
+/* Proof Chain Visualization */
+.proof-chain-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+.proof-node {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dark);
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+.proof-rel {
+  color: var(--brand);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+/* Gap Analysis Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.data-table th {
+  background: var(--bg-subtle);
+  color: var(--text-light);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+.data-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+.data-table tr.row-outdated {
+  background-color: rgba(239, 68, 68, 0.04);
+}
+
+/* Graph Canvas */
 .graph-canvas {
-  position: relative; height: 360px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius); overflow: hidden;
+  height: 380px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
 }
 .g-node {
   position: absolute;
-  padding: 10px 13px;
-  background: var(--card);
-  border: 1.5px solid var(--border2);
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-dark);
   border-radius: var(--radius-sm);
-  font-size: 12px; font-weight: 600;
-  color: var(--text);
-  box-shadow: var(--shadow);
-  cursor: default; white-space: nowrap;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
 }
-.g-node.primary {
-  border-color: var(--indicator);
-  box-shadow: 0 0 0 2px var(--indicator-glow), var(--shadow);
-  color: var(--heading);
+.g-node.g-primary {
+  border-color: var(--brand);
+  background: var(--brand-light);
+  color: var(--brand);
 }
-.g-node span { display: block; font-size: 10px; font-weight: 500; color: var(--muted); margin-top: 2px; }
-.g-node .g-type { color: var(--brand-cta); }
-[data-theme="dark"] .g-node .g-type { color: var(--brand-bright); }
-.g-edge {
-  position: absolute; height: 1.5px;
-  background: linear-gradient(90deg, var(--border2), var(--brand-cta));
-  transform-origin: left center;
+.g-node.g-outdated {
+  border-color: var(--badge-red-text);
+  background: var(--badge-red-bg);
+  color: var(--badge-red-text);
 }
-.g-edge.verified {
-  background: linear-gradient(90deg, var(--indicator), rgba(16,185,129,0.3));
+.g-edge-line {
+  position: absolute;
+  height: 2px;
+  background: var(--border-dark);
+  transform-origin: 0 0;
+  z-index: 1;
+}
+.g-edge-line.verified {
+  background: var(--brand);
 }
 .g-edge-label {
-  position: absolute; top: -16px; left: 50%;
-  font-size: 9px; color: var(--muted); white-space: nowrap;
-  transform: translateX(-50%);
-  background: var(--bg2); padding: 1px 5px;
-  border-radius: 4px;
-}
-.graph-legend {
-  display: flex; gap: 16px; flex-wrap: wrap;
-  padding: 12px 0; font-size: 12px; color: var(--muted);
-}
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.legend-dot {
-  width: 10px; height: 10px; border-radius: 50%;
+  position: absolute;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-light);
+  background: var(--bg-surface);
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+  z-index: 3;
 }
 
-/* ─── REVIEW QUEUE ───────────────────────────────────────────────────── */
-.review-banner {
-  background: var(--mint);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 16px 20px; margin-bottom: 18px;
-  display: flex; align-items: center; gap: 14px;
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
-[data-theme="dark"] .review-banner {
-  background: rgba(8,122,90,0.12);
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
 }
-.review-banner-icon { font-size: 28px; }
-.review-banner-text h4 {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 800; font-size: 14px; color: var(--heading); margin-bottom: 2px;
+.modal-content {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 600px;
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
 }
-.review-banner-text p { font-size: 13px; color: var(--muted); }
 
-/* ─── SYSTEM VIEW ────────────────────────────────────────────────────── */
-.sys-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 0; }
-
-/* ─── TOAST ──────────────────────────────────────────────────────────── */
+/* Toast */
 .toast {
-  position: fixed; right: 24px; bottom: 24px;
-  background: var(--card); color: var(--heading);
-  border: 1px solid var(--border2);
-  padding: 14px 18px; border-radius: var(--radius-sm);
-  font-weight: 700; font-size: 14px;
-  box-shadow: var(--shadow-lg); display: none;
-  z-index: 9999; max-width: 320px;
-  animation: slideIn 0.3s ease;
-}
-@keyframes slideIn {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-
-/* ─── FOOTER ─────────────────────────────────────────────────────────── */
-.footer {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  padding: 40px 0;
-}
-.footer-inner {
-  display: flex; justify-content: space-between;
-  align-items: center; gap: 24px; flex-wrap: wrap;
-}
-.footer-brand {
-  display: flex; align-items: center; gap: 8px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 900; font-size: 16px; color: var(--heading);
-}
-.footer-notice {
-  background: var(--amber-badge-bg);
-  color: var(--amber-badge-text);
-  border: 1px solid rgba(245,158,11,0.2);
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--text-main);
+  color: var(--bg-surface);
+  padding: 10px 16px;
   border-radius: var(--radius-sm);
-  padding: 10px 14px; font-size: 12px; font-weight: 600;
-  max-width: 480px; line-height: 1.5;
-}
-.footer-copy { font-size: 12px; color: var(--muted); }
-
-/* ─── MOBILE MENU ────────────────────────────────────────────────────── */
-.mobile-nav {
-  display: none; flex-direction: column; gap: 4px;
-  padding: 16px; border-top: 1px solid var(--border);
-  background: var(--card);
-}
-.mobile-nav a {
-  padding: 10px 14px; border-radius: var(--radius-sm);
-  font-size: 15px; font-weight: 600; color: var(--text);
-  transition: background 0.15s;
-}
-.mobile-nav a:hover { background: var(--mint); color: var(--brand-cta); }
-.mobile-nav.open { display: flex; }
-
-/* ─── RESPONSIVE ─────────────────────────────────────────────────────── */
-@media (max-width: 1080px) {
-  .proof-cards { grid-template-columns: repeat(2, 1fr); }
-  .arch-flow { gap: 0; }
-  .arch-step { min-width: 80px; }
-  .arch-step-desc { max-width: 68px; }
-}
-@media (max-width: 900px) {
-  .hero-inner { grid-template-columns: 1fr; }
-  .hero-card { display: none; }
-  .proof-cards { grid-template-columns: repeat(2, 1fr); }
-  .app-shell { grid-template-columns: 1fr; }
-  .sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .workspace-grid { grid-template-columns: 1fr; }
-  .sys-grid { grid-template-columns: 1fr; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .nav-cta { display: none; }
-  .footer-inner { flex-direction: column; text-align: center; }
-}
-@media (max-width: 580px) {
-  .section { padding: 60px 0; }
-  .hero { padding: 60px 0 50px; }
-  .proof-cards { grid-template-columns: 1fr; }
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .hero-actions { flex-direction: column; }
-  .arch-flow { flex-direction: column; align-items: flex-start; }
-  .arch-step { flex-direction: row; min-width: auto; width: 100%; align-items: flex-start; gap: 12px; }
-  .arch-step-connector { display: none; }
-  .arch-step-icon { margin-bottom: 0; flex-shrink: 0; }
-  .arch-step-name, .arch-step-desc { text-align: left; max-width: none; }
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  z-index: 200;
+  display: none;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ═══════════════════════════ NAVBAR ════════════════════════════════ -->
-<header>
-<nav class="navbar">
-  <div class="container navbar-inner">
-    <a class="brand" href="#home" id="nav-brand">
-      <svg class="brand-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Chanakya logo">
-        <!-- Outer ring -->
-        <circle cx="20" cy="20" r="19" stroke="var(--brand-cta)" stroke-width="1.5" opacity="0.3"/>
-        <!-- Inner background disc -->
-        <circle cx="20" cy="20" r="16" fill="var(--brand-cta)" opacity="0.12"/>
-        <!-- Strategy crown / arc -->
-        <path d="M10 17 Q20 7 30 17" stroke="var(--brand-cta)" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <!-- Vertical axis -->
-        <line x1="20" y1="9" x2="20" y2="20" stroke="var(--brand-cta)" stroke-width="1.5" stroke-linecap="round"/>
-        <!-- C monogram arc -->
-        <path d="M27 20 A8 8 0 1 1 27 22" stroke="var(--brand-cta)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <!-- Central knowledge dot -->
-        <circle cx="20" cy="20" r="3" fill="var(--brand-cta)"/>
-        <!-- Side strategy marks -->
-        <line x1="13" y1="29" x2="20" y2="20" stroke="var(--brand-cta)" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-        <line x1="27" y1="29" x2="20" y2="20" stroke="var(--brand-cta)" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-      </svg>
-      <span>Chanakya</span>
-    </a>
+<div class="app-container">
 
-    <ul class="nav-links">
-      <li><a href="#how">How it works</a></li>
-      <li><a href="#architecture">Architecture</a></li>
-      <li><a href="#demo">Live Demo</a></li>
-    </ul>
-
-    <div style="display:flex;align-items:center;gap:12px;">
-      <!-- Theme Toggle -->
-      <div class="theme-toggle" role="group" aria-label="Theme selection">
-        <button class="theme-btn" id="theme-light" onclick="setTheme('light')" title="Light mode">☀ Light</button>
-        <button class="theme-btn" id="theme-system" onclick="setTheme('system')" title="System default">◐ System</button>
-        <button class="theme-btn" id="theme-dark" onclick="setTheme('dark')" title="Dark mode">☾ Dark</button>
+  <!-- ════════════════════ TOP HEADER BAR ════════════════════ -->
+  <header class="top-bar">
+    <div class="brand-section" onclick="switchTabByTarget('landingView')" title="Return to Overview">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span>CHANAKYA</span>
       </div>
-      <button class="btn btn-primary nav-cta" onclick="openDemo()">Launch Prototype</button>
-      <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
+      <div class="brand-subtitle">AI-Assisted Procurement Standards Review</div>
     </div>
-  </div>
 
-  <!-- Mobile Nav -->
-  <div class="mobile-nav container" id="mobile-nav">
-    <a href="#how" onclick="toggleMobileNav()">How it works</a>
-    <a href="#architecture" onclick="toggleMobileNav()">Architecture</a>
-    <a href="#demo" onclick="toggleMobileNav()">Live Demo</a>
-    <button class="btn btn-primary" style="margin-top:8px" onclick="openDemo();toggleMobileNav()">Launch Prototype</button>
-  </div>
-</nav>
-</header>
-
-<main id="home">
-
-<!-- ═══════════════════════════ HERO ══════════════════════════════════ -->
-<section class="hero container">
-  <div class="hero-inner">
-    <div>
-      <div class="hero-badge">
-        <span class="eyebrow">✦ SIH 2026 &nbsp;•&nbsp; Procurement Standards Intelligence</span>
+    <div class="header-status">
+      <span class="demo-badge">DEMO / SIMULATION</span>
+      <div class="engine-status">
+        <span class="status-dot"></span>
+        <span>Engine Healthy</span>
       </div>
-      <h1>Turn procurement requirements into <em>evidence-backed</em> standards intelligence.</h1>
-      <p class="hero-lead">Chanakya analyzes product descriptions and tender specifications to identify applicable Indian Standards, related standards, lifecycle status, compliance evidence and proof-backed recommendations.</p>
-      <div class="hero-actions">
-        <button class="btn btn-primary" onclick="document.getElementById('architecture').scrollIntoView({behavior:'smooth'})">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          Explore the Architecture
+      <button class="btn btn-primary btn-sm" id="topNavWorkspaceBtn" onclick="switchTabByTarget('recommendView')">Launch Workspace →</button>
+      <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Theme">☀ Light / ☾ Dark</button>
+    </div>
+  </header>
+
+  <!-- ════════════════════ MAIN SHELL ════════════════════ -->
+  <div class="main-shell">
+    
+    <!-- ────── SIDEBAR (Hidden on Landing Page) ────── -->
+    <aside class="sidebar" style="display: none;">
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">Workspace</div>
+        
+        <button class="nav-item active" data-target="recommendView" onclick="switchTab(this)">
+          <span class="nav-icon">⚡</span>
+          <span>Recommendation</span>
         </button>
-        <button class="btn btn-secondary" onclick="openDemo()">
-          Launch Prototype →
+
+        <button class="nav-item" data-target="standardsView" onclick="switchTab(this)">
+          <span class="nav-icon">📚</span>
+          <span>Standards Catalog</span>
         </button>
-      </div>
-      <div class="trust-badge">
-        <span class="trust-dot"></span>AI-Powered
-        <span class="trust-dot"></span>Evidence Linked
-        <span class="trust-dot"></span>Human Reviewed
-      </div>
-    </div>
 
-    <!-- Pipeline Visual Card -->
-    <div class="hero-card">
-      <div class="hero-card-label">Prototype pipeline</div>
-      <div class="hero-card-metric">50 → 10 → 3</div>
-      <div class="hero-card-sub">Retrieval Top-50 • Rerank Top-10 • Primary Top-3</div>
-      <div class="pipeline-flow">
-        <div class="pipe-item"><span class="pipe-dot"></span>Tender / Product Description</div>
-        <div class="pipe-connector">↓</div>
-        <div class="pipe-item"><span class="pipe-dot"></span>Requirement Atoms</div>
-        <div class="pipe-connector">↓</div>
-        <div class="pipe-item"><span class="pipe-dot"></span>Semantic Retrieval (FAISS)</div>
-        <div class="pipe-connector">↓</div>
-        <div class="pipe-item"><span class="pipe-dot"></span>Reranking</div>
-        <div class="pipe-connector">↓</div>
-        <div class="pipe-item"><span class="pipe-dot"></span>ETOG → Temporal Gate</div>
-        <div class="pipe-connector">↓</div>
-        <div class="pipe-item"><span class="pipe-dot"></span>NCS → MSSS → CNT</div>
-        <div class="pipe-connector">↓</div>
-        <div class="pipe-item"><span class="pipe-dot"></span>Proof Validation</div>
-        <div class="pipe-connector">↓</div>
-        <div class="pipe-item"><span class="pipe-dot"></span>Tender Gap + Human Review</div>
-      </div>
-    </div>
-  </div>
-</section>
+        <button class="nav-item" data-target="graphView" onclick="switchTab(this)">
+          <span class="nav-icon">🕸️</span>
+          <span>Standards Graph</span>
+        </button>
 
-<!-- ══════════════════════ HOW IT WORKS / PROOF ═══════════════════════ -->
-<section class="section proof-section" id="how">
-  <div class="container">
-    <div class="eyebrow" style="margin-bottom:18px;">Core product philosophy</div>
-    <h2 class="proof-section-title">From relevance to <em>proof.</em></h2>
-    <p class="section-lead">Chanakya does not stop at finding relevant standards. Every recommendation must satisfy four conditions before it becomes actionable.</p>
+        <div class="nav-group-label" style="margin-top: 14px;">Verification</div>
+        
+        <button class="nav-item" data-target="reviewView" onclick="switchTab(this)">
+          <span class="nav-icon">👤</span>
+          <span>Review Queue</span>
+        </button>
 
-    <div class="proof-cards">
-      <div class="proof-card">
-        <div class="proof-card-icon">🎯</div>
-        <h3>Coverage</h3>
-        <p>Which procurement obligation does the standard satisfy? Every requirement atom must map to at least one verified standard.</p>
-        <span class="chip chip-green proof-card-tag">REQ → STD</span>
-      </div>
-      <div class="proof-card">
-        <div class="proof-card-icon">📅</div>
-        <h3>Validity</h3>
-        <p>Was the standard version valid for the relevant tender date? Temporal gate rejects superseded or withdrawn versions.</p>
-        <span class="chip chip-blue proof-card-tag">TEMPORAL GATE</span>
-      </div>
-      <div class="proof-card">
-        <div class="proof-card-icon">🔗</div>
-        <h3>Closure</h3>
-        <p>Are required relationships and evidence actually verified? A recommendation is actionable only when its proof chain closes.</p>
-        <span class="chip chip-green proof-card-tag">PROOF CLOSED ✓</span>
-      </div>
-      <div class="proof-card">
-        <div class="proof-card-icon">⚖️</div>
-        <h3>Minimality</h3>
-        <p>What is the smallest sufficient set of standards? MSSS ensures no redundant standards inflate the recommendation set.</p>
-        <span class="chip chip-muted proof-card-tag">MSSS</span>
-      </div>
-    </div>
+        <button class="nav-item" data-target="auditView" onclick="switchTab(this)">
+          <span class="nav-icon">📜</span>
+          <span>Audit Log</span>
+        </button>
 
-    <!-- Hard Invariant Banner -->
-    <div style="margin-top:32px; padding:24px 28px; background:var(--card); border:1.5px solid var(--brand-cta); border-radius:var(--radius); text-align:center; box-shadow:var(--shadow);">
-      <div style="font-family:'Manrope',sans-serif; font-size:clamp(18px,2.5vw,26px); font-weight:900; color:var(--heading); letter-spacing:-0.01em;">
-        <span style="color:var(--red-badge-text);">NO PROOF</span>
-        <span style="color:var(--muted); margin:0 12px;">→</span>
-        <span style="color:var(--red-badge-text);">NO ACTIONABLE RECOMMENDATION</span>
-      </div>
-      <p style="color:var(--muted); font-size:13px; margin-top:8px;">This is the hard invariant enforced by the Chanakya proof validator at every pipeline stage.</p>
-    </div>
-  </div>
-</section>
+        <div class="nav-group-label" style="margin-top: 14px;">System</div>
 
-<!-- ════════════════════════ ARCHITECTURE ════════════════════════════ -->
-<section class="section arch-section" id="architecture">
-  <div class="container">
-    <span class="eyebrow" style="margin-bottom:18px;">Pipeline architecture</span>
-    <h2 class="arch-title">Designed for verifiable procurement intelligence.</h2>
-    <p class="section-lead">Every stage in the Chanakya pipeline is purposefully designed to eliminate ambiguity, validate evidence, and preserve human control at the final decision point.</p>
+        <button class="nav-item" data-target="systemView" onclick="switchTab(this)">
+          <span class="nav-icon">⚙️</span>
+          <span>Architecture &amp; Data</span>
+        </button>
+      </nav>
 
-    <div class="arch-flow">
-      <!-- Step 1 -->
-      <div class="arch-step">
-        <div class="arch-step-num">1</div>
-        <div class="arch-step-icon">📄</div>
-        <div class="arch-step-name">Tender Input</div>
-        <div class="arch-step-desc">Product description or tender text</div>
-        <div class="arch-step-verify">→</div>
+      <div class="sidebar-footer">
+        <strong>Simulation Mode</strong><br>
+        Synthetic fixture data (<code>IS DEMO-*</code>).<br>
+        Human review required. Not live BIS retrieval.
       </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
+    </aside>
 
-      <!-- Step 2 -->
-      <div class="arch-step">
-        <div class="arch-step-num">2</div>
-        <div class="arch-step-icon">⚗️</div>
-        <div class="arch-step-name">Req. Atoms</div>
-        <div class="arch-step-desc">Structured atomic requirements</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
+    <!-- ────── CONTENT AREA ────── -->
+    <main class="content-area">
 
-      <!-- Step 3 -->
-      <div class="arch-step">
-        <div class="arch-step-num">3</div>
-        <div class="arch-step-icon">🔍</div>
-        <div class="arch-step-name">Retrieval</div>
-        <div class="arch-step-desc">bge-large + FAISS Top-50</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
+      <!-- ════════════════ VIEW 0: LANDING PAGE (Full Width, No Sidebar) ════════════════ -->
+      <div id="landingView" class="view-panel active">
+        
+        <!-- Hero Section -->
+        <div class="hero-container">
+          <div class="hero-badge-pill">
+            <span>✦ SIH 2026 PROTOTYPE &nbsp;•&nbsp; PROCUREMENT STANDARDS INTELLIGENCE</span>
+          </div>
 
-      <!-- Step 4 -->
-      <div class="arch-step">
-        <div class="arch-step-num">4</div>
-        <div class="arch-step-icon">🎛️</div>
-        <div class="arch-step-name">Reranking</div>
-        <div class="arch-step-desc">bge-reranker Top-10</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
+          <h1 class="hero-title">
+            Transform Procurement Requirements into <span>Evidence-Backed</span> Standards Intelligence.
+          </h1>
 
-      <!-- Step 5 -->
-      <div class="arch-step">
-        <div class="arch-step-num">5</div>
-        <div class="arch-step-icon">🧠</div>
-        <div class="arch-step-name">ETOG</div>
-        <div class="arch-step-desc">Evidence-typed ontology graph</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
+          <p class="hero-subtitle">
+            CHANAKYA parses complex procurement requirement texts, extracts atomic technical parameters, retrieves and reranks applicable Indian Standards, detects outdated references, and enforces proof closure before recommending compliance clauses.
+          </p>
 
-      <!-- Step 6 -->
-      <div class="arch-step">
-        <div class="arch-step-num">6</div>
-        <div class="arch-step-icon">⏱️</div>
-        <div class="arch-step-name">Temporal Gate</div>
-        <div class="arch-step-desc">Lifecycle validity check</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
-
-      <!-- Step 7 -->
-      <div class="arch-step">
-        <div class="arch-step-num">7</div>
-        <div class="arch-step-icon">✅</div>
-        <div class="arch-step-name">NCS</div>
-        <div class="arch-step-desc">Normative closure scoring</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
-
-      <!-- Step 8 -->
-      <div class="arch-step">
-        <div class="arch-step-num">8</div>
-        <div class="arch-step-icon">⚖️</div>
-        <div class="arch-step-name">MSSS</div>
-        <div class="arch-step-desc">Min. sufficient standard set</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
-
-      <!-- Step 9 -->
-      <div class="arch-step">
-        <div class="arch-step-num">9</div>
-        <div class="arch-step-icon">📊</div>
-        <div class="arch-step-name">CNT</div>
-        <div class="arch-step-desc">Coverage necessity typing</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
-
-      <!-- Step 10 -->
-      <div class="arch-step">
-        <div class="arch-step-num">10</div>
-        <div class="arch-step-icon">🔒</div>
-        <div class="arch-step-name">Proof Validator</div>
-        <div class="arch-step-desc">Closure state verification</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
-
-      <!-- Step 11 -->
-      <div class="arch-step">
-        <div class="arch-step-num">11</div>
-        <div class="arch-step-icon">📋</div>
-        <div class="arch-step-name">Tender Gap</div>
-        <div class="arch-step-desc">Cited vs. required analysis</div>
-        <div class="arch-step-verify">✓</div>
-      </div>
-      <div class="arch-step-connector"><div class="arch-connector-line"></div></div>
-
-      <!-- Step 12 -->
-      <div class="arch-step">
-        <div class="arch-step-num">12</div>
-        <div class="arch-step-icon">👤</div>
-        <div class="arch-step-name">Human Review</div>
-        <div class="arch-step-desc">Final officer decision</div>
-        <div class="arch-step-verify" style="background:var(--amber-badge-bg);color:var(--amber-badge-text);">★</div>
-      </div>
-    </div>
-
-    <!-- Warning callout -->
-    <div class="callout" style="margin-top:32px;">
-      ⚠️ <strong>Demo data is explicitly synthetic.</strong> Standard identifiers, QCO/certification facts and source claims in this prototype use <code>IS DEMO-*</code> identifiers and must be replaced with verified, reuse-permitted records before any legal or compliance demonstration.
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════ TECH STACK ══════════════════════════════ -->
-<section class="section tech-section" id="tech">
-  <div class="container">
-    <span class="eyebrow" style="margin-bottom:18px;">Technology stack</span>
-    <h2 class="arch-title">Built on proven enterprise foundations.</h2>
-    <p class="section-lead">Chanakya combines state-of-the-art retrieval models with deterministic compliance rules and a human-in-the-loop review layer.</p>
-
-    <div class="tech-grid">
-      <div class="tech-card">
-        <div class="tech-card-icon">⚡</div>
-        <div class="tech-card-name">FastAPI</div>
-        <div class="tech-card-desc">Async Python REST backend with Pydantic v2 validation</div>
-        <span class="tech-status tech-impl">IMPLEMENTED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">🐍</div>
-        <div class="tech-card-name">Python 3.10+</div>
-        <div class="tech-card-desc">Core runtime for pipeline logic and deterministic rules</div>
-        <span class="tech-status tech-impl">IMPLEMENTED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">🗂️</div>
-        <div class="tech-card-name">FAISS</div>
-        <div class="tech-card-desc">IndexFlatIP for English retrieval — Top-50 candidates</div>
-        <span class="tech-status tech-spec">SPECIFIED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">🕸️</div>
-        <div class="tech-card-name">NetworkX</div>
-        <div class="tech-card-desc">MultiDiGraph for standards relationships and ETOG</div>
-        <span class="tech-status tech-spec">SPECIFIED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">🗄️</div>
-        <div class="tech-card-name">PostgreSQL</div>
-        <div class="tech-card-desc">System of record for standards metadata and audit trail</div>
-        <span class="tech-status tech-spec">SPECIFIED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">🤖</div>
-        <div class="tech-card-name">bge-large-en-v1.5</div>
-        <div class="tech-card-desc">Frozen English embedding model for semantic retrieval</div>
-        <span class="tech-status tech-spec">SPECIFIED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">🎛️</div>
-        <div class="tech-card-name">bge-reranker-large</div>
-        <div class="tech-card-desc">Cross-encoder reranker for Top-10 precision pass</div>
-        <span class="tech-status tech-spec">SPECIFIED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">💡</div>
-        <div class="tech-card-name">GPT-OSS 120B</div>
-        <div class="tech-card-desc">Grounded clause drafting; simulated with demo data in prototype</div>
-        <span class="tech-status tech-demo">SIMULATED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">📷</div>
-        <div class="tech-card-name">OCR Layer</div>
-        <div class="tech-card-desc">PaddleOCR + Tesseract fallback for scanned tender documents</div>
-        <span class="tech-status tech-spec">SPECIFIED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">🌐</div>
-        <div class="tech-card-name">Translation Layer</div>
-        <div class="tech-card-desc">Hindi/regional language tender routing to English pipeline</div>
-        <span class="tech-status tech-spec">SPECIFIED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">📏</div>
-        <div class="tech-card-name">Deterministic Rules</div>
-        <div class="tech-card-desc">Lifecycle, QCO, certification and temporal compliance rules</div>
-        <span class="tech-status tech-impl">IMPLEMENTED</span>
-      </div>
-      <div class="tech-card">
-        <div class="tech-card-icon">👁️</div>
-        <div class="tech-card-name">Human Review</div>
-        <div class="tech-card-desc">Officer accept/correct/flag with full audit trail persistence</div>
-        <span class="tech-status tech-impl">IMPLEMENTED</span>
-      </div>
-    </div>
-    <p style="margin-top:16px;font-size:12px;color:var(--muted);">
-      <strong>IMPLEMENTED</strong> = present in this demo prototype &nbsp;|&nbsp;
-      <strong>SPECIFIED</strong> = in architecture doc, not live in demo &nbsp;|&nbsp;
-      <strong>SIMULATED</strong> = deterministic demo data replaces production ML
-    </p>
-  </div>
-</section>
-
-<!-- ════════════════════════ DASHBOARD APP ═══════════════════════════ -->
-<section class="section app-section" id="demo">
-  <div class="container" style="max-width:1360px;">
-    <span class="eyebrow" style="margin-bottom:18px;">🎯 DEMO MODE — Synthetic Data</span>
-    <h2 class="arch-title">Procurement Intelligence Workspace</h2>
-    <p class="section-lead">Interactive prototype demonstrating the full Chanakya pipeline. All data is synthetic demo data — not verified BIS records.</p>
-
-    <div class="app-shell">
-      <!-- ──────── SIDEBAR ──────── -->
-      <aside class="sidebar">
-        <div class="sidebar-header">
-          <div class="sidebar-brand">
-            <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
-              <circle cx="20" cy="20" r="19" stroke="var(--brand-cta)" stroke-width="1.5" opacity="0.4"/>
-              <circle cx="20" cy="20" r="14" fill="var(--brand-cta)" opacity="0.1"/>
-              <path d="M11 17 Q20 8 29 17" stroke="var(--brand-cta)" stroke-width="2" stroke-linecap="round" fill="none"/>
-              <path d="M26 20 A7 7 0 1 1 26 22" stroke="var(--brand-cta)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-              <circle cx="20" cy="20" r="2.5" fill="var(--brand-cta)"/>
-            </svg>
-            Chanakya
+          <div class="hero-cta-group">
+            <button class="btn-hero-primary" onclick="launchDemoWorkspace()">Launch Procurement Workspace →</button>
+            <button class="btn-hero-secondary" onclick="switchTabByTarget('systemView')">Explore Architecture</button>
           </div>
         </div>
-        <nav class="sidebar-nav">
-          <div class="side-group-label">Workspace</div>
-          <button class="sideitem active" data-view="recommendView" onclick="switchView(this)">
-            <span class="side-icon">🧠</span>
-            <div><span>Recommendation</span><small>Officer workspace</small></div>
-          </button>
-          <button class="sideitem" data-view="proofView" onclick="switchView(this)">
-            <span class="side-icon">🔗</span>
-            <div><span>Proof Chain</span><small>Evidence verification</small></div>
-          </button>
-          <button class="sideitem" data-view="auditView" onclick="switchView(this)">
-            <span class="side-icon">📋</span>
-            <div><span>Tender Audit</span><small>Gap analysis</small></div>
-          </button>
-          <div class="side-group-label">Intelligence</div>
-          <button class="sideitem" data-view="graphView" onclick="switchView(this)">
-            <span class="side-icon">🕸️</span>
-            <div><span>Standards Graph</span><small>ETOG relationships</small></div>
-          </button>
-          <div class="side-group-label">Review</div>
-          <button class="sideitem" data-view="reviewView" onclick="switchView(this)">
-            <span class="side-icon">👤</span>
-            <div><span>Review Queue</span><small>Human-in-the-loop</small></div>
-          </button>
-          <button class="sideitem" data-view="auditLogView" onclick="switchView(this)">
-            <span class="side-icon">📜</span>
-            <div><span>Audit Log</span><small>Session events</small></div>
-          </button>
-          <div class="side-group-label">System</div>
-          <button class="sideitem" data-view="systemView" onclick="switchView(this)">
-            <span class="side-icon">⚙️</span>
-            <div><span>System</span><small>Pipeline & demo data</small></div>
-          </button>
-        </nav>
-        <div class="sidebar-demo-badge">
-          <strong>⚠ DEMO MODE</strong><br>
-          No live BIS verification.<br>
-          All records are synthetic fixtures labeled <code>IS DEMO-*</code>
-        </div>
-      </aside>
 
-      <!-- ──────── MAIN CONTENT ──────── -->
-      <div class="main-content">
-        <!-- Topbar -->
-        <div class="topbar">
-          <div class="topbar-left">
-            <div>
-              <div class="topbar-title" id="viewTitle">Recommendation Workspace</div>
-              <div class="topbar-sub">Procurement Officer • Simulated end-to-end run</div>
-            </div>
+        <!-- 4 Philosophy / Proof Pillars -->
+        <div class="view-header" style="margin-top: 12px;">
+          <h2>Core Product Philosophy: From Relevance to Proof</h2>
+          <p>Four mandatory compliance conditions enforced before any standard recommendation becomes actionable.</p>
+        </div>
+
+        <div class="philosophy-grid">
+          <div class="philosophy-card">
+            <div class="philosophy-icon">🎯</div>
+            <h3>Coverage Mapping</h3>
+            <p>Maps every structured requirement atom (dimension, material, use-case) to at least one verified Indian Standard record.</p>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div class="engine-status">
-              <div class="engine-dot"></div>
-              Engine Healthy
+
+          <div class="philosophy-card">
+            <div class="philosophy-icon">📅</div>
+            <h3>Temporal Gate</h3>
+            <p>Validates standard edition currency against tender dates. Automatically rejects superseded or withdrawn specifications.</p>
+          </div>
+
+          <div class="philosophy-card">
+            <div class="philosophy-icon">🔒</div>
+            <h3>Proof Closure</h3>
+            <p><strong>Hard Invariant:</strong> <em>No Proof → No Actionable Recommendation.</em> Requires evidence nodes to close completely.</p>
+          </div>
+
+          <div class="philosophy-card">
+            <div class="philosophy-icon">⚖️</div>
+            <h3>Minimal Set (MSSS)</h3>
+            <p>Determines the smallest sufficient set of standards to satisfy all procurement constraints without inflating tender scopes.</p>
+          </div>
+        </div>
+
+        <!-- Interactive Pipeline Preview Banner -->
+        <div class="hero-pipeline-preview">
+          <div class="card-title" style="margin-bottom: 4px;">
+            <span>Conceptual 11-Stage Pipeline Workflow</span>
+            <span class="badge badge-green">ETOG → NCS → MSSS → CNT</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-light); margin-bottom: 14px;">Every query moves through structured semantic and rule-based verification stages.</p>
+
+          <div class="preview-flow-row">
+            <div class="preview-step">
+              <div class="preview-step-num">1</div>
+              <div class="preview-step-title">Completeness</div>
+              <div class="preview-step-sub">Input Check</div>
             </div>
-            <div class="theme-toggle" style="scale:0.9;">
-              <button class="theme-btn" id="dash-theme-light" onclick="setTheme('light')">☀</button>
-              <button class="theme-btn" id="dash-theme-system" onclick="setTheme('system')">◐</button>
-              <button class="theme-btn" id="dash-theme-dark" onclick="setTheme('dark')">☾</button>
+            <div class="preview-connector">→</div>
+
+            <div class="preview-step">
+              <div class="preview-step-num">2</div>
+              <div class="preview-step-title">Extraction</div>
+              <div class="preview-step-sub">Atomic Specs</div>
+            </div>
+            <div class="preview-connector">→</div>
+
+            <div class="preview-step">
+              <div class="preview-step-num">3</div>
+              <div class="preview-step-title">Retrieval</div>
+              <div class="preview-step-sub">FAISS Top-50</div>
+            </div>
+            <div class="preview-connector">→</div>
+
+            <div class="preview-step">
+              <div class="preview-step-num">4</div>
+              <div class="preview-step-title">Reranking</div>
+              <div class="preview-step-sub">Top-10 Candidates</div>
+            </div>
+            <div class="preview-connector">→</div>
+
+            <div class="preview-step">
+              <div class="preview-step-num">5</div>
+              <div class="preview-step-title">ETOG Graph</div>
+              <div class="preview-step-sub">Relation Expansion</div>
+            </div>
+            <div class="preview-connector">→</div>
+
+            <div class="preview-step">
+              <div class="preview-step-num">6</div>
+              <div class="preview-step-title">Proof Validator</div>
+              <div class="preview-step-sub">Closure Verification</div>
+            </div>
+            <div class="preview-connector">→</div>
+
+            <div class="preview-step">
+              <div class="preview-step-num">7</div>
+              <div class="preview-step-title">Gap Analysis</div>
+              <div class="preview-step-sub">Outdated Detection</div>
+            </div>
+            <div class="preview-connector">→</div>
+
+            <div class="preview-step">
+              <div class="preview-step-num">8</div>
+              <div class="preview-step-title">Grounded Draft</div>
+              <div class="preview-step-sub">Human Review</div>
             </div>
           </div>
         </div>
 
-        <div class="view-content">
+        <!-- Quick Demo Callout Box -->
+        <div class="card" style="background: var(--brand-light); border-color: var(--brand-border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <h3 style="font-size: 16px; font-weight: 800; color: var(--brand); margin-bottom: 4px;">Primary Demo Scenario: Rubber Sheet Tender Review</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Tender currently cites superseded standard <code>IS DEMO-118:2018</code>. Test how CHANAKYA detects the gap and resolves to <code>IS DEMO-101:2024</code>.</p>
+          </div>
+          <button class="btn btn-primary" onclick="launchDemoWorkspace()">Test Primary Demo Query →</button>
+        </div>
 
-          <!-- ══════ RECOMMEND VIEW ══════ -->
-          <div id="recommendView" class="view active">
-            <!-- Stats -->
-            <div class="stats-row">
-              <div class="stat-card">
-                <div class="stat-value">50</div>
-                <div class="stat-label">Retrieval Top-K</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">10</div>
-                <div class="stat-label">Rerank Top-K</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">3</div>
-                <div class="stat-label">Primary Standards</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value" style="color:var(--brand-cta);">0</div>
-                <div class="stat-label">Hallucinations Removed</div>
-              </div>
+      </div><!-- /landingView -->
+
+
+      <!-- ════════════════ VIEW 1: RECOMMENDATION WORKSPACE ════════════════ -->
+      <div id="recommendView" class="view-panel">
+        
+        <div class="view-header">
+          <h1>Recommendation Workspace</h1>
+          <p>Submit procurement specifications to retrieve evidence-backed standards, analyze tender gaps, and build verified clause drafts.</p>
+        </div>
+
+        <!-- Metric Row -->
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-value" id="mTopK">50</div>
+            <div class="metric-label">Retrieved Top-K</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="mRerank">10</div>
+            <div class="metric-label">Reranked Candidates</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="mPrimary">3</div>
+            <div class="metric-label">Primary Standards</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" style="color: var(--brand);" id="mHallucinations">0</div>
+            <div class="metric-label">Hallucinations Removed</div>
+          </div>
+        </div>
+
+        <!-- Requirement Input Card -->
+        <div class="card">
+          <div class="card-title">
+            <span>1. Describe your procurement requirement</span>
+            <span class="badge badge-gray">Primary Input</span>
+          </div>
+
+          <textarea id="queryInput" class="form-textarea" placeholder="Enter tender specification or product description...">Supply of 25 mm thick vulcanized natural rubber sheets for lining of a water tank. Tender currently cites IS DEMO-118:2018.</textarea>
+
+          <div class="button-group">
+            <button class="btn btn-primary" id="runBtn" onclick="runRecommendation()">
+              <span>⚡ Run Recommendation</span>
+            </button>
+            <button class="btn btn-secondary" onclick="loadDemoQuery()">Use Demo Data</button>
+            <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">⬆ Upload Tender</button>
+            <input type="file" id="fileInput" style="display:none;" onchange="handleFileUpload(this)">
+          </div>
+
+          <div id="uploadStatus" style="display:none; margin-top:10px;" class="badge badge-blue"></div>
+
+          <!-- Pipeline Progress -->
+          <div id="pipelineBox" class="pipeline-container">
+            <div class="pipeline-title">Simulated Processing Pipeline</div>
+            <div class="pipeline-steps">
+              <div class="step-item" id="st1"><span class="step-icon">1</span> Completeness Check</div>
+              <div class="step-item" id="st2"><span class="step-icon">2</span> Technical Extraction</div>
+              <div class="step-item" id="st3"><span class="step-icon">3</span> Requirement Atoms</div>
+              <div class="step-item" id="st4"><span class="step-icon">4</span> Candidate Retrieval</div>
+              <div class="step-item" id="st5"><span class="step-icon">5</span> Semantic Rerank</div>
+              <div class="step-item" id="st6"><span class="step-icon">6</span> Graph Expansion</div>
+              <div class="step-item" id="st7"><span class="step-icon">7</span> Lifecycle &amp; Compliance</div>
+              <div class="step-item" id="st8"><span class="step-icon">8</span> ETOG Reasoning</div>
+              <div class="step-item" id="st9"><span class="step-icon">9</span> Proof Validation</div>
+              <div class="step-item" id="st10"><span class="step-icon">10</span> Tender Gap Analysis</div>
+              <div class="step-item" id="st11"><span class="step-icon">11</span> Grounded Synthesis</div>
             </div>
+          </div>
+        </div>
 
-            <!-- Input + Extracted -->
-            <div class="workspace-grid">
-              <div class="panel">
-                <div class="panel-title">1. Describe your procurement requirement</div>
-                <textarea id="query" class="query-textarea" placeholder="Describe your procurement requirement…">Supply of 25 mm thick vulcanized natural rubber sheets for lining of a water tank. Tender currently cites IS DEMO-118:2018.</textarea>
-                <div class="query-actions">
-                  <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 2l9 5-9 5V2z" fill="currentColor"/></svg>
-                    Run Recommendation
-                  </button>
-                  <button class="btn btn-secondary" onclick="document.getElementById('file').click()">⬆ Upload Tender</button>
-                  <button class="btn btn-ghost" onclick="fillDemo()">Use Demo Data</button>
-                  <input id="file" type="file" hidden accept=".pdf,.docx,.png,.jpg,.jpeg,.txt" onchange="uploadFile(this)">
-                </div>
-                <div class="upload-drop" onclick="document.getElementById('file').click()">
-                  📂 Drag & drop PDF / DOCX / image, or click to browse
-                </div>
-                <div id="uploadStatus" style="font-size:12px;color:var(--muted);margin-top:8px;"></div>
-
-                <!-- Pipeline stages -->
-                <div class="pipeline-stages" id="pipelineStages">
-                  <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Processing pipeline</div>
-                  <div class="stage-item" id="st1"><span class="stage-check">1</span>Completeness check</div>
-                  <div class="stage-item" id="st2"><span class="stage-check">2</span>Technical extraction</div>
-                  <div class="stage-item" id="st3"><span class="stage-check">3</span>Requirement Atoms</div>
-                  <div class="stage-item" id="st4"><span class="stage-check">4</span>Semantic Retrieval</div>
-                  <div class="stage-item" id="st5"><span class="stage-check">5</span>Graph Expansion</div>
-                  <div class="stage-item" id="st6"><span class="stage-check">6</span>Lifecycle &amp; Compliance</div>
-                  <div class="stage-item" id="st7"><span class="stage-check">7</span>ETOG Reasoning</div>
-                  <div class="stage-item" id="st8"><span class="stage-check">8</span>Proof Validation</div>
-                  <div class="stage-item" id="st9"><span class="stage-check">9</span>Tender Gap Analysis</div>
-                  <div class="stage-item" id="st10"><span class="stage-check">10</span>Grounded Synthesis</div>
-                </div>
-              </div>
-
-              <div class="panel">
-                <div class="panel-title">Extracted requirement</div>
-                <dl class="kv-grid" id="extracted">
-                  <dt>Product</dt><dd>vulcanized natural rubber sheet</dd>
-                  <dt>Application</dt><dd>water tank lining</dd>
-                  <dt>Thickness</dt><dd>25 mm</dd>
-                  <dt>Category</dt><dd>Rubber products</dd>
-                  <dt>Atoms</dt><dd>REQ-001 … REQ-005</dd>
-                </dl>
-                <div class="callout" style="margin-top:14px;">
-                  Hard invariant: <strong>no proof → no actionable recommendation.</strong>
-                </div>
-              </div>
+        <!-- Grid: Extracted Requirement + Gap Analysis -->
+        <div class="grid-2">
+          
+          <!-- Extracted Requirement Panel -->
+          <div class="card">
+            <div class="card-title">
+              <span>Extracted Requirement</span>
+              <span class="badge badge-green">99% Confidence</span>
             </div>
-
-            <!-- Results -->
-            <div class="rec-results" id="recResults">
-              <div class="panel" style="margin-top:16px;">
-                <div class="panel-title">2. Recommendation results</div>
-                <div id="recList"></div>
-              </div>
-              <div class="workspace-grid" style="margin-top:16px;">
-                <div class="panel">
-                  <div class="panel-title">Proof-carrying recommendation</div>
-                  <div id="proofBox"></div>
-                </div>
-                <div class="panel">
-                  <div class="panel-title">Grounded clause draft</div>
-                  <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">⚠ Human review required before use</p>
-                  <div id="clauseBox" class="callout"></div>
-                  <div class="query-actions" style="margin-top:12px;">
-                    <button class="btn btn-primary btn-sm" onclick="feedback('accept')">✓ Accept</button>
-                    <button class="btn btn-secondary btn-sm" onclick="feedback('correct')">✎ Correct</button>
-                    <button class="btn btn-ghost btn-sm" onclick="feedback('review')">🚩 Flag for Review</button>
-                  </div>
-                </div>
-              </div>
+            
+            <div class="kv-list" id="extractedKv">
+              <div class="kv-label">Product</div><div class="kv-value">vulcanized natural rubber sheet</div>
+              <div class="kv-label">Material</div><div class="kv-value">NR</div>
+              <div class="kv-label">Application</div><div class="kv-value">water tank lining</div>
+              <div class="kv-label">Thickness</div><div class="kv-value">25 mm</div>
+              <div class="kv-label">Category</div><div class="kv-value">rubber products</div>
+              <div class="kv-label">Sector</div><div class="kv-value">polymers</div>
             </div>
           </div>
 
-          <!-- ══════ PROOF CHAIN VIEW ══════ -->
-          <div id="proofView" class="view">
-            <div class="proof-chain-hero">
-              <div class="proof-chain-slogan">
-                <span class="no">NO PROOF</span>
-                &nbsp;→&nbsp;
-                <span class="no">NO ACTIONABLE RECOMMENDATION</span>
-              </div>
-              <p style="color:var(--muted);font-size:13px;margin-top:8px;">The proof chain must close at every node before Chanakya surfaces an actionable recommendation.</p>
-              <div class="proof-chain-full">
-                <div class="proof-chain-node">
-                  <div class="proof-chain-node-icon">📝</div>
-                  <div class="proof-chain-node-label">Requirement</div>
-                  <div class="proof-chain-node-sub">REQ-001…REQ-005</div>
-                </div>
-                <div class="proof-chain-arrow">→</div>
-                <div class="proof-chain-node">
-                  <div class="proof-chain-node-icon">📘</div>
-                  <div class="proof-chain-node-label">Applicable Standard</div>
-                  <div class="proof-chain-node-sub">IS DEMO-101:2024</div>
-                </div>
-                <div class="proof-chain-arrow">→</div>
-                <div class="proof-chain-node">
-                  <div class="proof-chain-node-icon">🧾</div>
-                  <div class="proof-chain-node-label">Evidence</div>
-                  <div class="proof-chain-node-sub">EV-DEMO-01</div>
-                </div>
-                <div class="proof-chain-arrow">→</div>
-                <div class="proof-chain-node">
-                  <div class="proof-chain-node-icon">⏱️</div>
-                  <div class="proof-chain-node-label">Validity Window</div>
-                  <div class="proof-chain-node-sub">2024–2029 ACTIVE</div>
-                </div>
-                <div class="proof-chain-arrow">→</div>
-                <div class="proof-chain-node">
-                  <div class="proof-chain-node-icon">🔗</div>
-                  <div class="proof-chain-node-label">Typed Relation</div>
-                  <div class="proof-chain-node-sub">SATISFIES</div>
-                </div>
-                <div class="proof-chain-arrow">→</div>
-                <div class="proof-chain-node verified">
-                  <div class="proof-chain-node-icon">✅</div>
-                  <div class="proof-chain-node-label">Proof Closed</div>
-                  <div class="proof-chain-node-sub" style="color:var(--indicator);">CLOSED ✓</div>
-                </div>
-              </div>
+          <!-- Tender Gap Analysis Panel -->
+          <div class="card">
+            <div class="card-title">
+              <span>Tender Gap Analysis</span>
+              <span class="badge badge-amber">Action Needed</span>
             </div>
 
-            <div class="workspace-grid">
-              <div class="panel">
-                <div class="panel-title">Proof chain details — IS DEMO-101:2024</div>
-                <dl class="kv-grid">
-                  <dt>Standard</dt><dd>IS DEMO-101:2024</dd>
-                  <dt>Closure state</dt><dd><span class="chip chip-green">CLOSED ✓</span></dd>
-                  <dt>Requirements</dt><dd>REQ-001, REQ-003, REQ-004</dd>
-                  <dt>Evidence</dt><dd>EV-DEMO-01, EV-DEMO-02</dd>
-                  <dt>Validity</dt><dd>2024–2029 (ACTIVE)</dd>
-                  <dt>QCO status</dt><dd><span class="chip chip-green">MANDATORY QCO</span></dd>
-                  <dt>Certification</dt><dd>ISI MARK REQUIRED</dd>
-                  <dt>Hallucinations</dt><dd><span class="chip chip-green">0 removed</span></dd>
-                </dl>
-                <div class="callout" style="margin-top:14px;">This recommendation is actionable. All proof chain nodes are verified and closed.</div>
-              </div>
-              <div class="panel">
-                <div class="panel-title">Proof state summary</div>
-                <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--green-badge-bg);border-radius:var(--radius-sm);">
-                    <span style="font-size:13px;font-weight:600;color:var(--green-badge-text);">IS DEMO-101:2024</span>
-                    <span class="chip chip-green">CLOSED ✓</span>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--amber-badge-bg);border-radius:var(--radius-sm);">
-                    <span style="font-size:13px;font-weight:600;color:var(--amber-badge-text);">IS DEMO-205:2023</span>
-                    <span class="chip chip-amber">PARTIAL</span>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--red-badge-bg);border-radius:var(--radius-sm);">
-                    <span style="font-size:13px;font-weight:600;color:var(--red-badge-text);">IS DEMO-118:2018</span>
-                    <span class="chip chip-red">OPEN (OUTDATED)</span>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--green-badge-bg);border-radius:var(--radius-sm);">
-                    <span style="font-size:13px;font-weight:600;color:var(--green-badge-text);">IS DEMO-420:2025</span>
-                    <span class="chip chip-green">CLOSED ✓</span>
-                  </div>
-                </div>
-              </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>Cited Standard</th>
+                  <th>Required / Action</th>
+                </tr>
+              </thead>
+              <tbody id="gapTableBody">
+                <tr class="row-outdated">
+                  <td><span class="badge badge-red">OUTDATED</span></td>
+                  <td><strong>IS DEMO-118:2018</strong></td>
+                  <td>Superseded → <strong>IS DEMO-101:2024</strong></td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-green">PRESENT</span></td>
+                  <td>IS DEMO-205:2023</td>
+                  <td>Test method verified</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-amber">NOT CITED</span></td>
+                  <td>—</td>
+                  <td>Add <strong>IS DEMO-420:2025</strong> (Safety)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div><!-- /grid-2 -->
+
+        <!-- Recommendation Results Section -->
+        <div class="card" id="recResultsCard">
+          <div class="card-title">
+            <span>2. Recommendation Results</span>
+            <span class="badge badge-green">Proof Closed ✓</span>
+          </div>
+
+          <div id="recommendationsList">
+            <!-- Dynamic Evidence Cards rendered here -->
+          </div>
+        </div>
+
+        <!-- Proof Chain & Grounded Clause Grid -->
+        <div class="grid-2">
+          
+          <!-- Proof Chain Panel -->
+          <div class="card">
+            <div class="card-title">
+              <span>Proof Chain Verification</span>
+              <span class="badge badge-green">Invariant Satisfied</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-light); margin-bottom: 10px;">Every candidate standard must be connected through a closed chain of verified evidence nodes.</p>
+            <div class="proof-chain-container" id="proofChainBox">
+              <!-- Rendered proof nodes -->
             </div>
           </div>
 
-          <!-- ══════ AUDIT VIEW ══════ -->
-          <div id="auditView" class="view">
-            <div class="panel">
-              <div class="panel-title">Tender Compliance Audit</div>
-              <p class="panel-sub">Cited-vs-required comparison from the simulated proof set. All identifiers are synthetic demo fixtures.</p>
-              <div class="audit-table-wrap">
-                <table class="audit-table">
-                  <thead>
-                    <tr>
-                      <th>Status</th>
-                      <th>Severity</th>
-                      <th>Cited Standard</th>
-                      <th>Required Standard</th>
-                      <th>Finding</th>
-                      <th>Evidence</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody id="auditBody">
-                    <tr>
-                      <td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">
-                        <button class="btn btn-primary btn-sm" onclick="loadAudit()">Load Audit Data</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+          <!-- Grounded Clause Draft Panel -->
+          <div class="card">
+            <div class="card-title">
+              <span>Grounded Clause Draft</span>
+              <span class="badge badge-amber">HUMAN REVIEW REQUIRED</span>
+            </div>
+            <div id="clauseDraftText" style="font-size: 13px; color: var(--text-main); line-height: 1.6; background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 12px;">
+              DRAFT — HUMAN REVIEW REQUIRED<br>
+              For the specified vulcanized natural rubber sheet lining application, require the applicable current standard record identified by the procurement standards review, together with the associated verified test-method evidence. Confirm the final standard identifier and legal applicability against the authoritative source before tender issue.
+            </div>
+            <div class="button-group">
+              <button class="btn btn-secondary btn-sm" onclick="copyClauseDraft()">📋 Copy Draft</button>
+              <button class="btn btn-primary btn-sm" onclick="sendFeedback('accept')">✓ Accept Clause</button>
             </div>
           </div>
 
-          <!-- ══════ GRAPH VIEW ══════ -->
-          <div id="graphView" class="view">
-            <div class="panel">
-              <div class="panel-title">Standards Relationship Graph</div>
-              <p class="panel-sub">Synthetic NetworkX-style graph view. Verified emerald edges indicate closed proof candidates.</p>
-              <div class="graph-canvas">
-                <!-- Nodes -->
-                <div class="g-node" style="left:8%;top:12%">REQ-001<span class="g-type">REQUIREMENT</span></div>
-                <div class="g-node" style="left:8%;top:50%">REQ-003<span class="g-type">REQUIREMENT</span></div>
-                <div class="g-node" style="left:8%;top:76%">EV-DEMO-01<span>EVIDENCE</span></div>
-                <div class="g-node primary" style="left:38%;top:36%">IS DEMO-101:2024<span class="g-type">PRIMARY STANDARD</span></div>
-                <div class="g-node" style="right:5%;top:10%">IS DEMO-205:2023<span>TEST METHOD</span></div>
-                <div class="g-node" style="right:5%;top:52%">IS DEMO-420:2025<span>SAFETY</span></div>
-                <div class="g-node" style="right:8%;top:76%">IS DEMO-118:2018<span style="color:var(--red-badge-text);">OUTDATED / SUPERSEDED</span></div>
-                <!-- Edges -->
-                <div class="g-edge verified" style="left:24%;top:25%;width:16%;transform:rotate(15deg)"><span class="g-edge-label">SATISFIES</span></div>
-                <div class="g-edge verified" style="left:24%;top:55%;width:16%;transform:rotate(-2deg)"><span class="g-edge-label">SATISFIES</span></div>
-                <div class="g-edge" style="left:24%;top:78%;width:16%;transform:rotate(-15deg)"><span class="g-edge-label">SUPPORTED_BY</span></div>
-                <div class="g-edge" style="left:61%;top:38%;width:17%;transform:rotate(-15deg)"><span class="g-edge-label">TEST_METHOD</span></div>
-                <div class="g-edge" style="left:61%;top:55%;width:17%;transform:rotate(8deg)"><span class="g-edge-label">SAFETY</span></div>
-                <div class="g-edge" style="left:62%;top:60%;width:14%;transform:rotate(25deg)"><span class="g-edge-label">SUPERSEDES</span></div>
-              </div>
-              <div class="graph-legend">
-                <div class="legend-item"><div class="legend-dot" style="background:var(--indicator);"></div>Primary standard</div>
-                <div class="legend-item"><div class="legend-dot" style="background:var(--border2);"></div>Requirement / Evidence</div>
-                <div class="legend-item"><div class="legend-dot" style="background:var(--red-badge-text);"></div>Outdated / Superseded</div>
-                <div class="legend-item" style="color:var(--brand-cta);">— Verified edge (emerald)</div>
-                <div class="legend-item" style="color:var(--muted);">— Unverified edge (gray)</div>
-              </div>
-              <div style="margin-top:10px;font-size:12px;font-weight:600;color:var(--muted);">
-                Relationship labels: SATISFIES · SUPPORTED_BY · TEST_METHOD · TERMINOLOGY · SAFETY · SUPERSEDES · VALID_DURING
-              </div>
-            </div>
+        </div>
+
+      </div><!-- /recommendView -->
+
+
+      <!-- ════════════════ VIEW 2: STANDARDS CATALOG ════════════════ -->
+      <div id="standardsView" class="view-panel">
+        <div class="view-header">
+          <h1>Standards Catalog</h1>
+          <p>Synthetic standards repository fixture data. In production, this layer maps to verified BIS standards.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Indian Standards Fixture Records</span>
+            <span class="badge badge-gray">Synthetic Fixture Data</span>
           </div>
 
-          <!-- ══════ REVIEW QUEUE ══════ -->
-          <div id="reviewView" class="view">
-            <div class="review-banner">
-              <div class="review-banner-icon">👤</div>
-              <div class="review-banner-text">
-                <h4>Human-in-the-Loop Review Queue</h4>
-                <p>Final procurement decisions remain human-controlled. All cases below require officer review before any recommendation can be accepted as actionable.</p>
-              </div>
-            </div>
-            <div class="panel">
-              <div class="panel-title">Open review cases</div>
-              <div class="audit-table-wrap">
-                <table class="audit-table">
-                  <thead>
-                    <tr><th>Case ID</th><th>Severity</th><th>Reason</th><th>Query</th><th>Status</th><th>Actions</th></tr>
-                  </thead>
-                  <tbody id="reviewBody">
-                    <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">
-                      <button class="btn btn-primary btn-sm" onclick="loadReviews()">Load Review Queue</button>
-                    </td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>IS Number</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Sector</th>
+                <th>Edition</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="standardsTableBody">
+              <!-- Dynamically loaded -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- ════════════════ VIEW 3: STANDARDS GRAPH ════════════════ -->
+      <div id="graphView" class="view-panel">
+        <div class="view-header">
+          <h1>Standards Relationship Graph (ETOG)</h1>
+          <p>Evidence-Typed Ontology Graph mapping requirements, primary standards, test methods, safety specs, and supersession links.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Visual Graph Topology</span>
+            <span class="badge badge-green">NetworkX Topology Model</span>
           </div>
 
-          <!-- ══════ AUDIT LOG ══════ -->
-          <div id="auditLogView" class="view">
-            <div class="panel">
-              <div class="panel-title">Session Audit Log</div>
-              <p class="panel-sub">All pipeline events, officer actions and reviewer decisions are captured here.</p>
-              <div class="audit-table-wrap">
-                <table class="audit-table">
-                  <thead>
-                    <tr><th>Time</th><th>Actor</th><th>Event</th><th>Status</th><th>Latency</th></tr>
-                  </thead>
-                  <tbody id="auditLogBody">
-                    <tr>
-                      <td>12:02:18</td><td>Officer</td><td>recommend</td><td><span class="chip chip-green">CLOSED</span></td><td>2.8s</td>
-                    </tr>
-                    <tr>
-                      <td>12:02:22</td><td>Officer</td><td>feedback</td><td><span class="chip chip-green">ACCEPTED</span></td><td>41ms</td>
-                    </tr>
-                    <tr>
-                      <td>12:03:06</td><td>Reviewer</td><td>manual_review</td><td><span class="chip chip-amber">OPEN</span></td><td>—</td>
-                    </tr>
-                    <tr>
-                      <td>12:04:31</td><td>System</td><td>offline_replay</td><td><span class="chip chip-green">PASSED</span></td><td>1.7s</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div class="graph-canvas" id="graphCanvas">
+            <!-- Nodes -->
+            <div class="g-node" style="left:5%; top:20%;">REQ-001<br><span style="font-weight:400;font-size:10px;">Thickness 25mm</span></div>
+            <div class="g-node" style="left:5%; top:60%;">REQ-003<br><span style="font-weight:400;font-size:10px;">Water Tank Lining</span></div>
+            
+            <div class="g-node g-primary" style="left:38%; top:35%;">IS DEMO-101:2024<br><span style="font-weight:500;font-size:10px;">Primary Lining Spec</span></div>
+            
+            <div class="g-node" style="left:72%; top:15%;">IS DEMO-205:2023<br><span style="font-weight:400;font-size:10px;">Test Method</span></div>
+            <div class="g-node" style="left:72%; top:50%;">IS DEMO-420:2025<br><span style="font-weight:400;font-size:10px;">Safety Guidance</span></div>
+            <div class="g-node g-outdated" style="left:72%; top:80%;">IS DEMO-118:2018<br><span style="font-weight:400;font-size:10px;">SUPERSEDED</span></div>
+
+            <!-- Visual Connecting Lines -->
+            <div class="g-edge-line verified" style="left:16%; top:26%; width:22%; transform: rotate(12deg);"></div>
+            <div class="g-edge-label" style="left:24%; top:26%;">SATISFIES</div>
+
+            <div class="g-edge-line verified" style="left:16%; top:65%; width:22%; transform: rotate(-15deg);"></div>
+            <div class="g-edge-label" style="left:24%; top:55%;">SATISFIES</div>
+
+            <div class="g-edge-line verified" style="left:53%; top:40%; width:19%; transform: rotate(-18deg);"></div>
+            <div class="g-edge-label" style="left:60%; top:28%;">TEST_METHOD</div>
+
+            <div class="g-edge-line verified" style="left:53%; top:45%; width:19%; transform: rotate(10deg);"></div>
+            <div class="g-edge-label" style="left:60%; top:48%;">SAFETY</div>
+
+            <div class="g-edge-line" style="left:53%; top:50%; width:19%; transform: rotate(32deg);"></div>
+            <div class="g-edge-label" style="left:60%; top:66%;">SUPERSEDES</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ════════════════ VIEW 4: REVIEW QUEUE ════════════════ -->
+      <div id="reviewView" class="view-panel">
+        <div class="view-header">
+          <h1>Human Review Queue</h1>
+          <p>Uncertain queries, outdated references, or compliance conflicts flagged for officer determination.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Pending Review Cases</span>
+            <span class="badge badge-amber">4 Open Cases</span>
           </div>
 
-          <!-- ══════ SYSTEM VIEW ══════ -->
-          <div id="systemView" class="view">
-            <div class="stats-row">
-              <div class="stat-card"><div class="stat-value">20–50</div><div class="stat-label">Demo KB target</div></div>
-              <div class="stat-card"><div class="stat-value">ETOG</div><div class="stat-label">Reasoning layer</div></div>
-              <div class="stat-card"><div class="stat-value">DEMO</div><div class="stat-label">Data provenance</div></div>
-              <div class="stat-card"><div class="stat-value">Human</div><div class="stat-label">Final decision</div></div>
-            </div>
-            <div class="sys-grid" style="margin-top:16px;">
-              <div class="panel">
-                <div class="panel-title">Pipeline contract</div>
-                <dl class="kv-grid">
-                  <dt>Retriever</dt><dd>bge-large-en-v1.5 + FAISS IndexFlatIP</dd>
-                  <dt>Reranker</dt><dd>bge-reranker-large</dd>
-                  <dt>Graph</dt><dd>NetworkX MultiDiGraph</dd>
-                  <dt>Reasoning</dt><dd>ETOG → Temporal Gate → NCS → MSSS → CNT → Proof Validator</dd>
-                  <dt>LLM</dt><dd>GPT-OSS 120B (specified); simulated here with deterministic demo data</dd>
-                  <dt>Frontend</dt><dd>Polished browser prototype (HTML/CSS/JS)</dd>
-                  <dt>Backend</dt><dd>FastAPI + Pydantic v2</dd>
-                </dl>
-                <div class="callout" style="margin-top:14px;">This prototype is intentionally demo-safe: it does not claim live BIS, QCO or certification verification.</div>
-              </div>
-              <div class="panel">
-                <div class="panel-title">Demo data provenance</div>
-                <dl class="kv-grid">
-                  <dt>Standards</dt><dd>Synthetic <code>IS DEMO-*</code> identifiers</dd>
-                  <dt>Evidence</dt><dd>Synthetic <code>EV-DEMO-*</code> fixtures</dd>
-                  <dt>QCO/Cert</dt><dd>Simulated — not verified BIS records</dd>
-                  <dt>Relationships</dt><dd>Deterministic demo graph</dd>
-                  <dt>Proof chains</dt><dd>Pre-computed for rubber-sheet demo</dd>
-                </dl>
-                <div class="callout" style="margin-top:14px;background:var(--amber-badge-bg);color:var(--amber-badge-text);border-color:rgba(245,158,11,0.4);">Replace synthetic fixtures with verified, reuse-permitted records before external deployment.</div>
-              </div>
-            </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Severity</th>
+                <th>Reason</th>
+                <th>Query / Context</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="reviewTableBody">
+              <!-- Loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- ════════════════ VIEW 5: AUDIT LOG ════════════════ -->
+      <div id="auditView" class="view-panel">
+        <div class="view-header">
+          <h1>System Audit Log</h1>
+          <p>Synthetic audit records logging pipeline latency, officer feedback actions, and offline replay checks.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Recent Audit Trail Events</span>
+            <span class="badge badge-gray">Synthetic Demonstration Data</span>
           </div>
 
-        </div><!-- /view-content -->
-      </div><!-- /main-content -->
-    </div><!-- /app-shell -->
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Actor</th>
+                <th>Event</th>
+                <th>Status</th>
+                <th>Latency</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody">
+              <!-- Loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- ════════════════ VIEW 6: SYSTEM ARCHITECTURE ════════════════ -->
+      <div id="systemView" class="view-panel">
+        <div class="view-header">
+          <h1>System Architecture &amp; Data Provenance</h1>
+          <p>Overview of the CHANAKYA pipeline stages, technical components, and prototype boundaries.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Pipeline Architecture Invariants</div>
+            <ul style="padding-left:18px; color: var(--text-muted); line-height: 1.8;">
+              <li><strong>Hard Invariant:</strong> No proof, no actionable recommendation.</li>
+              <li><strong>ETOG:</strong> Evidence-Typed Ontology Graph for relationship validation.</li>
+              <li><strong>NCS:</strong> Normative Closure Scoring to verify complete requirement coverage.</li>
+              <li><strong>MSSS:</strong> Minimal Sufficient Standard Set to prevent bloated specifications.</li>
+              <li><strong>CNT:</strong> Coverage Necessity Typing (Essential vs Conditional vs Test Method).</li>
+              <li><strong>Temporal Gate:</strong> Enforces version validity based on tender issue date.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Simulation Boundary Notice</div>
+            <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+              This prototype is designed for SIH 2026 presentation and evaluation. It intentionally simulates vector search, embedding models, OCR, and external BIS API calls using deterministic local fixtures in <code>data/demo_data.json</code>.
+            </p>
+            <span class="badge badge-amber">DEMO PROTOTYPE ONLY</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
   </div>
-</section>
+</div>
 
-</main>
-
-<!-- ════════════════════════ FOOTER ══════════════════════════════════ -->
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-brand">
-      <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
-        <circle cx="20" cy="20" r="19" stroke="var(--brand-cta)" stroke-width="1.5" opacity="0.4"/>
-        <path d="M11 17 Q20 8 29 17" stroke="var(--brand-cta)" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <path d="M26 20 A7 7 0 1 1 26 22" stroke="var(--brand-cta)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-        <circle cx="20" cy="20" r="2.5" fill="var(--brand-cta)"/>
-      </svg>
-      Chanakya
+<!-- Modal for Standard Detail Inspection -->
+<div id="detailModal" class="modal-overlay">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <h3 id="modalIsNumber" style="font-family:'JetBrains Mono',monospace; font-size:18px;">IS DEMO-101:2024</h3>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">✕ Close</button>
+    </div>
+    
+    <div style="margin-bottom:14px;">
+      <span class="badge badge-amber">SYNTHETIC DEMO RECORD</span>
     </div>
 
-    <div class="footer-notice">
-      ⚠ <strong>Prototype demonstration only.</strong> Real procurement and compliance decisions require verification against authoritative sources. All <code>IS DEMO-*</code> standard identifiers are synthetic fixtures and do not represent verified BIS records.
+    <div class="kv-list" id="modalKvList" style="margin-bottom:16px;">
+      <!-- Populated dynamically -->
     </div>
 
-    <div class="footer-copy">
-      Chanakya • SIH 2026 Prototype<br>
-      Synthetic demo data • Human review required
+    <div style="font-size:12px; color:var(--text-light); border-top:1px solid var(--border-color); padding-top:12px;">
+      This record is a synthetic demonstration fixture. Before production deployment, standard details must be verified against authoritative BIS databases.
     </div>
   </div>
-</footer>
+</div>
 
-<div id="toast" class="toast"></div>
+<!-- Toast Notification -->
+<div id="toast" class="toast">Action completed successfully</div>
 
-<!-- ════════════════════════ SCRIPTS ══════════════════════════════════ -->
+<!-- ════════════════ JS APPLICATION LOGIC ════════════════ -->
 <script>
-// ─── THEME SYSTEM ─────────────────────────────────────────────────────
-const mq = window.matchMedia('(prefers-color-scheme: dark)');
-let currentTheme = localStorage.getItem('chanakya-theme') || 'system';
+// ─── STATE MANAGEMENT ──────────────────────────────────────────────────
+let currentTheme = localStorage.getItem('chanakya_theme') || 'light';
+let lastRecommendationData = null;
 
-function applyTheme(theme) {
-  const isDark = theme === 'dark' || (theme === 'system' && mq.matches);
-  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  ['light','system','dark'].forEach(t => {
-    ['theme-'+t, 'dash-theme-'+t].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle('active', t === theme);
-    });
-  });
+document.documentElement.setAttribute('data-theme', currentTheme);
+
+function toggleTheme() {
+  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  localStorage.setItem('chanakya_theme', currentTheme);
 }
 
-function setTheme(theme) {
-  currentTheme = theme;
-  localStorage.setItem('chanakya-theme', theme);
-  applyTheme(theme);
-}
+// ─── SIDEBAR VISIBILITY & TAB NAVIGATION ──────────────────────────────
+function updateSidebarVisibility(targetId) {
+  const sidebar = document.querySelector('.sidebar');
+  const topNavBtn = document.getElementById('topNavWorkspaceBtn');
 
-mq.addEventListener('change', () => { if (currentTheme === 'system') applyTheme('system'); });
-applyTheme(currentTheme);
-
-// ─── MOBILE NAV ────────────────────────────────────────────────────────
-function toggleMobileNav() {
-  document.getElementById('mobile-nav').classList.toggle('open');
-}
-
-// ─── SIDEBAR NAVIGATION ────────────────────────────────────────────────
-const viewTitles = {
-  recommendView:  'Recommendation Workspace',
-  proofView:      'Proof Chain Visualization',
-  auditView:      'Tender Compliance Audit',
-  graphView:      'Standards Relationship Graph',
-  reviewView:     'Human Review Queue',
-  auditLogView:   'Audit Log',
-  systemView:     'System & Demo Data'
-};
-
-function switchView(btn) {
-  document.querySelectorAll('.sideitem').forEach(x => x.classList.remove('active'));
-  document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
-  btn.classList.add('active');
-  const viewId = btn.dataset.view;
-  document.getElementById(viewId).classList.add('active');
-  document.getElementById('viewTitle').textContent = viewTitles[viewId] || viewId;
-
-  if (viewId === 'auditView')  loadAudit();
-  if (viewId === 'reviewView') loadReviews();
-}
-
-function openDemo() {
-  document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
-}
-
-// ─── TOAST ─────────────────────────────────────────────────────────────
-function toast(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  t.style.borderLeftColor = type === 'error' ? '#DC2626' : 'var(--brand-cta)';
-  setTimeout(() => t.style.display = 'none', 2800);
-}
-
-// ─── DEMO DATA FILL ────────────────────────────────────────────────────
-function fillDemo() {
-  document.getElementById('query').value = 'Supply of 25 mm thick vulcanized natural rubber sheets for lining of a water tank. Tender currently cites IS DEMO-118:2018.';
-  toast('Demo data loaded — rubber sheet tender specification.');
-}
-
-// ─── FILE UPLOAD ────────────────────────────────────────────────────────
-async function uploadFile(input) {
-  if (!input.files[0]) return;
-  const fd = new FormData();
-  fd.append('file', input.files[0]);
-  document.getElementById('uploadStatus').textContent = 'Uploading demo file…';
-  try {
-    const r = await fetch('/api/upload', { method: 'POST', body: fd });
-    const d = await r.json();
-    document.getElementById('uploadStatus').textContent = `${d.filename} • ${d.accepted ? 'accepted' : 'rejected'} • ${d.ocr_route}`;
-    toast('Demo ingestion job created.');
-  } catch(e) {
-    document.getElementById('uploadStatus').textContent = 'Demo upload simulated locally.';
-  }
-}
-
-// ─── PIPELINE RUNNER ───────────────────────────────────────────────────
-async function runPipeline() {
-  const btn = document.getElementById('runBtn');
-  btn.disabled = true;
-  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="animation:spin 1s linear infinite"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="12 22"/></svg> Analyzing…`;
-
-  const stages = document.getElementById('pipelineStages');
-  stages.style.display = 'block';
-  document.getElementById('recResults').style.display = 'none';
-
-  // Reset stages
-  for (let i = 1; i <= 10; i++) {
-    const el = document.getElementById('st' + i);
-    el.classList.remove('done');
-    el.querySelector('.stage-check').textContent = i;
-  }
-
-  // Animate stages
-  for (let i = 1; i <= 10; i++) {
-    await delay(380);
-    const el = document.getElementById('st' + i);
-    el.classList.add('done');
-    el.querySelector('.stage-check').textContent = '✓';
-  }
-
-  // Fetch result
-  try {
-    const r = await fetch('/api/recommend', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: document.getElementById('query').value, demo_mode: true })
-    });
-    lastResult = await r.json();
-  } catch(e) {
-    try {
-      const r = await fetch('/api/demo');
-      lastResult = await r.json();
-    } catch(e2) {
-      lastResult = FALLBACK_DATA;
+  if (targetId === 'landingView') {
+    sidebar.style.display = 'none';
+    if (topNavBtn) {
+      topNavBtn.textContent = 'Launch Workspace →';
+      topNavBtn.onclick = () => switchTabByTarget('recommendView');
+    }
+  } else {
+    sidebar.style.display = 'flex';
+    if (topNavBtn) {
+      topNavBtn.textContent = '← Overview Landing';
+      topNavBtn.onclick = () => switchTabByTarget('landingView');
     }
   }
-
-  renderResult(lastResult);
-  btn.disabled = false;
-  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 2l9 5-9 5V2z" fill="currentColor"/></svg> Run Recommendation`;
-  toast('Recommendation generated in simulation mode.');
 }
 
-function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+function switchTab(btn) {
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+  
+  btn.classList.add('active');
+  const targetId = btn.getAttribute('data-target');
+  document.getElementById(targetId).classList.add('active');
 
-let lastResult = null;
+  updateSidebarVisibility(targetId);
 
-// ─── RENDER RESULT ─────────────────────────────────────────────────────
-function renderResult(d) {
-  document.getElementById('recResults').style.display = 'block';
+  // Trigger data loads on tab switch
+  if (targetId === 'standardsView') loadStandardsCatalog();
+  if (targetId === 'reviewView') loadReviewQueue();
+  if (targetId === 'auditView') loadAuditLog();
+}
 
-  document.getElementById('extracted').innerHTML = `
-    <dt>Product</dt><dd>${d.extracted.product}</dd>
-    <dt>Application</dt><dd>${d.extracted.application}</dd>
-    <dt>Material</dt><dd>${d.extracted.material || '—'}</dd>
-    <dt>Category</dt><dd>${d.extracted.category}</dd>
-    <dt>Atoms</dt><dd>REQ-001 … REQ-005</dd>
+function switchTabByTarget(targetId) {
+  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => {
+    if (b.getAttribute('data-target') === targetId) {
+      b.classList.add('active');
+    } else {
+      b.classList.remove('active');
+    }
+  });
+
+  const panel = document.getElementById(targetId);
+  if (panel) panel.classList.add('active');
+
+  updateSidebarVisibility(targetId);
+
+  if (targetId === 'standardsView') loadStandardsCatalog();
+  if (targetId === 'reviewView') loadReviewQueue();
+  if (targetId === 'auditView') loadAuditLog();
+}
+
+function launchDemoWorkspace() {
+  switchTabByTarget('recommendView');
+  loadDemoQuery();
+  runRecommendation();
+}
+
+// ─── TOAST NOTIFICATION ────────────────────────────────────────────────
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, 2600);
+}
+
+// ─── DEMO QUERY LOAD ───────────────────────────────────────────────────
+function loadDemoQuery() {
+  document.getElementById('queryInput').value = 
+    "Supply of 25 mm thick vulcanized natural rubber sheets for lining of a water tank. Tender currently cites IS DEMO-118:2018.";
+  showToast("Loaded canonical rubber sheet tender specification.");
+}
+
+// ─── FILE UPLOAD HANDLER ───────────────────────────────────────────────
+async function handleFileUpload(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const statusEl = document.getElementById('uploadStatus');
+  statusEl.style.display = 'inline-flex';
+  statusEl.textContent = 'Uploading tender file...';
+
+  try {
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (res.ok) {
+      statusEl.className = 'badge badge-green';
+      statusEl.textContent = `File: ${data.filename} (${Math.round(data.size_bytes/1024)} KB) • Route: ${data.ocr_route} • Job ID: ${data.job_id}`;
+      showToast("Tender file accepted for demo ingestion.");
+    } else {
+      statusEl.className = 'badge badge-red';
+      statusEl.textContent = data.detail || 'Upload failed.';
+    }
+  } catch (err) {
+    statusEl.className = 'badge badge-blue';
+    statusEl.textContent = `Tender upload simulated for '${file.name}'. Job ID: ING-DEMO-00128.`;
+    showToast("Tender file ingestion simulated.");
+  }
+}
+
+// ─── RECOMMENDATION PIPELINE RUNNER ──────────────────────────────────
+async function runRecommendation() {
+  const query = document.getElementById('queryInput').value.trim();
+  if (!query) {
+    showToast("Please enter a procurement requirement query.");
+    return;
+  }
+
+  const runBtn = document.getElementById('runBtn');
+  runBtn.disabled = true;
+  runBtn.innerHTML = '<span>⏳ Processing...</span>';
+
+  const pipelineBox = document.getElementById('pipelineBox');
+  pipelineBox.style.display = 'block';
+
+  // Reset steps
+  for (let i = 1; i <= 11; i++) {
+    const el = document.getElementById('st' + i);
+    el.className = 'step-item';
+    el.querySelector('.step-icon').textContent = i;
+  }
+
+  // Animate stages step-by-step
+  for (let i = 1; i <= 11; i++) {
+    const el = document.getElementById('st' + i);
+    el.className = 'step-item active';
+    await new Promise(r => setTimeout(r, 140));
+    el.className = 'step-item completed';
+    el.querySelector('.step-icon').textContent = '✓';
+  }
+
+  try {
+    const res = await fetch('/api/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: query, demo_mode: true })
+    });
+    
+    if (res.ok) {
+      lastRecommendationData = await res.json();
+    } else {
+      lastRecommendationData = await fetchFallbackDemo();
+    }
+  } catch (e) {
+    lastRecommendationData = await fetchFallbackDemo();
+  }
+
+  renderRecommendationResults(lastRecommendationData);
+
+  runBtn.disabled = false;
+  runBtn.innerHTML = '<span>⚡ Run Recommendation</span>';
+  showToast("Recommendation generated in simulation mode.");
+}
+
+async function fetchFallbackDemo() {
+  try {
+    const r = await fetch('/api/demo');
+    return await r.json();
+  } catch {
+    return null;
+  }
+}
+
+// ─── RENDER RECOMMENDATION RESULTS ────────────────────────────────────
+function renderRecommendationResults(data) {
+  if (!data) return;
+
+  // Update Metrics Row
+  if (data.audit) {
+    document.getElementById('mTopK').textContent = data.audit.retrieval_topk || 50;
+    document.getElementById('mRerank').textContent = data.audit.rerank_topk || 10;
+    document.getElementById('mPrimary').textContent = data.audit.primary_topn || 3;
+    document.getElementById('mHallucinations').textContent = data.audit.hallucinations_removed || 0;
+  }
+
+  // Extracted Requirement KV
+  const ext = data.extracted || {};
+  document.getElementById('extractedKv').innerHTML = `
+    <div class="kv-label">Product</div><div class="kv-value">${ext.product || '—'}</div>
+    <div class="kv-label">Material</div><div class="kv-value">${ext.material || 'NR'}</div>
+    <div class="kv-label">Application</div><div class="kv-value">${ext.application || '—'}</div>
+    <div class="kv-label">Thickness</div><div class="kv-value">${ext.parameters ? ext.parameters[0]?.value + ' ' + ext.parameters[0]?.unit : '25 mm'}</div>
+    <div class="kv-label">Category</div><div class="kv-value">${ext.category || 'rubber products'}</div>
+    <div class="kv-label">Sector</div><div class="kv-value">${ext.sector || 'polymers'}</div>
   `;
 
-  document.getElementById('recList').innerHTML = d.recommendations.map((r, i) => {
-    const proofClass = r.proof.closure_state === 'CLOSED' ? 'chip-green' : r.proof.closure_state === 'PARTIAL' ? 'chip-amber' : 'chip-red';
+  // Gap Analysis Table
+  const gaps = data.gaps || [];
+  document.getElementById('gapTableBody').innerHTML = gaps.map(g => {
+    const isOutdated = g.status === 'OUTDATED';
+    const badgeClass = isOutdated ? 'badge-red' : g.status === 'PRESENT' ? 'badge-green' : 'badge-amber';
     return `
-    <div class="rec-card">
-      <div class="rec-head">
-        <div>
-          <div class="rec-is">${r.is_number}</div>
-          <div class="rec-title">${r.title}</div>
-        </div>
-        <div class="rec-match">${r.match}%</div>
-      </div>
-      <div class="rec-chips">
-        <span class="chip ${r.confidence === 'HIGH' ? 'chip-green' : 'chip-amber'}">${r.confidence} CONFIDENCE</span>
-        <span class="chip ${r.necessity === 'ESSENTIAL' ? 'chip-green' : 'chip-muted'}">${r.necessity}</span>
-        <span class="chip ${r.status === 'ACTIVE' ? 'chip-green' : 'chip-red'}">${r.status}</span>
-        <span class="chip chip-muted">${r.currency}</span>
-        ${r.certification !== '—' ? `<span class="chip chip-blue">${r.certification}</span>` : ''}
-        <span class="chip ${proofClass}">Proof: ${r.proof.closure_state} ${r.proof.closure_state === 'CLOSED' ? '✓' : ''}</span>
-      </div>
-      <div class="rec-why">${r.why}</div>
-      <div class="proof-box">
-        <div class="proof-box-head">
-          <span>Proof chain</span>
-          <strong style="color:var(--${r.proof.closure_state === 'CLOSED' ? 'indicator' : 'muted'})">${r.proof.closure_state}</strong>
-        </div>
-        <div class="proof-chain">
-          ${r.coverage.map(x => `<span class="proof-node">${x}</span>`).join('<span class="proof-arrow">→</span>')}
-          <span class="proof-arrow">→</span>
-          <span class="proof-node">Evidence: ${r.evidence.join(', ')}</span>
-        </div>
-      </div>
-    </div>`;
+      <tr class="${isOutdated ? 'row-outdated' : ''}">
+        <td><span class="badge ${badgeClass}">${g.status}</span></td>
+        <td><strong>${g.cited || '—'}</strong></td>
+        <td>${g.message || (g.required ? '→ ' + g.required : '')}</td>
+      </tr>
+    `;
   }).join('');
 
-  document.getElementById('proofBox').innerHTML = `
-    <div class="proof-chain" style="margin-bottom:12px;">
-      ${d.proof_chain.map((x, i) => `
-        <span class="proof-node">${x.from}</span>
-        <span class="proof-arrow">— ${x.relation} →</span>
-        <span class="proof-node">${x.to}</span>
-        ${i < d.proof_chain.length - 1 ? '<span class="proof-arrow">→</span>' : ''}
-      `).join('')}
-    </div>
-    <div class="callout"><strong>CLOSED</strong> • Validity checked • Verified evidence edges only • ${d.audit.hallucinations_removed} hallucinated identifiers removed</div>
-  `;
-  document.getElementById('clauseBox').textContent = d.clause_draft;
-}
+  // Recommendation Cards List
+  const recs = data.recommendations || [];
+  document.getElementById('recommendationsList').innerHTML = recs.map((r, idx) => {
+    const isPrimary = idx === 0;
+    return `
+      <div class="evidence-card ${isPrimary ? 'primary-candidate' : ''}">
+        <div class="card-header-row">
+          <div>
+            <div class="is-number">${r.is_number}</div>
+            <div class="is-title">${r.title}</div>
+          </div>
+          <div class="match-score">${r.match}%</div>
+        </div>
 
-// ─── LOAD AUDIT ────────────────────────────────────────────────────────
-async function loadAudit() {
-  let d = lastResult;
-  if (!d) {
-    try { const r = await fetch('/api/demo'); d = await r.json(); } catch { d = FALLBACK_DATA; }
-  }
-  const statusMap = {
-    OUTDATED: 'chip-orange',
-    PRESENT: 'chip-green',
-    NOT_CITED: 'chip-amber',
-    'MANDATORY MISSING': 'chip-red',
-    CONFLICT: 'chip-red',
-    REVIEW: 'chip-blue'
-  };
-  document.getElementById('auditBody').innerHTML = d.gaps.map(g => `
-    <tr>
-      <td><span class="chip ${statusMap[g.status] || 'chip-muted'}">${g.status}</span></td>
-      <td><span class="chip ${g.severity === 'HIGH' ? 'chip-red' : g.severity === 'MEDIUM' ? 'chip-amber' : 'chip-muted'}">${g.severity}</span></td>
-      <td style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;">${g.cited}</td>
-      <td style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;">${g.required}</td>
-      <td>${g.message}</td>
-      <td><span class="chip chip-muted">EV-DEMO-0${Math.floor(Math.random()*3)+1}</span></td>
-      <td><button class="btn btn-ghost btn-sm">Review</button></td>
-    </tr>
+        <div class="chips-row">
+          <span class="badge ${r.confidence === 'HIGH' ? 'badge-green' : 'badge-amber'}">${r.confidence} CONFIDENCE</span>
+          <span class="badge ${r.necessity === 'ESSENTIAL' ? 'badge-green' : 'badge-blue'}">${r.necessity}</span>
+          <span class="badge badge-green">${r.status}</span>
+          <span class="badge badge-gray">${r.currency}</span>
+          <span class="badge badge-gray">${r.certification || 'ISI MARK'}</span>
+        </div>
+
+        <div class="why-reasoning">
+          <strong>Why this recommendation:</strong> ${r.why}
+        </div>
+
+        <div style="font-size:12px; color:var(--text-light); margin-top:8px;">
+          <strong>Coverage:</strong> ${(r.coverage || []).join(' • ')} &nbsp;|&nbsp; 
+          <strong>Evidence:</strong> ${(r.evidence || []).join(', ')}
+        </div>
+
+        <div class="button-group" style="margin-top:12px;">
+          <button class="btn btn-primary btn-sm" onclick="sendFeedback('accept', '${r.is_number}')">✓ Accept</button>
+          <button class="btn btn-secondary btn-sm" onclick="sendFeedback('correct', '${r.is_number}')">✎ Correct</button>
+          <button class="btn btn-outline btn-sm" onclick="sendFeedback('review', '${r.is_number}')">🚩 Flag for Review</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Proof Chain
+  const chain = data.proof_chain || [];
+  document.getElementById('proofChainBox').innerHTML = chain.map((node, i) => `
+    <span class="proof-node">${node.from}</span>
+    <span class="proof-rel">→ ${node.relation} →</span>
+    <span class="proof-node">${node.to}</span>
+    ${i < chain.length - 1 ? '<span style="color:var(--text-light);">•</span>' : ''}
   `).join('');
+
+  // Clause Draft
+  if (data.clause_draft) {
+    document.getElementById('clauseDraftText').textContent = data.clause_draft;
+  }
 }
 
-// ─── LOAD REVIEWS ──────────────────────────────────────────────────────
-async function loadReviews() {
-  let items;
+// ─── STANDARDS CATALOG LOADER ──────────────────────────────────────────
+async function loadStandardsCatalog() {
+  const tbody = document.getElementById('standardsTableBody');
+  tbody.innerHTML = '<tr><td colspan="7">Loading standards catalog...</td></tr>';
+  
   try {
-    const r = await fetch('/api/review/queue');
-    const d = await r.json();
-    items = d.items;
-  } catch {
-    items = [
-      { id:'REV-104', severity:'HIGH',   reason:'DATE_UNRESOLVED',             query:'PVC cable specification',       status:'OPEN' },
-      { id:'REV-109', severity:'MEDIUM', reason:'LOW_CLASSIFICATION_CONFIDENCE',query:'Industrial polymer component',   status:'OPEN' },
-      { id:'REV-112', severity:'HIGH',   reason:'QCO_CONFLICT',                 query:'Demo electrical product',       status:'OPEN' },
-      { id:'REV-115', severity:'MEDIUM', reason:'OPEN_CHAIN_REVIEW',            query:'Stainless steel valve fitting',  status:'OPEN' }
-    ];
+    const res = await fetch('/api/standards');
+    const data = await res.json();
+    const items = data.items || [];
+    
+    tbody.innerHTML = items.map(s => `
+      <tr>
+        <td style="font-family:'JetBrains Mono',monospace; font-weight:700;">${s.is_number}</td>
+        <td>${s.title}</td>
+        <td>${s.category}</td>
+        <td>${s.sector}</td>
+        <td>${s.edition}</td>
+        <td><span class="badge ${s.status === 'ACTIVE' ? 'badge-green' : 'badge-red'}">${s.status}</span></td>
+        <td><button class="btn btn-secondary btn-sm" onclick="openStandardDetail('${s.is_number}')">Inspect</button></td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="7">Failed to load standards catalog.</td></tr>';
   }
-  document.getElementById('reviewBody').innerHTML = items.map(x => `
-    <tr>
-      <td style="font-family:'Manrope',sans-serif;font-weight:700;">${x.id}</td>
-      <td><span class="chip ${x.severity === 'HIGH' ? 'chip-red' : 'chip-amber'}">${x.severity}</span></td>
-      <td><code style="font-size:11px;background:var(--bg2);padding:3px 7px;border-radius:6px;">${x.reason}</code></td>
-      <td>${x.query}</td>
-      <td><span class="chip chip-amber">${x.status}</span></td>
-      <td style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="btn btn-ghost btn-sm" onclick="resolveReview('${x.id}','accept')">✓ Accept</button>
-        <button class="btn btn-secondary btn-sm" onclick="resolveReview('${x.id}','reject')">✕ Reject</button>
-        <button class="btn btn-ghost btn-sm" onclick="resolveReview('${x.id}','resolve')">⇄ Resolve</button>
-      </td>
-    </tr>
-  `).join('');
 }
 
-// ─── RESOLVE REVIEW ────────────────────────────────────────────────────
-async function resolveReview(id, decision) {
+async function openStandardDetail(isNumber) {
+  try {
+    const res = await fetch('/api/standards/' + encodeURIComponent(isNumber));
+    const data = await res.json();
+    
+    document.getElementById('modalIsNumber').textContent = data.is_number;
+    document.getElementById('modalKvList').innerHTML = `
+      <div class="kv-label">Title</div><div class="kv-value">${data.title}</div>
+      <div class="kv-label">Category</div><div class="kv-value">${data.category}</div>
+      <div class="kv-label">Sector</div><div class="kv-value">${data.sector}</div>
+      <div class="kv-label">Status</div><div class="kv-value">${data.status}</div>
+      <div class="kv-label">Edition</div><div class="kv-value">${data.edition}</div>
+      <div class="kv-label">Scope</div><div class="kv-value">${data.scope || '—'}</div>
+      <div class="kv-label">Certification</div><div class="kv-value">${data.certification ? data.certification.scheme : '—'}</div>
+      <div class="kv-label">Superseded By</div><div class="kv-value">${data.superseded_by || 'N/A (Current)'}</div>
+    `;
+    
+    document.getElementById('detailModal').classList.add('active');
+  } catch (e) {
+    showToast("Unable to load standard detail.");
+  }
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('active');
+}
+
+// ─── REVIEW QUEUE LOADER ───────────────────────────────────────────────
+async function loadReviewQueue() {
+  const tbody = document.getElementById('reviewTableBody');
+  tbody.innerHTML = '<tr><td colspan="6">Loading review queue...</td></tr>';
+  
+  try {
+    const res = await fetch('/api/review/queue');
+    const data = await res.json();
+    const items = data.items || [];
+    
+    tbody.innerHTML = items.map(item => `
+      <tr>
+        <td style="font-family:'JetBrains Mono',monospace; font-weight:700;">${item.id}</td>
+        <td><span class="badge ${item.severity === 'HIGH' ? 'badge-red' : 'badge-amber'}">${item.severity}</span></td>
+        <td><code>${item.reason}</code></td>
+        <td>${item.query}</td>
+        <td><span class="badge badge-amber">${item.status}</span></td>
+        <td>
+          <div class="button-group" style="margin-top:0;">
+            <button class="btn btn-primary btn-sm" onclick="resolveReview('${item.id}', 'accept')">Accept</button>
+            <button class="btn btn-secondary btn-sm" onclick="resolveReview('${item.id}', 'resolve')">Resolve</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="6">Failed to load review queue.</td></tr>';
+  }
+}
+
+async function resolveReview(reviewId, decision) {
   try {
     await fetch('/api/review/resolve', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ review_id: id, decision })
+      body: JSON.stringify({ review_id: reviewId, decision: decision })
     });
-  } catch {}
-  toast(`${id} → ${decision.toUpperCase()} (simulated)`);
-  setTimeout(loadReviews, 600);
+    showToast(`Review case ${reviewId} marked as ${decision.toUpperCase()}`);
+    loadReviewQueue();
+  } catch (e) {
+    showToast("Review resolution simulated.");
+  }
 }
 
-// ─── FEEDBACK ──────────────────────────────────────────────────────────
-async function feedback(decision) {
+// ─── AUDIT LOG LOADER ──────────────────────────────────────────────────
+async function loadAuditLog() {
+  const tbody = document.getElementById('auditTableBody');
+  tbody.innerHTML = '<tr><td colspan="5">Loading audit log...</td></tr>';
+  
+  try {
+    const res = await fetch('/api/audit');
+    const data = await res.json();
+    const events = data.events || [];
+    
+    tbody.innerHTML = events.map(e => `
+      <tr>
+        <td>${e.time}</td>
+        <td><strong>${e.actor}</strong></td>
+        <td><code>${e.event}</code></td>
+        <td><span class="badge badge-green">${e.status}</span></td>
+        <td>${e.latency}</td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="5">Failed to load audit log.</td></tr>';
+  }
+}
+
+// ─── FEEDBACK ACTION ───────────────────────────────────────────────────
+async function sendFeedback(decision, isNumber = null) {
   try {
     await fetch('/api/feedback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ decision })
+      body: JSON.stringify({ decision, is_number: isNumber })
     });
-  } catch {}
-  toast('Feedback recorded: ' + decision.toUpperCase());
+  } catch (e) {}
+  showToast(`Feedback recorded: ${decision.toUpperCase()} for ${isNumber || 'clause'}`);
 }
 
-// ─── SPIN ANIMATION ────────────────────────────────────────────────────
-const spinStyle = document.createElement('style');
-spinStyle.textContent = '@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
-document.head.appendChild(spinStyle);
+function copyClauseDraft() {
+  const text = document.getElementById('clauseDraftText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("Grounded clause draft copied to clipboard.");
+  }).catch(() => {
+    showToast("Copied to clipboard.");
+  });
+}
 
-// ─── FALLBACK DATA ─────────────────────────────────────────────────────
-const FALLBACK_DATA = {
-  query: "Supply of 25mm vulcanized rubber sheets for tank lining",
-  extracted: {
-    product: "vulcanized natural rubber sheet",
-    application: "water tank lining",
-    material: "natural rubber",
-    category: "Rubber products"
-  },
-  recommendations: [
-    {
-      is_number: "IS DEMO-101:2024",
-      title: "Vulcanized Rubber Sheets for Industrial Lining",
-      match: 94,
-      confidence: "HIGH",
-      necessity: "ESSENTIAL",
-      status: "ACTIVE",
-      currency: "CURRENT",
-      certification: "ISI MARK REQUIRED",
-      why: "Primary applicable standard for vulcanized rubber sheet tank lining; covers material composition, thickness tolerances and water-resistance requirements relevant to this procurement.",
-      coverage: ["REQ-001", "REQ-003", "REQ-004"],
-      evidence: ["EV-DEMO-01", "EV-DEMO-02"],
-      proof: { closure_state: "CLOSED" }
-    },
-    {
-      is_number: "IS DEMO-205:2023",
-      title: "Methods of Test for Vulcanized Rubber — Physical Properties",
-      match: 81,
-      confidence: "HIGH",
-      necessity: "TEST_METHOD",
-      status: "ACTIVE",
-      currency: "CURRENT",
-      certification: "—",
-      why: "Specifies test methods for tensile strength, elongation and hardness referenced by IS DEMO-101:2024.",
-      coverage: ["REQ-002"],
-      evidence: ["EV-DEMO-03"],
-      proof: { closure_state: "PARTIAL" }
-    },
-    {
-      is_number: "IS DEMO-420:2025",
-      title: "Safety Requirements for Rubber Products in Potable Water Contact",
-      match: 72,
-      confidence: "MEDIUM",
-      necessity: "SAFETY",
-      status: "ACTIVE",
-      currency: "CURRENT",
-      certification: "—",
-      why: "Safety standard for rubber in potable water contact; applicable given tank lining usage.",
-      coverage: ["REQ-005"],
-      evidence: ["EV-DEMO-04"],
-      proof: { closure_state: "CLOSED" }
-    }
-  ],
-  proof_chain: [
-    { from: "REQ-001", relation: "SATISFIES", to: "IS DEMO-101:2024" },
-    { from: "IS DEMO-101:2024", relation: "SUPPORTED_BY", to: "EV-DEMO-01" },
-    { from: "EV-DEMO-01", relation: "VALID_DURING", to: "2024–2029" }
-  ],
-  gaps: [
-    { status: "OUTDATED", severity: "HIGH", cited: "IS DEMO-118:2018", required: "IS DEMO-101:2024", message: "Cited standard is superseded. Replace with IS DEMO-101:2024 (2024 edition)." },
-    { status: "NOT_CITED", severity: "MEDIUM", cited: "—", required: "IS DEMO-205:2023", message: "Test method standard not cited in tender. Recommend adding." },
-    { status: "NOT_CITED", severity: "LOW", cited: "—", required: "IS DEMO-420:2025", message: "Safety standard for potable water contact not cited." },
-    { status: "PRESENT", severity: "INFO", cited: "IS DEMO-101:2024", required: "IS DEMO-101:2024", message: "Correctly cited after update from IS DEMO-118:2018." }
-  ],
-  clause_draft: "The rubber lining shall conform to IS DEMO-101:2024 (vulcanized rubber sheets for industrial lining). Test methods shall be per IS DEMO-205:2023. Safety requirements for potable water contact shall comply with IS DEMO-420:2025. ⚠ HUMAN REVIEW REQUIRED before use in actual tender documents.",
-  audit: { hallucinations_removed: 0, demo_input: true }
-};
+// Initial state: hide sidebar on landing page
+window.addEventListener('DOMContentLoaded', () => {
+  updateSidebarVisibility('landingView');
+});
 </script>
 
 </body>
