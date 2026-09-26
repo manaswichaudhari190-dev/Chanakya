@@ -264,6 +264,72 @@
       },
       "source_url": "https://www.bis.gov.in/",
       "demo": true
+    },
+    {
+      "is_number": "IS 10322 (Part 5/Sec 3):2012",
+      "title": "Luminaires \u2014 Part 5: Particular Requirements \u2014 Section 3: Luminaires for Road and Street Lighting",
+      "category": "Luminaires & Lighting",
+      "sector": "Electrical Engineering",
+      "status": "ACTIVE",
+      "edition": "2012 (Reaffirmed 2022)",
+      "last_verified": "2026-09-18",
+      "currency_risk": 0.04,
+      "scope": "Specifies safety, thermal and constructional requirements for road, street, and municipal public outdoor lighting luminaires.",
+      "certification": {
+        "scheme": "Scheme-II (CRS Registration)",
+        "mandatory": true,
+        "source": "MeitY Compulsory Registration Scheme"
+      },
+      "qco": {
+        "status": "MANDATORY_QCO",
+        "reference": "MeitY Gazette Order S.O. 2357(E)"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": false
+    },
+    {
+      "is_number": "IS 16107 (Part 2/Sec 1):2012",
+      "title": "Luminaires Performance \u2014 Part 2: Particular Requirements \u2014 Section 1: LED Luminaires",
+      "category": "Lighting Performance & Testing",
+      "sector": "Electrical Engineering",
+      "status": "ACTIVE",
+      "edition": "2012 (Reaffirmed 2021)",
+      "last_verified": "2026-09-18",
+      "currency_risk": 0.06,
+      "scope": "Specifies photometric performance requirements, luminous efficacy (lm/W), and thermal endurance protocols for LED luminaires.",
+      "certification": {
+        "scheme": "Normative Companion",
+        "mandatory": false,
+        "source": "BIS Test Protocol"
+      },
+      "qco": {
+        "status": "COMPANION_SPEC",
+        "reference": "Municipal Road Lighting Norms"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": false
+    },
+    {
+      "is_number": "IS 2925:1984",
+      "title": "Specification for Industrial Safety Helmets",
+      "category": "Personal Protective Equipment",
+      "sector": "Industrial Safety & Construction",
+      "status": "ACTIVE",
+      "edition": "1984 (Reaffirmed 2020)",
+      "last_verified": "2026-09-17",
+      "currency_risk": 0.05,
+      "scope": "Specifies requirements for non-metallic safety helmets for construction workers and heavy industry to provide protection against falling objects and mechanical impact.",
+      "certification": {
+        "scheme": "Scheme-I (ISI Mark)",
+        "mandatory": true,
+        "source": "DPIIT Safety Helmets QCO"
+      },
+      "qco": {
+        "status": "MANDATORY_QCO",
+        "reference": "Safety Helmets (Quality Control) Order S.O. 1165(E)"
+      },
+      "source_url": "https://www.bis.gov.in/",
+      "demo": false
     }
   ],
   "relationships": [
@@ -308,6 +374,13 @@
       "type": "design_code",
       "verification": "VERIFIED",
       "evidence": "EV-STEEL-01"
+    },
+    {
+      "source": "IS 10322 (Part 5/Sec 3):2012",
+      "target": "IS 16107 (Part 2/Sec 1):2012",
+      "type": "performance_protocol",
+      "verification": "VERIFIED",
+      "evidence": "EV-LIGHT-01"
     }
   ],
   "demo_response": {

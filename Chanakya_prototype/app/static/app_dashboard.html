@@ -1,1855 +1,2611 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CHANAKYA — AI Standards Intelligence Workspace</title>
-<meta name="description" content="CHANAKYA is an AI-assisted procurement standards review and recommendation system prototype for government procurement officers.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-/* ─── RESET & DESIGN SYSTEM (DARK STAGE + OFF-WHITE CANVAS + LIME ACCENT) ─── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  --bg-stage: #0B1015;
-  --bg-stage-subtle: #121820;
-  --grid-line: rgba(255, 255, 255, 0.035);
-  
-  --surface-canvas: #ECEFF2;
-  --surface-card: #FFFFFF;
-  --surface-subtle: #F5F7F9;
-  --surface-dark: #12181F;
-  --surface-dark-card: #182029;
-  
-  --lime: #B8F936;
-  --lime-glow: rgba(184, 249, 54, 0.35);
-  --lime-hover: #A6E828;
-  --lime-soft: rgba(184, 249, 54, 0.14);
-  --lime-dark-text: #0E1807;
-  
-  --text-primary: #0F1720;
-  --text-muted: #526071;
-  --text-light: #7E8C9E;
-  --text-on-dark: #F8FAFC;
-  --text-on-dark-muted: #94A3B8;
-
-  --border-card: rgba(0, 0, 0, 0.05);
-  --border-dark-card: rgba(255, 255, 255, 0.08);
-  --radius-card: 22px;
-  --radius-sm: 10px;
-  --radius-pill: 9999px;
-  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
-  --shadow-lift: 0 14px 28px -4px rgba(15, 23, 42, 0.08);
-
-  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-heading: 'Space Grotesk', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-}
-
-html, body {
-  width: 100%;
-  min-height: 100vh;
-  background-color: var(--bg-stage);
-  font-family: var(--font-body);
-  color: var(--text-primary);
-  overflow-x: hidden;
-}
-
-/* Subtle Technical Grid */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: 
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: 36px 36px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Ambient Lime Glow behind main presentation frame */
-body::after {
-  content: '';
-  position: fixed;
-  bottom: -160px;
-  left: 8%;
-  width: 540px;
-  height: 480px;
-  background: radial-gradient(circle, rgba(184, 249, 54, 0.1) 0%, transparent 65%);
-  pointer-events: none;
-  filter: blur(80px);
-  z-index: 0;
-}
-
-.presentation-viewport {
-  position: relative;
-  z-index: 1;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 24px 32px 48px;
-}
-
-/* ─── FLOATING CAPSULE HEADER BAR ─── */
-.capsule-nav-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(14, 20, 27, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: var(--radius-pill);
-  padding: 8px 14px 8px 18px;
-  margin-bottom: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-}
-
-.capsule-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-}
-
-.capsule-logo {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #000000;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FFFFFF;
-  font-weight: 800;
-  font-size: 16px;
-  font-family: var(--font-heading);
-}
-
-.capsule-title {
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  color: #FFFFFF;
-  font-family: var(--font-heading);
-}
-
-.capsule-tag {
-  font-size: 10px;
-  color: var(--text-on-dark-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-}
-
-/* Horizontal Tracker Pill */
-.capsule-tracker {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-pill);
-  padding: 4px;
-  gap: 4px;
-}
-
-.tracker-node {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--text-on-dark-muted);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.tracker-node.active-lime {
-  background: var(--lime);
-  color: var(--lime-dark-text);
-  font-weight: 700;
-  box-shadow: 0 0 14px var(--lime-glow);
-}
-
-.tracker-avatar {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 800;
-}
-
-.capsule-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.capsule-metrics {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-right: 14px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 12px;
-  color: var(--text-on-dark-muted);
-  font-family: var(--font-mono);
-}
-
-.capsule-metrics strong {
-  color: #FFFFFF;
-  font-size: 14px;
-}
-
-.capsule-metrics .dot-green {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--lime);
-  margin-right: 4px;
-}
-
-.btn-pill-action {
-  background: #FFFFFF;
-  color: #0E1620;
-  border: none;
-  font-family: var(--font-body);
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 8px 18px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-.btn-pill-action:hover {
-  background: var(--lime);
-  transform: translateY(-1px);
-}
-
-/* ─── WORKSPACE SHELL: SIDEBAR + MAIN CANVAS ─── */
-.app-workspace-shell {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 20px;
-  align-items: stretch;
-}
-
-/* Floating Sleek Sidebar */
-.sleek-sidebar {
-  background: rgba(14, 20, 27, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 28px;
-  padding: 24px 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-}
-
-.sidebar-section-title {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: rgba(255, 255, 255, 0.4);
-  padding: 8px 14px 6px;
-}
-
-.sidebar-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.sidebar-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 11px 16px;
-  border-radius: 14px;
-  border: none;
-  background: transparent;
-  color: var(--text-on-dark-muted);
-  font-family: var(--font-body);
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.2s ease;
-}
-
-.sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #FFFFFF;
-}
-
-.sidebar-item.active {
-  background: var(--lime);
-  color: var(--lime-dark-text);
-  font-weight: 700;
-  box-shadow: 0 4px 14px var(--lime-glow);
-}
-
-.sidebar-item.active .side-icon {
-  filter: brightness(0.2);
-}
-
-.side-icon {
-  font-size: 16px;
-}
-
-.sidebar-status-box {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 14px;
-  font-size: 11.5px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.sidebar-status-box strong {
-  color: #FFFFFF;
-  display: block;
-  margin-bottom: 3px;
-}
-
-/* ─── MAIN PRODUCT WORKSPACE CANVAS (OFF-WHITE) ─── */
-.main-canvas {
-  background: var(--surface-canvas);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.5);
-  padding: 34px 38px;
-  position: relative;
-  overflow: hidden;
-  min-height: 720px;
-}
-
-/* Tab Panels */
-.tab-view {
-  display: none;
-}
-.tab-view.active {
-  display: block;
-}
-
-/* Workspace Identity Header Row */
-.workspace-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 26px;
-}
-
-.workspace-title-group {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.workspace-title {
-  font-family: var(--font-heading);
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  color: var(--text-primary);
-}
-
-.btn-new-audit {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #0E1620;
-  color: #FFFFFF;
-  border: none;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 9px 18px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-.btn-new-audit:hover { background: #253342; }
-
-/* Header KPIs */
-.header-kpis {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-
-.kpi-unit {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.kpi-num {
-  font-family: var(--font-heading);
-  font-size: 30px;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.kpi-tag {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.dot-badge {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-.dot-badge.lime { background: #65C900; }
-.dot-badge.blue { background: #3B82F6; }
-.dot-badge.amber { background: #F59E0B; }
-
-/* ─── DUAL-COLUMN WORKSPACE GRID (STREAM + DRAWER) ─── */
-.workspace-grid {
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 26px;
-  align-items: start;
-}
-
-.main-stream {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* Stream Section Header */
-.stream-section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-
-.section-label {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-
-.section-label h2 {
-  font-family: var(--font-heading);
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.section-badge-count {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  background: rgba(0, 0, 0, 0.06);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-}
-
-.stream-filter-pills {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.filter-pill {
-  border: none;
-  background: transparent;
-  font-family: var(--font-body);
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--text-muted);
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.filter-pill.active {
-  background: #0E1620;
-  color: #FFFFFF;
-}
-
-/* Query Card */
-.query-card {
-  background: var(--surface-card);
-  border-radius: var(--radius-card);
-  padding: 20px 24px;
-  border: 1px solid var(--border-card);
-  box-shadow: var(--shadow-card);
-}
-
-.query-textarea {
-  width: 100%;
-  min-height: 80px;
-  border: none;
-  outline: none;
-  resize: none;
-  background: transparent;
-  font-family: var(--font-body);
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.query-card-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid #EEF2F6;
-  padding-top: 14px;
-  margin-top: 6px;
-}
-
-.sample-prompts {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sample-prompt-btn {
-  background: var(--surface-subtle);
-  border: 1px solid #E2E8F0;
-  border-radius: var(--radius-pill);
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--text-muted);
-  padding: 4px 12px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.sample-prompt-btn:hover {
-  background: #E2E8F0;
-  color: var(--text-primary);
-}
-
-.btn-run-audit {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--lime);
-  color: var(--lime-dark-text);
-  border: none;
-  font-family: var(--font-body);
-  font-size: 13.5px;
-  font-weight: 700;
-  padding: 9px 20px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px var(--lime-glow);
-}
-.btn-run-audit:hover {
-  background: var(--lime-hover);
-  transform: translateY(-1px);
-}
-
-/* ─── SIMULATION PIPELINE PROGRESS BAR (11 STAGES) ─── */
-.simulation-pipeline-card {
-  margin-top: 18px;
-  padding: 16px 20px;
-  background: var(--surface-subtle);
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-}
-
-.sim-pipeline-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.sim-pipeline-title {
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sim-live-pulse {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #10B981;
-  box-shadow: 0 0 8px #10B981;
-}
-
-.sim-steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px;
-}
-
-.sim-step-node {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--text-light);
-  padding: 6px 10px;
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 10px;
-  transition: all 0.2s ease;
-}
-
-.sim-step-node .step-badge {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #F1F5F9;
-  border: 1px solid #CBD5E1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9.5px;
-  font-weight: 800;
-  color: var(--text-muted);
-}
-
-.sim-step-node.active-sim {
-  border-color: #0E1620;
-  background: var(--lime);
-  color: var(--lime-dark-text);
-  box-shadow: 0 4px 12px var(--lime-glow);
-  transform: translateY(-1px);
-}
-.sim-step-node.active-sim .step-badge {
-  background: #0E1620;
-  color: var(--lime);
-  border-color: #0E1620;
-}
-
-.sim-step-node.done-sim {
-  border-color: #A7F3D0;
-  background: #ECFDF5;
-  color: #047857;
-}
-.sim-step-node.done-sim .step-badge {
-  background: #10B981;
-  color: #FFFFFF;
-  border-color: #10B981;
-}
-
-/* Standards Card Deck */
-.standards-card-deck {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-.std-card {
-  border-radius: var(--radius-card);
-  padding: 22px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.std-card.featured-lime {
-  background: var(--lime);
-  color: var(--lime-dark-text);
-  box-shadow: 0 12px 32px var(--lime-glow);
-  border: none;
-}
-.std-card.featured-lime:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 40px rgba(184, 249, 54, 0.45);
-}
-
-.std-card.neutral-matte {
-  background: var(--surface-card);
-  border: 1px solid var(--border-card);
-  box-shadow: var(--shadow-card);
-}
-.std-card.neutral-matte:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lift);
-}
-
-.std-card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.std-code {
-  font-family: var(--font-mono);
-  font-size: 15.5px;
-  font-weight: 700;
-}
-
-.std-title {
-  font-size: 13.5px;
-  font-weight: 600;
-  line-height: 1.45;
-  margin-top: 4px;
-}
-
-.std-card.featured-lime .std-title { color: rgba(14, 24, 7, 0.85); }
-.std-card.neutral-matte .std-title { color: var(--text-muted); }
-
-.std-match-badge {
-  font-family: var(--font-heading);
-  font-size: 20px;
-  font-weight: 800;
-}
-
-.std-tags-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin: 14px 0;
-}
-
-.mini-tag {
-  font-size: 10.5px;
-  font-weight: 700;
-  padding: 3px 9px;
-  border-radius: var(--radius-pill);
-  text-transform: uppercase;
-}
-
-.std-card.featured-lime .mini-tag { background: rgba(0, 0, 0, 0.12); color: var(--lime-dark-text); }
-.std-card.neutral-matte .mini-tag { background: #F1F5F9; color: #475569; }
-.std-card.neutral-matte .mini-tag.active-green { background: #ECFDF5; color: #059669; }
-
-.std-why-box {
-  font-size: 12.5px;
-  line-height: 1.5;
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  margin-bottom: 16px;
-}
-.std-card.featured-lime .std-why-box { background: rgba(0, 0, 0, 0.08); color: rgba(14, 24, 7, 0.9); }
-.std-card.neutral-matte .std-why-box { background: var(--surface-subtle); color: var(--text-muted); }
-
-.std-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
-.std-card.featured-lime .std-card-footer { border-top-color: rgba(0, 0, 0, 0.12); }
-
-.action-circle-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.std-card.featured-lime .action-circle-btn { background: #0E1807; color: #FFFFFF; }
-.std-card.featured-lime .action-circle-btn:hover { background: #233516; }
-.std-card.neutral-matte .action-circle-btn { background: #F1F5F9; color: var(--text-primary); }
-.std-card.neutral-matte .action-circle-btn:hover { background: var(--lime); color: var(--lime-dark-text); }
-
-/* Tender Gap Analysis Panel */
-.gap-audit-panel {
-  background: var(--surface-card);
-  border-radius: var(--radius-card);
-  padding: 22px;
-  border: 1px solid var(--border-card);
-  box-shadow: var(--shadow-card);
-}
-
-.gap-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
-  font-size: 13px;
-}
-
-.gap-table th {
-  text-align: left;
-  padding: 10px 12px;
-  color: var(--text-light);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  border-bottom: 1px solid #EEF2F6;
-}
-
-.gap-table td {
-  padding: 11px 12px;
-  border-bottom: 1px solid #F1F5F9;
-  color: var(--text-primary);
-}
-
-.status-badge-outdated {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: #FEF2F2;
-  color: #DC2626;
-  font-weight: 700;
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-}
-
-/* Right-Hand Inspection Drawer */
-.summary-drawer {
-  background: var(--surface-dark);
-  border-radius: 28px;
-  padding: 24px;
-  color: var(--text-on-dark);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-  border: 1px solid var(--border-dark-card);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.drawer-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.drawer-title {
-  font-family: var(--font-heading);
-  font-size: 17px;
-  font-weight: 700;
-  color: #FFFFFF;
-}
-
-.doc-preview-block {
-  display: flex;
-  gap: 10px;
-}
-
-.doc-thumb-card {
-  flex: 1;
-  background: var(--surface-dark-card);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.doc-thumb-card:hover {
-  border-color: var(--lime);
-  transform: translateY(-2px);
-}
-
-.doc-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-
-.doc-line {
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.2);
-}
-.doc-line.short { width: 60%; }
-.doc-line.accent { background: var(--lime); }
-
-.doc-thumb-label {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--text-on-dark-muted);
-}
-
-.proof-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  position: relative;
-  padding-left: 20px;
-}
-
-.proof-timeline::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 6px;
-  bottom: 6px;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.timeline-step {
-  position: relative;
-  font-size: 12px;
-  line-height: 1.45;
-  color: var(--text-on-dark-muted);
-}
-
-.timeline-step strong {
-  color: #FFFFFF;
-  display: block;
-  font-size: 12.5px;
-  margin-bottom: 2px;
-}
-
-.timeline-dot {
-  position: absolute;
-  left: -20px;
-  top: 4px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--lime);
-  box-shadow: 0 0 10px var(--lime-glow);
-}
-
-.grounded-clause-box {
-  background: var(--surface-dark-card);
-  border-radius: 16px;
-  padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.clause-text {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  line-height: 1.6;
-  color: #E2E8F0;
-  margin-bottom: 12px;
-  word-break: break-word;
-}
-
-.btn-copy-clause {
-  width: 100%;
-  background: var(--lime);
-  color: var(--lime-dark-text);
-  border: none;
-  font-family: var(--font-body);
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 10px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-copy-clause:hover { background: var(--lime-hover); }
-
-/* ─── DATA TABLES FOR OTHER VIEWS (CATALOG, QUEUE, AUDIT) ─── */
-.data-card-wrapper {
-  background: var(--surface-card);
-  border-radius: var(--radius-card);
-  padding: 24px;
-  border: 1px solid var(--border-card);
-  box-shadow: var(--shadow-card);
-}
-
-.view-intro {
-  margin-bottom: 20px;
-}
-.view-intro h2 {
-  font-family: var(--font-heading);
-  font-size: 24px;
-  font-weight: 800;
-}
-.view-intro p {
-  font-size: 13.5px;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
-.styled-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-.styled-table th {
-  background: var(--surface-subtle);
-  color: var(--text-light);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  padding: 12px 14px;
-  border-bottom: 1px solid #E2E8F0;
-  text-align: left;
-}
-
-.styled-table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid #F1F5F9;
-  color: var(--text-primary);
-}
-
-/* Graph Canvas */
-.graph-canvas {
-  height: 420px;
-  background: var(--surface-subtle);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-card);
-  position: relative;
-  overflow: hidden;
-  margin-top: 14px;
-}
-
-.g-node {
-  position: absolute;
-  background: #FFFFFF;
-  border: 1.5px solid #CBD5E1;
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  z-index: 2;
-}
-.g-node.g-primary {
-  border-color: #0E1620;
-  background: var(--lime);
-  color: var(--lime-dark-text);
-  box-shadow: 0 6px 18px var(--lime-glow);
-}
-.g-node.g-outdated {
-  border-color: #EF4444;
-  background: #FEF2F2;
-  color: #DC2626;
-}
-
-.g-edge-line {
-  position: absolute;
-  height: 2px;
-  background: #94A3B8;
-  transform-origin: 0 0;
-  z-index: 1;
-}
-.g-edge-line.verified {
-  background: #10B981;
-}
-
-.g-edge-label {
-  position: absolute;
-  font-size: 10px;
-  font-weight: 700;
-  color: #475569;
-  background: #FFFFFF;
-  padding: 2px 6px;
-  border-radius: 4px;
-  border: 1px solid #E2E8F0;
-  z-index: 3;
-}
-
-/* Toast */
-.toast-notice {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  background: #FFFFFF;
-  color: #0E1620;
-  padding: 12px 20px;
-  border-radius: var(--radius-pill);
-  font-size: 13px;
-  font-weight: 700;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-  z-index: 999;
-  display: none;
-}
-</style>
-</head>
-
-<body>
-
-<div class="presentation-viewport">
-
-  <!-- ═══════════════ CAPSULE FLOATING TOP BAR ═══════════════ -->
-  <header class="capsule-nav-bar">
-    <a href="/" class="capsule-brand">
-      <div class="capsule-logo">च</div>
-      <span class="capsule-title">CHANAKYA</span>
-      <span class="capsule-tag">v7.13 Reconciled</span>
-    </a>
-
-    <!-- Horizontal Step Tracker (Lime Highlighted) -->
-    <div class="capsule-tracker">
-      <div class="tracker-node active-lime" id="trackAtom">
-        <span class="tracker-avatar">1</span>
-        <span>Requirement Atoms</span>
-      </div>
-      <div class="tracker-node" id="trackRetrieval">
-        <span class="tracker-avatar">2</span>
-        <span>FAISS + BGE Rerank</span>
-      </div>
-      <div class="tracker-node" id="trackProof">
-        <span class="tracker-avatar">3</span>
-        <span>Proof Validation</span>
-      </div>
-    </div>
-
-    <!-- Right Controls -->
-    <div class="capsule-controls">
-      <div class="capsule-metrics">
-        <span><span class="dot-green"></span>Verified <strong>20</strong></span>
-        <span>Audited <strong>34</strong></span>
-      </div>
-      <a href="/docs" target="_blank" class="btn-pill-action">API Docs</a>
-    </div>
-  </header>
-
-  <!-- ═══════════════ WORKSPACE SHELL: SIDEBAR + MAIN CANVAS ═══════════════ -->
-  <div class="app-workspace-shell">
-
-    <!-- ─── SLEEK DARK SIDEBAR MENU ─── -->
-    <aside class="sleek-sidebar">
-      <div>
-        <div class="sidebar-section-title">Workspace</div>
-        <div class="sidebar-menu">
-          <button class="sidebar-item active" data-view="viewTenders" onclick="switchSidebarTab(this)">
-            <span class="side-icon">📊</span>
-            <span>Tender Dashboard</span>
-          </button>
-          <button class="sidebar-item" data-view="viewRecommend" onclick="switchSidebarTab(this)">
-            <span class="side-icon">⚡</span>
-            <span>AI Review Workspace</span>
-          </button>
-          <button class="sidebar-item" data-view="viewCatalog" onclick="switchSidebarTab(this)">
-            <span class="side-icon">📚</span>
-            <span>Standards Catalog</span>
-          </button>
-          <button class="sidebar-item" data-view="viewGraph" onclick="switchSidebarTab(this)">
-            <span class="side-icon">🕸️</span>
-            <span>Standards Graph</span>
-          </button>
-        </div>
-
-        <div class="sidebar-section-title" style="margin-top: 20px;">Verification</div>
-        <div class="sidebar-menu">
-          <button class="sidebar-item" data-view="viewReview" onclick="switchSidebarTab(this)">
-            <span class="side-icon">👤</span>
-            <span>Review Queue</span>
-          </button>
-          <button class="sidebar-item" data-view="viewAudit" onclick="switchSidebarTab(this)">
-            <span class="side-icon">📜</span>
-            <span>Audit Log</span>
-          </button>
-        </div>
-
-        <div class="sidebar-section-title" style="margin-top: 20px;">System</div>
-        <div class="sidebar-menu">
-          <button class="sidebar-item" data-view="viewArchitecture" onclick="switchSidebarTab(this)">
-            <span class="side-icon">⚙️</span>
-            <span>Architecture</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="sidebar-status-box">
-        <strong>Simulation Mode</strong>
-        Synthetic fixtures (<code>IS DEMO-*</code>). Enforces proof closure invariants.
-      </div>
-    </aside>
-
-    <!-- ─── OFF-WHITE PRODUCT CANVAS ─── -->
-    <main class="main-canvas">
-
-      <!-- ════════ TAB 0: TENDER DASHBOARD (OVERVIEW) ════════ -->
-      <div id="viewTenders" class="tab-view active">
-        
-        <!-- Header & Top Stats -->
-        <div class="workspace-header">
-          <div class="workspace-title-group">
-            <h1 class="workspace-title">TENDER DASHBOARD</h1>
-            <button class="btn-new-audit" onclick="launchAuditWithSample('water_pipe')">+ New Tender Review</button>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CHANAKYA — AI Standards Intelligence Workspace</title>
+    <meta
+      name="description"
+      content="CHANAKYA is an AI-assisted procurement standards review and recommendation system prototype for government procurement officers."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ─── RESET & DESIGN SYSTEM (DARK STAGE + OFF-WHITE CANVAS + LIME ACCENT) ─── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg-stage: #0b1015;
+        --bg-stage-subtle: #121820;
+        --grid-line: rgba(255, 255, 255, 0.035);
+
+        --surface-canvas: #eceff2;
+        --surface-card: #ffffff;
+        --surface-subtle: #f5f7f9;
+        --surface-dark: #12181f;
+        --surface-dark-card: #182029;
+
+        --lime: #b8f936;
+        --lime-glow: rgba(184, 249, 54, 0.35);
+        --lime-hover: #a6e828;
+        --lime-soft: rgba(184, 249, 54, 0.14);
+        --lime-dark-text: #0e1807;
+
+        --text-primary: #0f1720;
+        --text-muted: #526071;
+        --text-light: #7e8c9e;
+        --text-on-dark: #f8fafc;
+        --text-on-dark-muted: #94a3b8;
+
+        --border-card: rgba(0, 0, 0, 0.05);
+        --border-dark-card: rgba(255, 255, 255, 0.08);
+        --radius-card: 22px;
+        --radius-sm: 10px;
+        --radius-pill: 9999px;
+        --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+        --shadow-lift: 0 14px 28px -4px rgba(15, 23, 42, 0.08);
+
+        --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+        --font-heading: "Space Grotesk", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100vh;
+        background-color: var(--bg-stage);
+        font-family: var(--font-body);
+        color: var(--text-primary);
+        overflow-x: hidden;
+      }
+
+      /* Subtle Technical Grid */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+        background-size: 36px 36px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Ambient Lime Glow behind main presentation frame */
+      body::after {
+        content: "";
+        position: fixed;
+        bottom: -160px;
+        left: 8%;
+        width: 540px;
+        height: 480px;
+        background: radial-gradient(
+          circle,
+          rgba(184, 249, 54, 0.1) 0%,
+          transparent 65%
+        );
+        pointer-events: none;
+        filter: blur(80px);
+        z-index: 0;
+      }
+
+      .presentation-viewport {
+        position: relative;
+        z-index: 1;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 24px 32px 48px;
+      }
+
+      /* ─── FLOATING CAPSULE HEADER BAR ─── */
+      .capsule-nav-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(14, 20, 27, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: var(--radius-pill);
+        padding: 8px 14px 8px 18px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      }
+
+      .capsule-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+
+      .capsule-logo {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #000000;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 16px;
+        font-family: var(--font-heading);
+      }
+
+      .capsule-title {
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        color: #ffffff;
+        font-family: var(--font-heading);
+      }
+
+      .capsule-tag {
+        font-size: 10px;
+        color: var(--text-on-dark-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 2px 8px;
+        border-radius: var(--radius-pill);
+      }
+
+      /* Horizontal Tracker Pill */
+      .capsule-tracker {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-pill);
+        padding: 4px;
+        gap: 4px;
+      }
+
+      .tracker-node {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 14px;
+        border-radius: var(--radius-pill);
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-on-dark-muted);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .tracker-node.active-lime {
+        background: var(--lime);
+        color: var(--lime-dark-text);
+        font-weight: 700;
+        box-shadow: 0 0 14px var(--lime-glow);
+      }
+
+      .tracker-avatar {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 800;
+      }
+
+      .capsule-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .capsule-metrics {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-right: 14px;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 12px;
+        color: var(--text-on-dark-muted);
+        font-family: var(--font-mono);
+      }
+
+      .capsule-metrics strong {
+        color: #ffffff;
+        font-size: 14px;
+      }
+
+      .capsule-metrics .dot-green {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--lime);
+        margin-right: 4px;
+      }
+
+      .btn-pill-action {
+        background: #ffffff;
+        color: #0e1620;
+        border: none;
+        font-family: var(--font-body);
+        font-size: 12.5px;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .btn-pill-action:hover {
+        background: var(--lime);
+        transform: translateY(-1px);
+      }
+
+      /* ─── WORKSPACE SHELL: SIDEBAR + MAIN CANVAS ─── */
+      .app-workspace-shell {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 20px;
+        align-items: stretch;
+      }
+
+      /* Floating Sleek Sidebar */
+      .sleek-sidebar {
+        background: rgba(14, 20, 27, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 28px;
+        padding: 24px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      }
+
+      .sidebar-section-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: rgba(255, 255, 255, 0.4);
+        padding: 8px 14px 6px;
+      }
+
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 11px 16px;
+        border-radius: 14px;
+        border: none;
+        background: transparent;
+        color: var(--text-on-dark-muted);
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.2s ease;
+      }
+
+      .sidebar-item:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
+      }
+
+      .sidebar-item.active {
+        background: var(--lime);
+        color: var(--lime-dark-text);
+        font-weight: 700;
+        box-shadow: 0 4px 14px var(--lime-glow);
+      }
+
+      .sidebar-item.active .side-icon {
+        filter: brightness(0.2);
+      }
+
+      .side-icon {
+        font-size: 16px;
+      }
+
+      .sidebar-status-box {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 14px;
+        font-size: 11.5px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .sidebar-status-box strong {
+        color: #ffffff;
+        display: block;
+        margin-bottom: 3px;
+      }
+
+      /* ─── MAIN PRODUCT WORKSPACE CANVAS (OFF-WHITE) ─── */
+      .main-canvas {
+        background: var(--surface-canvas);
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.5);
+        padding: 34px 38px;
+        position: relative;
+        overflow: hidden;
+        min-height: 720px;
+      }
+
+      /* Tab Panels */
+      .tab-view {
+        display: none;
+      }
+      .tab-view.active {
+        display: block;
+      }
+
+      /* Workspace Identity Header Row */
+      .workspace-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 26px;
+      }
+
+      .workspace-title-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .workspace-title {
+        font-family: var(--font-heading);
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: var(--text-primary);
+      }
+
+      .btn-new-audit {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #0e1620;
+        color: #ffffff;
+        border: none;
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 600;
+        padding: 9px 18px;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+      .btn-new-audit:hover {
+        background: #253342;
+      }
+
+      /* Header KPIs */
+      .header-kpis {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .kpi-unit {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+
+      .kpi-num {
+        font-family: var(--font-heading);
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--text-primary);
+      }
+
+      .kpi-tag {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .dot-badge {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
+      .dot-badge.lime {
+        background: #65c900;
+      }
+      .dot-badge.blue {
+        background: #3b82f6;
+      }
+      .dot-badge.amber {
+        background: #f59e0b;
+      }
+
+      /* ─── DUAL-COLUMN WORKSPACE GRID (STREAM + DRAWER) ─── */
+      .workspace-grid {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 26px;
+        align-items: start;
+      }
+
+      .main-stream {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      /* Stream Section Header */
+      .stream-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .section-label {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+
+      .section-label h2 {
+        font-family: var(--font-heading);
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .section-badge-count {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        background: rgba(0, 0, 0, 0.06);
+        padding: 2px 8px;
+        border-radius: var(--radius-pill);
+      }
+
+      .stream-filter-pills {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .filter-pill {
+        border: none;
+        background: transparent;
+        font-family: var(--font-body);
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-muted);
+        padding: 5px 12px;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .filter-pill.active {
+        background: #0e1620;
+        color: #ffffff;
+      }
+
+      /* Query Card */
+      .query-card {
+        background: var(--surface-card);
+        border-radius: var(--radius-card);
+        padding: 20px 24px;
+        border: 1px solid var(--border-card);
+        box-shadow: var(--shadow-card);
+      }
+
+      .query-textarea {
+        width: 100%;
+        min-height: 80px;
+        border: none;
+        outline: none;
+        resize: none;
+        background: transparent;
+        font-family: var(--font-body);
+        font-size: 14.5px;
+        line-height: 1.6;
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .query-card-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid #eef2f6;
+        padding-top: 14px;
+        margin-top: 6px;
+      }
+
+      .sample-prompts {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .sample-prompt-btn {
+        background: var(--surface-subtle);
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius-pill);
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-muted);
+        padding: 4px 12px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .sample-prompt-btn:hover {
+        background: #e2e8f0;
+        color: var(--text-primary);
+      }
+
+      .btn-run-audit {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--lime);
+        color: var(--lime-dark-text);
+        border: none;
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 700;
+        padding: 9px 20px;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 14px var(--lime-glow);
+      }
+      .btn-run-audit:hover {
+        background: var(--lime-hover);
+        transform: translateY(-1px);
+      }
+
+      /* ─── SIMULATION PIPELINE PROGRESS BAR (11 STAGES) ─── */
+      .simulation-pipeline-card {
+        margin-top: 18px;
+        padding: 16px 20px;
+        background: var(--surface-subtle);
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+      }
+
+      .sim-pipeline-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .sim-pipeline-title {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .sim-live-pulse {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 8px #10b981;
+      }
+
+      .sim-steps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+      }
+
+      .sim-step-node {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-light);
+        padding: 6px 10px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+      }
+
+      .sim-step-node .step-badge {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9.5px;
+        font-weight: 800;
+        color: var(--text-muted);
+      }
+
+      .sim-step-node.active-sim {
+        border-color: #0e1620;
+        background: var(--lime);
+        color: var(--lime-dark-text);
+        box-shadow: 0 4px 12px var(--lime-glow);
+        transform: translateY(-1px);
+      }
+      .sim-step-node.active-sim .step-badge {
+        background: #0e1620;
+        color: var(--lime);
+        border-color: #0e1620;
+      }
+
+      .sim-step-node.done-sim {
+        border-color: #a7f3d0;
+        background: #ecfdf5;
+        color: #047857;
+      }
+      .sim-step-node.done-sim .step-badge {
+        background: #10b981;
+        color: #ffffff;
+        border-color: #10b981;
+      }
+
+      /* Standards Card Deck */
+      .standards-card-deck {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .std-card {
+        border-radius: var(--radius-card);
+        padding: 22px;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .std-card.featured-lime {
+        background: var(--lime);
+        color: var(--lime-dark-text);
+        box-shadow: 0 12px 32px var(--lime-glow);
+        border: none;
+      }
+      .std-card.featured-lime:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px rgba(184, 249, 54, 0.45);
+      }
+
+      .std-card.neutral-matte {
+        background: var(--surface-card);
+        border: 1px solid var(--border-card);
+        box-shadow: var(--shadow-card);
+      }
+      .std-card.neutral-matte:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lift);
+      }
+
+      .std-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .std-code {
+        font-family: var(--font-mono);
+        font-size: 15.5px;
+        font-weight: 700;
+      }
+
+      .std-title {
+        font-size: 13.5px;
+        font-weight: 600;
+        line-height: 1.45;
+        margin-top: 4px;
+      }
+
+      .std-card.featured-lime .std-title {
+        color: rgba(14, 24, 7, 0.85);
+      }
+      .std-card.neutral-matte .std-title {
+        color: var(--text-muted);
+      }
+
+      .std-match-badge {
+        font-family: var(--font-heading);
+        font-size: 20px;
+        font-weight: 800;
+      }
+
+      .std-tags-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin: 14px 0;
+      }
+
+      .mini-tag {
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: var(--radius-pill);
+        text-transform: uppercase;
+      }
+
+      .std-card.featured-lime .mini-tag {
+        background: rgba(0, 0, 0, 0.12);
+        color: var(--lime-dark-text);
+      }
+      .std-card.neutral-matte .mini-tag {
+        background: #f1f5f9;
+        color: #475569;
+      }
+      .std-card.neutral-matte .mini-tag.active-green {
+        background: #ecfdf5;
+        color: #059669;
+      }
+
+      .std-why-box {
+        font-size: 12.5px;
+        line-height: 1.5;
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+        margin-bottom: 16px;
+      }
+      .std-card.featured-lime .std-why-box {
+        background: rgba(0, 0, 0, 0.08);
+        color: rgba(14, 24, 7, 0.9);
+      }
+      .std-card.neutral-matte .std-why-box {
+        background: var(--surface-subtle);
+        color: var(--text-muted);
+      }
+
+      .std-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 12px;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .std-card.featured-lime .std-card-footer {
+        border-top-color: rgba(0, 0, 0, 0.12);
+      }
+
+      .action-circle-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .std-card.featured-lime .action-circle-btn {
+        background: #0e1807;
+        color: #ffffff;
+      }
+      .std-card.featured-lime .action-circle-btn:hover {
+        background: #233516;
+      }
+      .std-card.neutral-matte .action-circle-btn {
+        background: #f1f5f9;
+        color: var(--text-primary);
+      }
+      .std-card.neutral-matte .action-circle-btn:hover {
+        background: var(--lime);
+        color: var(--lime-dark-text);
+      }
+
+      /* Tender Gap Analysis Panel */
+      .gap-audit-panel {
+        background: var(--surface-card);
+        border-radius: var(--radius-card);
+        padding: 22px;
+        border: 1px solid var(--border-card);
+        box-shadow: var(--shadow-card);
+      }
+
+      .gap-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        font-size: 13px;
+      }
+
+      .gap-table th {
+        text-align: left;
+        padding: 10px 12px;
+        color: var(--text-light);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        border-bottom: 1px solid #eef2f6;
+      }
+
+      .gap-table td {
+        padding: 11px 12px;
+        border-bottom: 1px solid #f1f5f9;
+        color: var(--text-primary);
+      }
+
+      .status-badge-outdated {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #fef2f2;
+        color: #dc2626;
+        font-weight: 700;
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: var(--radius-pill);
+      }
+
+      /* Right-Hand Inspection Drawer */
+      .summary-drawer {
+        background: var(--surface-dark);
+        border-radius: 28px;
+        padding: 24px;
+        color: var(--text-on-dark);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--border-dark-card);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .drawer-title {
+        font-family: var(--font-heading);
+        font-size: 17px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+
+      .doc-preview-block {
+        display: flex;
+        gap: 10px;
+      }
+
+      .doc-thumb-card {
+        flex: 1;
+        background: var(--surface-dark-card);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .doc-thumb-card:hover {
+        border-color: var(--lime);
+        transform: translateY(-2px);
+      }
+
+      .doc-lines {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+
+      .doc-line {
+        height: 3px;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .doc-line.short {
+        width: 60%;
+      }
+      .doc-line.accent {
+        background: var(--lime);
+      }
+
+      .doc-thumb-label {
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--text-on-dark-muted);
+      }
+
+      .proof-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+        padding-left: 20px;
+      }
+
+      .proof-timeline::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 6px;
+        bottom: 6px;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .timeline-step {
+        position: relative;
+        font-size: 12px;
+        line-height: 1.45;
+        color: var(--text-on-dark-muted);
+      }
+
+      .timeline-step strong {
+        color: #ffffff;
+        display: block;
+        font-size: 12.5px;
+        margin-bottom: 2px;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        left: -20px;
+        top: 4px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--lime);
+        box-shadow: 0 0 10px var(--lime-glow);
+      }
+
+      .grounded-clause-box {
+        background: var(--surface-dark-card);
+        border-radius: 16px;
+        padding: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .clause-text {
+        font-family: var(--font-mono);
+        font-size: 11.5px;
+        line-height: 1.6;
+        color: #e2e8f0;
+        margin-bottom: 12px;
+        word-break: break-word;
+      }
+
+      .btn-copy-clause {
+        width: 100%;
+        background: var(--lime);
+        color: var(--lime-dark-text);
+        border: none;
+        font-family: var(--font-body);
+        font-size: 12.5px;
+        font-weight: 700;
+        padding: 10px;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-copy-clause:hover {
+        background: var(--lime-hover);
+      }
+
+      /* ─── DATA TABLES FOR OTHER VIEWS (CATALOG, QUEUE, AUDIT) ─── */
+      .data-card-wrapper {
+        background: var(--surface-card);
+        border-radius: var(--radius-card);
+        padding: 24px;
+        border: 1px solid var(--border-card);
+        box-shadow: var(--shadow-card);
+      }
+
+      .view-intro {
+        margin-bottom: 20px;
+      }
+      .view-intro h2 {
+        font-family: var(--font-heading);
+        font-size: 24px;
+        font-weight: 800;
+      }
+      .view-intro p {
+        font-size: 13.5px;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+
+      .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .styled-table th {
+        background: var(--surface-subtle);
+        color: var(--text-light);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        padding: 12px 14px;
+        border-bottom: 1px solid #e2e8f0;
+        text-align: left;
+      }
+
+      .styled-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid #f1f5f9;
+        color: var(--text-primary);
+      }
+
+      /* Graph Canvas */
+      .graph-canvas {
+        height: 420px;
+        background: var(--surface-subtle);
+        border: 1px solid var(--border-card);
+        border-radius: var(--radius-card);
+        position: relative;
+        overflow: hidden;
+        margin-top: 14px;
+      }
+
+      .g-node {
+        position: absolute;
+        background: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        z-index: 2;
+      }
+      .g-node.g-primary {
+        border-color: #0e1620;
+        background: var(--lime);
+        color: var(--lime-dark-text);
+        box-shadow: 0 6px 18px var(--lime-glow);
+      }
+      .g-node.g-outdated {
+        border-color: #ef4444;
+        background: #fef2f2;
+        color: #dc2626;
+      }
+
+      .g-edge-line {
+        position: absolute;
+        height: 2px;
+        background: #94a3b8;
+        transform-origin: 0 0;
+        z-index: 1;
+      }
+      .g-edge-line.verified {
+        background: #10b981;
+      }
+
+      .g-edge-label {
+        position: absolute;
+        font-size: 10px;
+        font-weight: 700;
+        color: #475569;
+        background: #ffffff;
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid #e2e8f0;
+        z-index: 3;
+      }
+
+      /* Toast */
+      .toast-notice {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        background: #ffffff;
+        color: #0e1620;
+        padding: 12px 20px;
+        border-radius: var(--radius-pill);
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        z-index: 999;
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="presentation-viewport">
+      <!-- ═══════════════ CAPSULE FLOATING TOP BAR ═══════════════ -->
+      <header class="capsule-nav-bar">
+        <a href="/" class="capsule-brand">
+          <div class="capsule-logo">च</div>
+          <span class="capsule-title">CHANAKYA</span>
+          <span class="capsule-tag">v7.13 Reconciled</span>
+        </a>
+
+        <!-- Horizontal Step Tracker (Lime Highlighted) -->
+        <div class="capsule-tracker">
+          <div class="tracker-node active-lime" id="trackAtom">
+            <span class="tracker-avatar">1</span>
+            <span>Requirement Atoms</span>
           </div>
-
-          <div class="header-kpis">
-            <div class="kpi-unit">
-              <span class="kpi-num">12</span>
-              <span class="kpi-tag"><span class="dot-badge lime"></span> Active Tenders</span>
-            </div>
-            <div class="kpi-unit">
-              <span class="kpi-num">98.2%</span>
-              <span class="kpi-tag"><span class="dot-badge blue"></span> Compliance</span>
-            </div>
-            <div class="kpi-unit">
-              <span class="kpi-num">4</span>
-              <span class="kpi-tag"><span class="dot-badge amber"></span> Action Req.</span>
-            </div>
+          <div class="tracker-node" id="trackRetrieval">
+            <span class="tracker-avatar">2</span>
+            <span>FAISS + BGE Rerank</span>
+          </div>
+          <div class="tracker-node" id="trackProof">
+            <span class="tracker-avatar">3</span>
+            <span>Proof Validation</span>
           </div>
         </div>
 
-        <!-- 4 Philosophy / Metric Cards -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
-          <div style="background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 18px; padding: 18px; box-shadow: var(--shadow-card);">
-            <div style="font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Total Audited Tenders</div>
-            <div style="font-family: var(--font-heading); font-size: 26px; font-weight: 800; color: var(--text-primary); margin-top: 6px;">34 Cases</div>
-            <div style="font-size: 12px; color: #059669; font-weight: 600; margin-top: 4px;">&uarr; 100% Invariant Passed</div>
+        <!-- Right Controls -->
+        <div class="capsule-controls">
+          <div class="capsule-metrics">
+            <span
+              ><span class="dot-green"></span>Verified <strong>20</strong></span
+            >
+            <span>Audited <strong>34</strong></span>
           </div>
-
-          <div style="background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 18px; padding: 18px; box-shadow: var(--shadow-card);">
-            <div style="font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Mandatory QCO Matches</div>
-            <div style="font-family: var(--font-heading); font-size: 26px; font-weight: 800; color: var(--text-primary); margin-top: 6px;">28 Verified</div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Scheme-I ISI Mark Enforced</div>
-          </div>
-
-          <div style="background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 18px; padding: 18px; box-shadow: var(--shadow-card);">
-            <div style="font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Superseded Standards Flagged</div>
-            <div style="font-family: var(--font-heading); font-size: 26px; font-weight: 800; color: #DC2626; margin-top: 6px;">6 Gaps</div>
-            <div style="font-size: 12px; color: #DC2626; font-weight: 600; margin-top: 4px;">Prevented Outdated Tenders</div>
-          </div>
-
-          <div style="background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 18px; padding: 18px; box-shadow: var(--shadow-card);">
-            <div style="font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Avg. Pipeline Latency</div>
-            <div style="font-family: var(--font-heading); font-size: 26px; font-weight: 800; color: var(--text-primary); margin-top: 6px;">1.28 s</div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Simulated 11 Stages</div>
-          </div>
+          <a href="/docs" target="_blank" class="btn-pill-action">API Docs</a>
         </div>
+      </header>
 
-        <!-- Live Tenders Queue Table with One-Click AI Audit -->
-        <div class="data-card-wrapper" style="margin-bottom: 24px;">
-          <div class="stream-section-header" style="margin-bottom: 16px;">
-            <div class="section-label">
-              <h2>Recent Procurement Tenders</h2>
-              <span class="section-badge-count">Live Queue</span>
+      <!-- ═══════════════ WORKSPACE SHELL: SIDEBAR + MAIN CANVAS ═══════════════ -->
+      <div class="app-workspace-shell">
+        <!-- ─── SLEEK DARK SIDEBAR MENU ─── -->
+        <aside class="sleek-sidebar">
+          <div>
+            <div class="sidebar-section-title">Workspace</div>
+            <div class="sidebar-menu">
+              <button
+                class="sidebar-item active"
+                data-view="viewTenders"
+                onclick="switchSidebarTab(this)"
+              >
+                <span class="side-icon">📊</span>
+                <span>Tender Dashboard</span>
+              </button>
+              <button
+                class="sidebar-item"
+                data-view="viewRecommend"
+                onclick="switchSidebarTab(this)"
+              >
+                <span class="side-icon">⚡</span>
+                <span>AI Review Workspace</span>
+              </button>
+              <button
+                class="sidebar-item"
+                data-view="viewCatalog"
+                onclick="switchSidebarTab(this)"
+              >
+                <span class="side-icon">📚</span>
+                <span>Standards Catalog</span>
+              </button>
+              <button
+                class="sidebar-item"
+                data-view="viewGraph"
+                onclick="switchSidebarTab(this)"
+              >
+                <span class="side-icon">🕸️</span>
+                <span>Standards Graph</span>
+              </button>
             </div>
-            <div class="stream-filter-pills">
-              <button class="filter-pill active">All Tenders</button>
-              <button class="filter-pill">Needs Review</button>
-              <button class="filter-pill">Compliant</button>
+
+            <div class="sidebar-section-title" style="margin-top: 20px">
+              Verification
             </div>
-          </div>
-
-          <table class="styled-table">
-            <thead>
-              <tr>
-                <th>Tender ID</th>
-                <th>Procurement Subject</th>
-                <th>Department / Sector</th>
-                <th>Cited Standard</th>
-                <th>AI Verdict</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="font-family: var(--font-mono); font-weight: 700;">TND-2026-089</td>
-                <td><strong>Potable Water HDPE Pipeline (110 mm, PN 10)</strong></td>
-                <td>Public Works &bull; Water Infrastructure</td>
-                <td><span style="color:#DC2626; text-decoration:line-through; font-family:var(--font-mono);">IS 118:2018</span></td>
-                <td><span class="status-badge-outdated">⚠ SUPERSEDED CITATION</span></td>
-                <td>
-                  <button class="btn-action-primary" style="padding: 6px 14px; font-size: 12px; border-radius: 9999px; background:var(--lime); color:#0E1620; border:none; font-weight:700; cursor:pointer;" onclick="launchAuditWithSample('water_pipe')">Review &rarr;</button>
-                </td>
-              </tr>
-              <tr>
-                <td style="font-family: var(--font-mono); font-weight: 700;">TND-2026-104</td>
-                <td><strong>Viscosity Grade Paving Bitumen VG-30</strong></td>
-                <td>National Highway Authority &bull; Roadways</td>
-                <td><span style="font-family:var(--font-mono);">IS 73:2013</span></td>
-                <td><span class="mini-tag active-green" style="background:#ECFDF5; color:#059669;">✓ FULLY COMPLIANT</span></td>
-                <td>
-                  <button class="btn-action-primary" style="padding: 6px 14px; font-size: 12px; border-radius: 9999px; background:#F1F5F9; color:#0E1620; border:none; font-weight:700; cursor:pointer;" onclick="launchAuditWithSample('bitumen')">Review &rarr;</button>
-                </td>
-              </tr>
-              <tr>
-                <td style="font-family: var(--font-mono); font-weight: 700;">TND-2026-112</td>
-                <td><strong>Structural Steel Plates Grade E350</strong></td>
-                <td>Railway Engineering &bull; Bridges</td>
-                <td><span style="font-family:var(--font-mono);">IS 2062:2011</span></td>
-                <td><span class="mini-tag" style="background:#FEF3C7; color:#B45309;">⚠ MISSING IMPACT TEST</span></td>
-                <td>
-                  <button class="btn-action-primary" style="padding: 6px 14px; font-size: 12px; border-radius: 9999px; background:var(--lime); color:#0E1620; border:none; font-weight:700; cursor:pointer;" onclick="launchAuditWithSample('structural_steel')">Review &rarr;</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-      </div><!-- /viewTenders -->
-
-
-      <!-- ════════ TAB 1: RECOMMENDATION WORKSPACE ════════ -->
-      <div id="viewRecommend" class="tab-view">
-        
-        <!-- Header & KPIs -->
-        <div class="workspace-header">
-          <div class="workspace-title-group">
-            <h1 class="workspace-title">WORKSPACE</h1>
-            <button class="btn-new-audit" onclick="setQuery('water_pipe')">+ Review Tender</button>
-          </div>
-
-          <div class="header-kpis">
-            <div class="kpi-unit">
-              <span class="kpi-num">34</span>
-              <span class="kpi-tag"><span class="dot-badge lime"></span> Audited</span>
+            <div class="sidebar-menu">
+              <button
+                class="sidebar-item"
+                data-view="viewReview"
+                onclick="switchSidebarTab(this)"
+              >
+                <span class="side-icon">👤</span>
+                <span>Review Queue</span>
+              </button>
+              <button
+                class="sidebar-item"
+                data-view="viewAudit"
+                onclick="switchSidebarTab(this)"
+              >
+                <span class="side-icon">📜</span>
+                <span>Audit Log</span>
+              </button>
             </div>
-            <div class="kpi-unit">
-              <span class="kpi-num">20</span>
-              <span class="kpi-tag"><span class="dot-badge blue"></span> Verified</span>
+
+            <div class="sidebar-section-title" style="margin-top: 20px">
+              System
             </div>
-            <div class="kpi-unit">
-              <span class="kpi-num">3</span>
-              <span class="kpi-tag"><span class="dot-badge amber"></span> Flagged</span>
+            <div class="sidebar-menu">
+              <button
+                class="sidebar-item"
+                data-view="viewArchitecture"
+                onclick="switchSidebarTab(this)"
+              >
+                <span class="side-icon">⚙️</span>
+                <span>Architecture</span>
+              </button>
             </div>
           </div>
-        </div>
 
-        <!-- Dual Column Grid -->
-        <div class="workspace-grid">
+          <div class="sidebar-status-box">
+            <strong>Simulation Mode</strong>
+            Synthetic fixtures (<code>IS DEMO-*</code>). Enforces proof closure
+            invariants.
+          </div>
+        </aside>
 
-          <!-- Left Stream -->
-          <div class="main-stream">
-
-            <!-- Ingestion Input Card -->
-            <div class="query-card">
-              <textarea id="tenderInput" class="query-textarea" placeholder="Paste procurement requirement or tender excerpt here...">Procurement of high density polyethylene (HDPE) pipes for potable water distribution network. Nominal outside diameter 110 mm, pressure rating PN 10, conforming to IS 4984. Minimum required hydrostatic strength test at 80°C for 165 hours.</textarea>
-              
-              <div class="query-card-bottom">
-                <div class="sample-prompts">
-                  <span style="font-size: 11.5px; font-weight: 600; color: var(--text-light);">Samples:</span>
-                  <button class="sample-prompt-btn" onclick="setQuery('water_pipe')">HDPE Pipe</button>
-                  <button class="sample-prompt-btn" onclick="setQuery('bitumen')">Bitumen</button>
-                  <button class="sample-prompt-btn" onclick="setQuery('structural_steel')">Structural Steel</button>
-                </div>
-
-                <button class="btn-run-audit" id="runAuditBtn" onclick="executeAudit()">
-                  <span>Run AI Audit &rarr;</span>
+        <!-- ─── OFF-WHITE PRODUCT CANVAS ─── -->
+        <main class="main-canvas">
+          <!-- ════════ TAB 0: TENDER DASHBOARD (OVERVIEW) ════════ -->
+          <div id="viewTenders" class="tab-view active">
+            <!-- Header & Top Stats -->
+            <div class="workspace-header">
+              <div class="workspace-title-group">
+                <h1 class="workspace-title">TENDER DASHBOARD</h1>
+                <button
+                  class="btn-new-audit"
+                  onclick="launchAuditWithSample('water_pipe')"
+                >
+                  + New Tender Review
                 </button>
               </div>
 
-              <!-- 11-Stage Simulation Pipeline Visualizer -->
-              <div class="simulation-pipeline-card" id="simPipelineCard">
-                <div class="sim-pipeline-header">
-                  <div class="sim-pipeline-title">
-                    <span class="sim-live-pulse"></span>
-                    <span>11-Stage Pipeline Simulation (ETOG &bull; NCS &bull; MSSS &bull; CNT)</span>
-                  </div>
-                  <span style="font-size:11px; font-weight:700; color:var(--text-light); font-family:var(--font-mono);" id="simStageLatency">Simulation Ready &bull; 0ms</span>
+              <div class="header-kpis">
+                <div class="kpi-unit">
+                  <span class="kpi-num">12</span>
+                  <span class="kpi-tag"
+                    ><span class="dot-badge lime"></span> Active Tenders</span
+                  >
                 </div>
-
-                <div class="sim-steps-grid">
-                  <div class="sim-step-node" id="sim1"><span class="step-badge">1</span> Completeness</div>
-                  <div class="sim-step-node" id="sim2"><span class="step-badge">2</span> Extraction</div>
-                  <div class="sim-step-node" id="sim3"><span class="step-badge">3</span> Atoms Gate</div>
-                  <div class="sim-step-node" id="sim4"><span class="step-badge">4</span> FAISS Retrieval</div>
-                  <div class="sim-step-node" id="sim5"><span class="step-badge">5</span> BGE Rerank</div>
-                  <div class="sim-step-node" id="sim6"><span class="step-badge">6</span> ETOG Expansion</div>
-                  <div class="sim-step-node" id="sim7"><span class="step-badge">7</span> Lifecycle Check</div>
-                  <div class="sim-step-node" id="sim8"><span class="step-badge">8</span> MSSS Pruning</div>
-                  <div class="sim-step-node" id="sim9"><span class="step-badge">9</span> Proof Closure</div>
-                  <div class="sim-step-node" id="sim10"><span class="step-badge">10</span> Gap Analysis</div>
-                  <div class="sim-step-node" id="sim11"><span class="step-badge">11</span> Clause Synthesis</div>
+                <div class="kpi-unit">
+                  <span class="kpi-num">98.2%</span>
+                  <span class="kpi-tag"
+                    ><span class="dot-badge blue"></span> Compliance</span
+                  >
+                </div>
+                <div class="kpi-unit">
+                  <span class="kpi-num">4</span>
+                  <span class="kpi-tag"
+                    ><span class="dot-badge amber"></span> Action Req.</span
+                  >
                 </div>
               </div>
             </div>
 
-            <!-- Applicable Standards Deck -->
-            <div>
-              <div class="stream-section-header">
+            <!-- 4 Philosophy / Metric Cards -->
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+                margin-bottom: 24px;
+              "
+            >
+              <div
+                style="
+                  background: #ffffff;
+                  border: 1px solid var(--border-card);
+                  border-radius: 18px;
+                  padding: 18px;
+                  box-shadow: var(--shadow-card);
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-light);
+                    text-transform: uppercase;
+                  "
+                >
+                  Total Audited Tenders
+                </div>
+                <div
+                  style="
+                    font-family: var(--font-heading);
+                    font-size: 26px;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                    margin-top: 6px;
+                  "
+                >
+                  34 Cases
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: #059669;
+                    font-weight: 600;
+                    margin-top: 4px;
+                  "
+                >
+                  &uarr; 100% Invariant Passed
+                </div>
+              </div>
+
+              <div
+                style="
+                  background: #ffffff;
+                  border: 1px solid var(--border-card);
+                  border-radius: 18px;
+                  padding: 18px;
+                  box-shadow: var(--shadow-card);
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-light);
+                    text-transform: uppercase;
+                  "
+                >
+                  Mandatory QCO Matches
+                </div>
+                <div
+                  style="
+                    font-family: var(--font-heading);
+                    font-size: 26px;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                    margin-top: 6px;
+                  "
+                >
+                  28 Verified
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text-muted);
+                    margin-top: 4px;
+                  "
+                >
+                  Scheme-I ISI Mark Enforced
+                </div>
+              </div>
+
+              <div
+                style="
+                  background: #ffffff;
+                  border: 1px solid var(--border-card);
+                  border-radius: 18px;
+                  padding: 18px;
+                  box-shadow: var(--shadow-card);
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-light);
+                    text-transform: uppercase;
+                  "
+                >
+                  Superseded Standards Flagged
+                </div>
+                <div
+                  style="
+                    font-family: var(--font-heading);
+                    font-size: 26px;
+                    font-weight: 800;
+                    color: #dc2626;
+                    margin-top: 6px;
+                  "
+                >
+                  6 Gaps
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: #dc2626;
+                    font-weight: 600;
+                    margin-top: 4px;
+                  "
+                >
+                  Prevented Outdated Tenders
+                </div>
+              </div>
+
+              <div
+                style="
+                  background: #ffffff;
+                  border: 1px solid var(--border-card);
+                  border-radius: 18px;
+                  padding: 18px;
+                  box-shadow: var(--shadow-card);
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-light);
+                    text-transform: uppercase;
+                  "
+                >
+                  Avg. Pipeline Latency
+                </div>
+                <div
+                  style="
+                    font-family: var(--font-heading);
+                    font-size: 26px;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                    margin-top: 6px;
+                  "
+                >
+                  1.28 s
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--text-muted);
+                    margin-top: 4px;
+                  "
+                >
+                  Simulated 11 Stages
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Tenders Queue Table with One-Click AI Audit -->
+            <div class="data-card-wrapper" style="margin-bottom: 24px">
+              <div class="stream-section-header" style="margin-bottom: 16px">
                 <div class="section-label">
-                  <h2>Applicable Standards</h2>
-                  <span class="section-badge-count" id="recsCount">3 Found</span>
+                  <h2>Recent Procurement Tenders</h2>
+                  <span class="section-badge-count">Live Queue</span>
                 </div>
                 <div class="stream-filter-pills">
-                  <button class="filter-pill active">All</button>
-                  <button class="filter-pill">Mandatory QCO</button>
-                  <button class="filter-pill">Current Only</button>
+                  <button class="filter-pill active">All Tenders</button>
+                  <button class="filter-pill">Needs Review</button>
+                  <button class="filter-pill">Compliant</button>
                 </div>
               </div>
 
-              <div class="standards-card-deck" id="standardsCardDeck">
-                
-                <!-- FEATURED LIME CARD -->
-                <div class="std-card featured-lime">
-                  <div>
-                    <div class="std-card-top">
-                      <div>
-                        <div class="std-code">IS DEMO-101:2024</div>
-                        <div class="std-title">High Density Polyethylene Pipes for Water Supply — Specification</div>
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Tender ID</th>
+                    <th>Procurement Subject</th>
+                    <th>Department / Sector</th>
+                    <th>Cited Standard</th>
+                    <th>AI Verdict</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-family: var(--font-mono); font-weight: 700">
+                      TND-2026-089
+                    </td>
+                    <td>
+                      <strong
+                        >Potable Water HDPE Pipeline (110 mm, PN 10)</strong
+                      >
+                    </td>
+                    <td>Public Works &bull; Water Infrastructure</td>
+                    <td>
+                      <span
+                        style="
+                          color: #dc2626;
+                          text-decoration: line-through;
+                          font-family: var(--font-mono);
+                        "
+                        >IS 118:2018</span
+                      >
+                    </td>
+                    <td>
+                      <span class="status-badge-outdated"
+                        >⚠ SUPERSEDED CITATION</span
+                      >
+                    </td>
+                    <td>
+                      <button
+                        class="btn-action-primary"
+                        style="
+                          padding: 6px 14px;
+                          font-size: 12px;
+                          border-radius: 9999px;
+                          background: var(--lime);
+                          color: #0e1620;
+                          border: none;
+                          font-weight: 700;
+                          cursor: pointer;
+                        "
+                        onclick="launchAuditWithSample('water_pipe')"
+                      >
+                        Review &rarr;
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-family: var(--font-mono); font-weight: 700">
+                      TND-2026-104
+                    </td>
+                    <td>
+                      <strong>Viscosity Grade Paving Bitumen VG-30</strong>
+                    </td>
+                    <td>National Highway Authority &bull; Roadways</td>
+                    <td>
+                      <span style="font-family: var(--font-mono)"
+                        >IS 73:2013</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="mini-tag active-green"
+                        style="background: #ecfdf5; color: #059669"
+                        >✓ FULLY COMPLIANT</span
+                      >
+                    </td>
+                    <td>
+                      <button
+                        class="btn-action-primary"
+                        style="
+                          padding: 6px 14px;
+                          font-size: 12px;
+                          border-radius: 9999px;
+                          background: #f1f5f9;
+                          color: #0e1620;
+                          border: none;
+                          font-weight: 700;
+                          cursor: pointer;
+                        "
+                        onclick="launchAuditWithSample('bitumen')"
+                      >
+                        Review &rarr;
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-family: var(--font-mono); font-weight: 700">
+                      TND-2026-112
+                    </td>
+                    <td><strong>Structural Steel Plates Grade E350</strong></td>
+                    <td>Railway Engineering &bull; Bridges</td>
+                    <td>
+                      <span style="font-family: var(--font-mono)"
+                        >IS 2062:2011</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="mini-tag"
+                        style="background: #fef3c7; color: #b45309"
+                        >⚠ MISSING IMPACT TEST</span
+                      >
+                    </td>
+                    <td>
+                      <button
+                        class="btn-action-primary"
+                        style="
+                          padding: 6px 14px;
+                          font-size: 12px;
+                          border-radius: 9999px;
+                          background: var(--lime);
+                          color: #0e1620;
+                          border: none;
+                          font-weight: 700;
+                          cursor: pointer;
+                        "
+                        onclick="launchAuditWithSample('structural_steel')"
+                      >
+                        Review &rarr;
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /viewTenders -->
+
+          <!-- ════════ TAB 1: RECOMMENDATION WORKSPACE ════════ -->
+          <div id="viewRecommend" class="tab-view">
+            <!-- Header & KPIs -->
+            <div class="workspace-header">
+              <div class="workspace-title-group">
+                <h1 class="workspace-title">WORKSPACE</h1>
+                <button class="btn-new-audit" onclick="setQuery('water_pipe')">
+                  + Review Tender
+                </button>
+              </div>
+
+              <div class="header-kpis">
+                <div class="kpi-unit">
+                  <span class="kpi-num">34</span>
+                  <span class="kpi-tag"
+                    ><span class="dot-badge lime"></span> Audited</span
+                  >
+                </div>
+                <div class="kpi-unit">
+                  <span class="kpi-num">20</span>
+                  <span class="kpi-tag"
+                    ><span class="dot-badge blue"></span> Verified</span
+                  >
+                </div>
+                <div class="kpi-unit">
+                  <span class="kpi-num">3</span>
+                  <span class="kpi-tag"
+                    ><span class="dot-badge amber"></span> Flagged</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Dual Column Grid -->
+            <div class="workspace-grid">
+              <!-- Left Stream -->
+              <div class="main-stream">
+                <!-- Ingestion Input Card -->
+                <div class="query-card">
+                  <textarea
+                    id="tenderInput"
+                    class="query-textarea"
+                    placeholder="Paste procurement requirement or tender excerpt here..."
+                  >
+Procurement of high density polyethylene (HDPE) pipes for potable water distribution network. Nominal outside diameter 110 mm, pressure rating PN 10, conforming to IS 4984. Minimum required hydrostatic strength test at 80°C for 165 hours.</textarea
+                  >
+
+                  <div class="query-card-bottom">
+                    <div class="sample-prompts">
+                      <span
+                        style="
+                          font-size: 11.5px;
+                          font-weight: 600;
+                          color: var(--text-light);
+                        "
+                        >Samples:</span
+                      >
+                      <button
+                        class="sample-prompt-btn"
+                        onclick="setQuery('water_pipe')"
+                      >
+                        HDPE Pipe
+                      </button>
+                      <button
+                        class="sample-prompt-btn"
+                        onclick="setQuery('bitumen')"
+                      >
+                        Bitumen
+                      </button>
+                      <button
+                        class="sample-prompt-btn"
+                        onclick="setQuery('structural_steel')"
+                      >
+                        Structural Steel
+                      </button>
+                    </div>
+
+                    <button
+                      class="btn-run-audit"
+                      id="runAuditBtn"
+                      onclick="executeAudit()"
+                    >
+                      <span>Run AI Audit &rarr;</span>
+                    </button>
+                  </div>
+
+                  <!-- 11-Stage Simulation Pipeline Visualizer -->
+                  <div class="simulation-pipeline-card" id="simPipelineCard">
+                    <div class="sim-pipeline-header">
+                      <div class="sim-pipeline-title">
+                        <span class="sim-live-pulse"></span>
+                        <span
+                          >11-Stage Pipeline Simulation (ETOG &bull; NCS &bull;
+                          MSSS &bull; CNT)</span
+                        >
                       </div>
-                      <div class="std-match-badge">94%</div>
+                      <span
+                        style="
+                          font-size: 11px;
+                          font-weight: 700;
+                          color: var(--text-light);
+                          font-family: var(--font-mono);
+                        "
+                        id="simStageLatency"
+                        >Simulation Ready &bull; 0ms</span
+                      >
                     </div>
 
-                    <div class="std-tags-row">
-                      <span class="mini-tag">CURRENT</span>
-                      <span class="mini-tag">MANDATORY QCO</span>
-                      <span class="mini-tag">HIGH CONFIDENCE</span>
-                    </div>
-
-                    <div class="std-why-box">
-                      Direct match for potable water transmission. Enforces hydrostatic strength and PE 100 material designation.
-                    </div>
-                  </div>
-
-                  <div class="std-card-footer">
-                    <span style="font-size: 12px; font-weight: 700;">Scheme-I (ISI Mark)</span>
-                    <button class="action-circle-btn" onclick="showToast('Inspecting IS DEMO-101')">&rarr;</button>
-                  </div>
-                </div>
-
-                <!-- NEUTRAL MATTE CARD -->
-                <div class="std-card neutral-matte">
-                  <div>
-                    <div class="std-card-top">
-                      <div>
-                        <div class="std-code">IS DEMO-205:2023</div>
-                        <div class="std-title">Methods of Test for Polyethylene Pipes &amp; Fittings</div>
+                    <div class="sim-steps-grid">
+                      <div class="sim-step-node" id="sim1">
+                        <span class="step-badge">1</span> Completeness
                       </div>
-                      <div class="std-match-badge">81%</div>
+                      <div class="sim-step-node" id="sim2">
+                        <span class="step-badge">2</span> Extraction
+                      </div>
+                      <div class="sim-step-node" id="sim3">
+                        <span class="step-badge">3</span> Atoms Gate
+                      </div>
+                      <div class="sim-step-node" id="sim4">
+                        <span class="step-badge">4</span> FAISS Retrieval
+                      </div>
+                      <div class="sim-step-node" id="sim5">
+                        <span class="step-badge">5</span> BGE Rerank
+                      </div>
+                      <div class="sim-step-node" id="sim6">
+                        <span class="step-badge">6</span> ETOG Expansion
+                      </div>
+                      <div class="sim-step-node" id="sim7">
+                        <span class="step-badge">7</span> Lifecycle Check
+                      </div>
+                      <div class="sim-step-node" id="sim8">
+                        <span class="step-badge">8</span> MSSS Pruning
+                      </div>
+                      <div class="sim-step-node" id="sim9">
+                        <span class="step-badge">9</span> Proof Closure
+                      </div>
+                      <div class="sim-step-node" id="sim10">
+                        <span class="step-badge">10</span> Gap Analysis
+                      </div>
+                      <div class="sim-step-node" id="sim11">
+                        <span class="step-badge">11</span> Clause Synthesis
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Applicable Standards Deck -->
+                <div>
+                  <div class="stream-section-header">
+                    <div class="section-label">
+                      <h2>Applicable Standards</h2>
+                      <span class="section-badge-count" id="recsCount"
+                        >3 Found</span
+                      >
+                    </div>
+                    <div class="stream-filter-pills">
+                      <button class="filter-pill active">All</button>
+                      <button class="filter-pill">Mandatory QCO</button>
+                      <button class="filter-pill">Current Only</button>
+                    </div>
+                  </div>
+
+                  <div class="standards-card-deck" id="standardsCardDeck">
+                    <!-- FEATURED LIME CARD -->
+                    <div class="std-card featured-lime">
+                      <div>
+                        <div class="std-card-top">
+                          <div>
+                            <div class="std-code">IS DEMO-101:2024</div>
+                            <div class="std-title">
+                              High Density Polyethylene Pipes for Water Supply —
+                              Specification
+                            </div>
+                          </div>
+                          <div class="std-match-badge">94%</div>
+                        </div>
+
+                        <div class="std-tags-row">
+                          <span class="mini-tag">CURRENT</span>
+                          <span class="mini-tag">MANDATORY QCO</span>
+                          <span class="mini-tag">HIGH CONFIDENCE</span>
+                        </div>
+
+                        <div class="std-why-box">
+                          Direct match for potable water transmission. Enforces
+                          hydrostatic strength and PE 100 material designation.
+                        </div>
+                      </div>
+
+                      <div class="std-card-footer">
+                        <span style="font-size: 12px; font-weight: 700"
+                          >Scheme-I (ISI Mark)</span
+                        >
+                        <button
+                          class="action-circle-btn"
+                          onclick="showToast('Inspecting IS DEMO-101')"
+                        >
+                          &rarr;
+                        </button>
+                      </div>
                     </div>
 
-                    <div class="std-tags-row">
-                      <span class="mini-tag active-green">CURRENT</span>
-                      <span class="mini-tag">TEST METHOD</span>
-                      <span class="mini-tag">COMPANION</span>
+                    <!-- NEUTRAL MATTE CARD -->
+                    <div class="std-card neutral-matte">
+                      <div>
+                        <div class="std-card-top">
+                          <div>
+                            <div class="std-code">IS DEMO-205:2023</div>
+                            <div class="std-title">
+                              Methods of Test for Polyethylene Pipes &amp;
+                              Fittings
+                            </div>
+                          </div>
+                          <div class="std-match-badge">81%</div>
+                        </div>
+
+                        <div class="std-tags-row">
+                          <span class="mini-tag active-green">CURRENT</span>
+                          <span class="mini-tag">TEST METHOD</span>
+                          <span class="mini-tag">COMPANION</span>
+                        </div>
+
+                        <div class="std-why-box">
+                          Mandatory companion standard covering hydrostatic
+                          testing protocols at 80°C.
+                        </div>
+                      </div>
+
+                      <div class="std-card-footer">
+                        <span
+                          style="
+                            font-size: 12px;
+                            font-weight: 600;
+                            color: var(--text-light);
+                          "
+                          >Normative Reference</span
+                        >
+                        <button
+                          class="action-circle-btn"
+                          onclick="showToast('Inspecting IS DEMO-205')"
+                        >
+                          &rarr;
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tender Gap Analysis -->
+                <div>
+                  <div class="stream-section-header">
+                    <div class="section-label">
+                      <h2>Tender Gap Analysis</h2>
+                      <span class="section-badge-count">Audit Invariants</span>
+                    </div>
+                  </div>
+
+                  <div class="gap-audit-panel">
+                    <table class="gap-table">
+                      <thead>
+                        <tr>
+                          <th>Status</th>
+                          <th>Standard Cited / Required</th>
+                          <th>Audit Finding &amp; Corrective Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <span class="status-badge-outdated"
+                              >⚠ SUPERSEDED</span
+                            >
+                          </td>
+                          <td><strong>IS 118:2018</strong></td>
+                          <td>
+                            Superseded specification cited in tender draft.
+                            Replace with <strong>IS DEMO-101:2024</strong>.
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span
+                              style="
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 5px;
+                                background: #eff6ff;
+                                color: #1d4ed8;
+                                font-weight: 700;
+                                font-size: 11px;
+                                padding: 3px 10px;
+                                border-radius: var(--radius-pill);
+                              "
+                              >MISSING MANDATORY</span
+                            >
+                          </td>
+                          <td><strong>IS DEMO-205:2023</strong></td>
+                          <td>
+                            Omitted test method required for hydrostatic
+                            verification under Clause 8.2.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Stream: Floating Inspection Drawer -->
+              <aside class="summary-drawer">
+                <div class="drawer-header">
+                  <span class="drawer-title">Tender Summary</span>
+                  <button
+                    class="action-circle-btn"
+                    style="
+                      width: 30px;
+                      height: 30px;
+                      background: rgba(255, 255, 255, 0.08);
+                      color: #fff;
+                    "
+                    title="Expand Details"
+                  >
+                    &nearr;
+                  </button>
+                </div>
+
+                <!-- Requirement Atoms Document Previews -->
+                <div>
+                  <div
+                    style="
+                      font-size: 11px;
+                      font-weight: 700;
+                      color: var(--text-on-dark-muted);
+                      text-transform: uppercase;
+                      margin-bottom: 10px;
+                      letter-spacing: 0.6px;
+                    "
+                  >
+                    Extracted Requirement Atoms
+                  </div>
+                  <div class="doc-preview-block">
+                    <div class="doc-thumb-card">
+                      <div class="doc-lines">
+                        <div class="doc-line accent"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line short"></div>
+                      </div>
+                      <div class="doc-thumb-label">Product: HDPE Pipe</div>
                     </div>
 
-                    <div class="std-why-box">
-                      Mandatory companion standard covering hydrostatic testing protocols at 80°C.
+                    <div class="doc-thumb-card">
+                      <div class="doc-lines">
+                        <div class="doc-line"></div>
+                        <div class="doc-line accent"></div>
+                        <div class="doc-line short"></div>
+                      </div>
+                      <div class="doc-thumb-label">Rating: PN 10 (80°C)</div>
                     </div>
                   </div>
+                </div>
 
-                  <div class="std-card-footer">
-                    <span style="font-size: 12px; font-weight: 600; color: var(--text-light);">Normative Reference</span>
-                    <button class="action-circle-btn" onclick="showToast('Inspecting IS DEMO-205')">&rarr;</button>
+                <!-- Proof Timeline -->
+                <div>
+                  <div
+                    style="
+                      font-size: 11px;
+                      font-weight: 700;
+                      color: var(--text-on-dark-muted);
+                      text-transform: uppercase;
+                      margin-bottom: 12px;
+                      letter-spacing: 0.6px;
+                    "
+                  >
+                    Verified Proof Chain
+                  </div>
+                  <div class="proof-timeline">
+                    <div class="timeline-step">
+                      <span class="timeline-dot"></span>
+                      <strong>Requirement Parsed</strong>
+                      Water pipe transmission specification extracted.
+                    </div>
+                    <div class="timeline-step">
+                      <span class="timeline-dot"></span>
+                      <strong>Mandatory QCO Verified</strong>
+                      Covered under Gazette QCO Order S.O. 1284(E).
+                    </div>
+                    <div class="timeline-step">
+                      <span class="timeline-dot"></span>
+                      <strong>Proof Closure Enforced</strong>
+                      Hard invariant satisfied: zero hallucinations.
+                    </div>
                   </div>
                 </div>
 
-              </div>
-            </div>
-
-            <!-- Tender Gap Analysis -->
-            <div>
-              <div class="stream-section-header">
-                <div class="section-label">
-                  <h2>Tender Gap Analysis</h2>
-                  <span class="section-badge-count">Audit Invariants</span>
-                </div>
-              </div>
-
-              <div class="gap-audit-panel">
-                <table class="gap-table">
-                  <thead>
-                    <tr>
-                      <th>Status</th>
-                      <th>Standard Cited / Required</th>
-                      <th>Audit Finding &amp; Corrective Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><span class="status-badge-outdated">⚠ SUPERSEDED</span></td>
-                      <td><strong>IS 118:2018</strong></td>
-                      <td>Superseded specification cited in tender draft. Replace with <strong>IS DEMO-101:2024</strong>.</td>
-                    </tr>
-                    <tr>
-                      <td><span style="display:inline-flex; align-items:center; gap:5px; background:#EFF6FF; color:#1D4ED8; font-weight:700; font-size:11px; padding:3px 10px; border-radius:var(--radius-pill);">MISSING MANDATORY</span></td>
-                      <td><strong>IS DEMO-205:2023</strong></td>
-                      <td>Omitted test method required for hydrostatic verification under Clause 8.2.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Right Stream: Floating Inspection Drawer -->
-          <aside class="summary-drawer">
-            <div class="drawer-header">
-              <span class="drawer-title">Tender Summary</span>
-              <button class="action-circle-btn" style="width:30px; height:30px; background:rgba(255,255,255,0.08); color:#FFF;" title="Expand Details">&nearr;</button>
-            </div>
-
-            <!-- Requirement Atoms Document Previews -->
-            <div>
-              <div style="font-size: 11px; font-weight: 700; color: var(--text-on-dark-muted); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.6px;">Extracted Requirement Atoms</div>
-              <div class="doc-preview-block">
-                <div class="doc-thumb-card">
-                  <div class="doc-lines">
-                    <div class="doc-line accent"></div>
-                    <div class="doc-line"></div>
-                    <div class="doc-line short"></div>
+                <!-- Grounded Clause Draft Box -->
+                <div>
+                  <div
+                    style="
+                      font-size: 11px;
+                      font-weight: 700;
+                      color: var(--text-on-dark-muted);
+                      text-transform: uppercase;
+                      margin-bottom: 10px;
+                      letter-spacing: 0.6px;
+                    "
+                  >
+                    Grounded Clause Draft
                   </div>
-                  <div class="doc-thumb-label">Product: HDPE Pipe</div>
-                </div>
-
-                <div class="doc-thumb-card">
-                  <div class="doc-lines">
-                    <div class="doc-line"></div>
-                    <div class="doc-line accent"></div>
-                    <div class="doc-line short"></div>
+                  <div class="grounded-clause-box">
+                    <div class="clause-text" id="clausePreviewText">
+                      "The supplied HDPE pipes shall strictly conform to IS
+                      DEMO-101:2024 with pressure rating PN 10. Testing
+                      protocols shall adhere to IS DEMO-205:2023. Valid BIS
+                      License under Scheme-I (ISI Mark) is mandatory."
+                    </div>
+                    <button class="btn-copy-clause" onclick="copyClause()">
+                      Copy Clause to Clipboard
+                    </button>
                   </div>
-                  <div class="doc-thumb-label">Rating: PN 10 (80°C)</div>
                 </div>
+              </aside>
+            </div>
+          </div>
+          <!-- /viewRecommend -->
+
+          <!-- ════════ TAB 2: STANDARDS CATALOG ════════ -->
+          <div id="viewCatalog" class="tab-view">
+            <div class="view-intro">
+              <h2>Standards Catalog</h2>
+              <p>
+                Browse synthetic Indian Standards records mapped across sectors,
+                categories, and certification schemes.
+              </p>
+            </div>
+
+            <!-- Standards Search -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                margin-bottom: 18px;
+                flex-wrap: wrap;
+              "
+            >
+              <div>
+                <div
+                  style="
+                    font-size: 13px;
+                    font-weight: 700;
+                    color: #64748b;
+                    margin-bottom: 5px;
+                  "
+                >
+                  SEARCH STANDARDS
+                </div>
+
+                <div style="font-size: 12px; color: #94a3b8">
+                  Search by IS number, title, category, or sector
+                </div>
+              </div>
+
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  min-width: 320px;
+                  flex: 1;
+                  max-width: 520px;
+                "
+              >
+                <input
+                  id="standardsSearchInput"
+                  type="text"
+                  placeholder="Search e.g. IS 4984, HDPE, electrical..."
+                  onkeydown="if (event.key === 'Enter') searchStandards();"
+                  style="
+                    flex: 1;
+                    height: 42px;
+                    padding: 0 14px;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 10px;
+                    background: #ffffff;
+                    color: #102a43;
+                    font-family: inherit;
+                    font-size: 13px;
+                    outline: none;
+                  "
+                />
+
+                <button
+                  onclick="searchStandards()"
+                  style="
+                    height: 42px;
+                    padding: 0 18px;
+                    border: none;
+                    border-radius: 10px;
+                    background: #102a43;
+                    color: #ffffff;
+                    font-family: inherit;
+                    font-size: 13px;
+                    font-weight: 700;
+                    cursor: pointer;
+                  "
+                >
+                  Search
+                </button>
+
+                <button
+                  onclick="
+                    document.getElementById('standardsSearchInput').value = '';
+                    loadCatalog();
+                  "
+                  style="
+                    height: 42px;
+                    padding: 0 14px;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 10px;
+                    background: #ffffff;
+                    color: #475569;
+                    font-family: inherit;
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                  "
+                >
+                  Clear
+                </button>
               </div>
             </div>
 
-            <!-- Proof Timeline -->
-            <div>
-              <div style="font-size: 11px; font-weight: 700; color: var(--text-on-dark-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.6px;">Verified Proof Chain</div>
-              <div class="proof-timeline">
-                <div class="timeline-step">
-                  <span class="timeline-dot"></span>
-                  <strong>Requirement Parsed</strong>
-                  Water pipe transmission specification extracted.
+            <div class="data-card-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>IS Number</th>
+                    <th>Standard Title</th>
+                    <th>Category</th>
+                    <th>Sector</th>
+                    <th>Edition</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody id="catalogTableBody">
+                  <!-- Dynamically populated via loadCatalog() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /viewCatalog -->
+
+          <!-- ════════ TAB 3: STANDARDS GRAPH ════════ -->
+          <div id="viewGraph" class="tab-view">
+            <div class="view-intro">
+              <h2>Standards Relationship Graph (ETOG)</h2>
+              <p>
+                Evidence-Typed Ontology Graph visualizing requirement nodes,
+                primary standards, companion test methods, and supersession
+                edges.
+              </p>
+            </div>
+
+            <div class="data-card-wrapper">
+              <div class="graph-canvas">
+                <div class="g-node" style="left: 5%; top: 20%">
+                  REQ-001<br /><span style="font-weight: 400; font-size: 10px"
+                    >Thickness 25mm</span
+                  >
                 </div>
-                <div class="timeline-step">
-                  <span class="timeline-dot"></span>
-                  <strong>Mandatory QCO Verified</strong>
-                  Covered under Gazette QCO Order S.O. 1284(E).
+                <div class="g-node" style="left: 5%; top: 60%">
+                  REQ-003<br /><span style="font-weight: 400; font-size: 10px"
+                    >Water Tank Lining</span
+                  >
                 </div>
-                <div class="timeline-step">
-                  <span class="timeline-dot"></span>
-                  <strong>Proof Closure Enforced</strong>
-                  Hard invariant satisfied: zero hallucinations.
+
+                <div class="g-node g-primary" style="left: 38%; top: 35%">
+                  IS DEMO-101:2024<br /><span
+                    style="font-weight: 700; font-size: 10px"
+                    >Primary Lining Spec</span
+                  >
+                </div>
+
+                <div class="g-node" style="left: 72%; top: 15%">
+                  IS DEMO-205:2023<br /><span
+                    style="font-weight: 400; font-size: 10px"
+                    >Test Method</span
+                  >
+                </div>
+                <div class="g-node" style="left: 72%; top: 50%">
+                  IS DEMO-420:2025<br /><span
+                    style="font-weight: 400; font-size: 10px"
+                    >Safety Guidance</span
+                  >
+                </div>
+                <div class="g-node g-outdated" style="left: 72%; top: 80%">
+                  IS DEMO-118:2018<br /><span
+                    style="font-weight: 400; font-size: 10px"
+                    >SUPERSEDED</span
+                  >
+                </div>
+
+                <!-- Lines -->
+                <div
+                  class="g-edge-line verified"
+                  style="
+                    left: 16%;
+                    top: 26%;
+                    width: 22%;
+                    transform: rotate(12deg);
+                  "
+                ></div>
+                <div class="g-edge-label" style="left: 24%; top: 26%">
+                  SATISFIES
+                </div>
+
+                <div
+                  class="g-edge-line verified"
+                  style="
+                    left: 16%;
+                    top: 65%;
+                    width: 22%;
+                    transform: rotate(-15deg);
+                  "
+                ></div>
+                <div class="g-edge-label" style="left: 24%; top: 55%">
+                  SATISFIES
+                </div>
+
+                <div
+                  class="g-edge-line verified"
+                  style="
+                    left: 53%;
+                    top: 40%;
+                    width: 19%;
+                    transform: rotate(-18deg);
+                  "
+                ></div>
+                <div class="g-edge-label" style="left: 60%; top: 28%">
+                  TEST_METHOD
+                </div>
+
+                <div
+                  class="g-edge-line verified"
+                  style="
+                    left: 53%;
+                    top: 45%;
+                    width: 19%;
+                    transform: rotate(10deg);
+                  "
+                ></div>
+                <div class="g-edge-label" style="left: 60%; top: 48%">
+                  SAFETY
+                </div>
+
+                <div
+                  class="g-edge-line"
+                  style="
+                    left: 53%;
+                    top: 50%;
+                    width: 19%;
+                    transform: rotate(32deg);
+                  "
+                ></div>
+                <div class="g-edge-label" style="left: 60%; top: 66%">
+                  SUPERSEDES
                 </div>
               </div>
             </div>
+          </div>
+          <!-- /viewGraph -->
 
-            <!-- Grounded Clause Draft Box -->
-            <div>
-              <div style="font-size: 11px; font-weight: 700; color: var(--text-on-dark-muted); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.6px;">Grounded Clause Draft</div>
-              <div class="grounded-clause-box">
-                <div class="clause-text" id="clausePreviewText">
-                  "The supplied HDPE pipes shall strictly conform to IS DEMO-101:2024 with pressure rating PN 10. Testing protocols shall adhere to IS DEMO-205:2023. Valid BIS License under Scheme-I (ISI Mark) is mandatory."
-                </div>
-                <button class="btn-copy-clause" onclick="copyClause()">Copy Clause to Clipboard</button>
-              </div>
+          <!-- ════════ TAB 4: REVIEW QUEUE ════════ -->
+          <div id="viewReview" class="tab-view">
+            <div class="view-intro">
+              <h2>Human Review Queue</h2>
+              <p>
+                Audit cases flagged for officer adjudication due to low
+                confidence scores, contradictory clauses, or obsolete citations.
+              </p>
             </div>
 
-          </aside>
-
-        </div>
-      </div><!-- /viewRecommend -->
-
-
-      <!-- ════════ TAB 2: STANDARDS CATALOG ════════ -->
-      <div id="viewCatalog" class="tab-view">
-        <div class="view-intro">
-          <h2>Standards Catalog</h2>
-          <p>Browse synthetic Indian Standards records mapped across sectors, categories, and certification schemes.</p>
-        </div>
-
-        <div class="data-card-wrapper">
-          <table class="styled-table">
-            <thead>
-              <tr>
-                <th>IS Number</th>
-                <th>Standard Title</th>
-                <th>Category</th>
-                <th>Sector</th>
-                <th>Edition</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="catalogTableBody">
-              <!-- Dynamically populated via loadCatalog() -->
-            </tbody>
-          </table>
-        </div>
-      </div><!-- /viewCatalog -->
-
-
-      <!-- ════════ TAB 3: STANDARDS GRAPH ════════ -->
-      <div id="viewGraph" class="tab-view">
-        <div class="view-intro">
-          <h2>Standards Relationship Graph (ETOG)</h2>
-          <p>Evidence-Typed Ontology Graph visualizing requirement nodes, primary standards, companion test methods, and supersession edges.</p>
-        </div>
-
-        <div class="data-card-wrapper">
-          <div class="graph-canvas">
-            <div class="g-node" style="left:5%; top:20%;">REQ-001<br><span style="font-weight:400;font-size:10px;">Thickness 25mm</span></div>
-            <div class="g-node" style="left:5%; top:60%;">REQ-003<br><span style="font-weight:400;font-size:10px;">Water Tank Lining</span></div>
-            
-            <div class="g-node g-primary" style="left:38%; top:35%;">IS DEMO-101:2024<br><span style="font-weight:700;font-size:10px;">Primary Lining Spec</span></div>
-            
-            <div class="g-node" style="left:72%; top:15%;">IS DEMO-205:2023<br><span style="font-weight:400;font-size:10px;">Test Method</span></div>
-            <div class="g-node" style="left:72%; top:50%;">IS DEMO-420:2025<br><span style="font-weight:400;font-size:10px;">Safety Guidance</span></div>
-            <div class="g-node g-outdated" style="left:72%; top:80%;">IS DEMO-118:2018<br><span style="font-weight:400;font-size:10px;">SUPERSEDED</span></div>
-
-            <!-- Lines -->
-            <div class="g-edge-line verified" style="left:16%; top:26%; width:22%; transform: rotate(12deg);"></div>
-            <div class="g-edge-label" style="left:24%; top:26%;">SATISFIES</div>
-
-            <div class="g-edge-line verified" style="left:16%; top:65%; width:22%; transform: rotate(-15deg);"></div>
-            <div class="g-edge-label" style="left:24%; top:55%;">SATISFIES</div>
-
-            <div class="g-edge-line verified" style="left:53%; top:40%; width:19%; transform: rotate(-18deg);"></div>
-            <div class="g-edge-label" style="left:60%; top:28%;">TEST_METHOD</div>
-
-            <div class="g-edge-line verified" style="left:53%; top:45%; width:19%; transform: rotate(10deg);"></div>
-            <div class="g-edge-label" style="left:60%; top:48%;">SAFETY</div>
-
-            <div class="g-edge-line" style="left:53%; top:50%; width:19%; transform: rotate(32deg);"></div>
-            <div class="g-edge-label" style="left:60%; top:66%;">SUPERSEDES</div>
+            <div class="data-card-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Case ID</th>
+                    <th>Severity</th>
+                    <th>Reason</th>
+                    <th>Query Context</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="reviewTableBody">
+                  <!-- Loaded dynamically via loadReviewQueue() -->
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      </div><!-- /viewGraph -->
+          <!-- /viewReview -->
 
+          <!-- ════════ TAB 5: AUDIT LOG ════════ -->
+          <div id="viewAudit" class="tab-view">
+            <div class="view-intro">
+              <h2>System Audit Log</h2>
+              <p>
+                Immutable audit trail tracking query latencies, rule
+                invocations, feedback decisions, and replay verifications.
+              </p>
+            </div>
 
-      <!-- ════════ TAB 4: REVIEW QUEUE ════════ -->
-      <div id="viewReview" class="tab-view">
-        <div class="view-intro">
-          <h2>Human Review Queue</h2>
-          <p>Audit cases flagged for officer adjudication due to low confidence scores, contradictory clauses, or obsolete citations.</p>
-        </div>
-
-        <div class="data-card-wrapper">
-          <table class="styled-table">
-            <thead>
-              <tr>
-                <th>Case ID</th>
-                <th>Severity</th>
-                <th>Reason</th>
-                <th>Query Context</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="reviewTableBody">
-              <!-- Loaded dynamically via loadReviewQueue() -->
-            </tbody>
-          </table>
-        </div>
-      </div><!-- /viewReview -->
-
-
-      <!-- ════════ TAB 5: AUDIT LOG ════════ -->
-      <div id="viewAudit" class="tab-view">
-        <div class="view-intro">
-          <h2>System Audit Log</h2>
-          <p>Immutable audit trail tracking query latencies, rule invocations, feedback decisions, and replay verifications.</p>
-        </div>
-
-        <div class="data-card-wrapper">
-          <table class="styled-table">
-            <thead>
-              <tr>
-                <th>Timestamp</th>
-                <th>Actor</th>
-                <th>Event Type</th>
-                <th>Status</th>
-                <th>Latency</th>
-              </tr>
-            </thead>
-            <tbody id="auditTableBody">
-              <!-- Loaded dynamically via loadAuditLog() -->
-            </tbody>
-          </table>
-        </div>
-      </div><!-- /viewAudit -->
-
-
-      <!-- ════════ TAB 6: ARCHITECTURE ════════ -->
-      <div id="viewArchitecture" class="tab-view">
-        <div class="view-intro">
-          <h2>Architecture &amp; Data Provenance</h2>
-          <p>Core design principles and proof invariants defined in the CHANAKYA v7.13 Reconciled Specification.</p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-          <div class="data-card-wrapper">
-            <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 12px;">Core Invariants</h3>
-            <ul style="padding-left: 18px; line-height: 1.8; color: var(--text-muted); font-size: 13.5px;">
-              <li><strong>Hard Invariant:</strong> No proof, no actionable recommendation.</li>
-              <li><strong>ETOG:</strong> Evidence-Typed Ontology Graph for relationship validation.</li>
-              <li><strong>NCS:</strong> Normative Closure Scoring to ensure requirement completeness.</li>
-              <li><strong>MSSS:</strong> Minimal Sufficient Standard Set to prevent tender inflation.</li>
-              <li><strong>Temporal Gate:</strong> Automatically rejects withdrawn or superseded editions.</li>
-            </ul>
+            <div class="data-card-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Actor</th>
+                    <th>Event Type</th>
+                    <th>Status</th>
+                    <th>Latency</th>
+                  </tr>
+                </thead>
+                <tbody id="auditTableBody">
+                  <!-- Loaded dynamically via loadAuditLog() -->
+                </tbody>
+              </table>
+            </div>
           </div>
+          <!-- /viewAudit -->
 
-          <div class="data-card-wrapper">
-            <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 12px;">Simulation Boundary</h3>
-            <p style="font-size: 13.5px; line-height: 1.6; color: var(--text-muted);">
-              This prototype runs in local deterministic simulation mode for Smart India Hackathon 2026. Vector indices and heavy NLP models are simulated using calibrated fixtures in <code>data/demo_data.json</code> to provide an instant, reliable demonstration.
-            </p>
+          <!-- ════════ TAB 6: ARCHITECTURE ════════ -->
+          <div id="viewArchitecture" class="tab-view">
+            <div class="view-intro">
+              <h2>Architecture &amp; Data Provenance</h2>
+              <p>
+                Core design principles and proof invariants defined in the
+                CHANAKYA v7.13 Reconciled Specification.
+              </p>
+            </div>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px"
+            >
+              <div class="data-card-wrapper">
+                <h3
+                  style="
+                    font-family: var(--font-heading);
+                    font-size: 18px;
+                    margin-bottom: 12px;
+                  "
+                >
+                  Core Invariants
+                </h3>
+                <ul
+                  style="
+                    padding-left: 18px;
+                    line-height: 1.8;
+                    color: var(--text-muted);
+                    font-size: 13.5px;
+                  "
+                >
+                  <li>
+                    <strong>Hard Invariant:</strong> No proof, no actionable
+                    recommendation.
+                  </li>
+                  <li>
+                    <strong>ETOG:</strong> Evidence-Typed Ontology Graph for
+                    relationship validation.
+                  </li>
+                  <li>
+                    <strong>NCS:</strong> Normative Closure Scoring to ensure
+                    requirement completeness.
+                  </li>
+                  <li>
+                    <strong>MSSS:</strong> Minimal Sufficient Standard Set to
+                    prevent tender inflation.
+                  </li>
+                  <li>
+                    <strong>Temporal Gate:</strong> Automatically rejects
+                    withdrawn or superseded editions.
+                  </li>
+                </ul>
+              </div>
+
+              <div class="data-card-wrapper">
+                <h3
+                  style="
+                    font-family: var(--font-heading);
+                    font-size: 18px;
+                    margin-bottom: 12px;
+                  "
+                >
+                  Simulation Boundary
+                </h3>
+                <p
+                  style="
+                    font-size: 13.5px;
+                    line-height: 1.6;
+                    color: var(--text-muted);
+                  "
+                >
+                  This prototype runs in local deterministic simulation mode for
+                  Smart India Hackathon 2026. Vector indices and heavy NLP
+                  models are simulated using calibrated fixtures in
+                  <code>data/demo_data.json</code> to provide an instant,
+                  reliable demonstration.
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div><!-- /viewArchitecture -->
+          <!-- /viewArchitecture -->
+        </main>
+      </div>
+    </div>
 
-    </main>
+    <div class="toast-notice" id="toastNotice">Clause copied to clipboard.</div>
 
-  </div>
+    <script>
+      // Queries dictionary
+      const sampleQueries = {
+        water_pipe:
+          "Procurement of high density polyethylene (HDPE) pipes for potable water distribution network. Nominal outside diameter 110 mm, pressure rating PN 10, conforming to IS 4984. Minimum required hydrostatic strength test at 80°C for 165 hours.",
+        bitumen:
+          "Procurement of viscosity grade paving bitumen VG-30 for national highway flexible pavement construction conforming to IS 73. Softening point minimum 47°C and penetration grade requirements.",
+        structural_steel:
+          "Supply of high-strength structural steel plates for bridge fabrication conforming to IS 2062 Grade E350. Yield strength minimum 350 MPa with Charpy V-notch impact testing.",
+      };
 
-</div>
+      function setQuery(key) {
+        if (sampleQueries[key]) {
+          document.getElementById("tenderInput").value = sampleQueries[key];
+          executeAudit();
+        }
+      }
 
-<div class="toast-notice" id="toastNotice">Clause copied to clipboard.</div>
+      function launchAuditWithSample(sampleKey) {
+        // Find sidebar button for review workspace
+        const reviewBtn = document.querySelector('[data-view="viewRecommend"]');
+        if (reviewBtn) switchSidebarTab(reviewBtn);
+        setTimeout(() => {
+          setQuery(sampleKey);
+        }, 100);
+      }
 
-<script>
-// Queries dictionary
-const sampleQueries = {
-  water_pipe: "Procurement of high density polyethylene (HDPE) pipes for potable water distribution network. Nominal outside diameter 110 mm, pressure rating PN 10, conforming to IS 4984. Minimum required hydrostatic strength test at 80°C for 165 hours.",
-  bitumen: "Procurement of viscosity grade paving bitumen VG-30 for national highway flexible pavement construction conforming to IS 73. Softening point minimum 47°C and penetration grade requirements.",
-  structural_steel: "Supply of high-strength structural steel plates for bridge fabrication conforming to IS 2062 Grade E350. Yield strength minimum 350 MPa with Charpy V-notch impact testing."
-};
+      // Sidebar Tab Switcher
+      function switchSidebarTab(btn) {
+        document
+          .querySelectorAll(".sidebar-item")
+          .forEach((b) => b.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-view")
+          .forEach((v) => v.classList.remove("active"));
 
-function setQuery(key) {
-  if (sampleQueries[key]) {
-    document.getElementById('tenderInput').value = sampleQueries[key];
-    executeAudit();
-  }
-}
+        btn.classList.add("active");
+        const viewId = btn.getAttribute("data-view");
+        const targetView = document.getElementById(viewId);
+        if (targetView) targetView.classList.add("active");
 
-function launchAuditWithSample(sampleKey) {
-  // Find sidebar button for review workspace
-  const reviewBtn = document.querySelector('[data-view="viewRecommend"]');
-  if (reviewBtn) switchSidebarTab(reviewBtn);
-  setTimeout(() => {
-    setQuery(sampleKey);
-  }, 100);
-}
+        // Trigger loads
+        if (viewId === "viewCatalog") loadCatalog();
+        if (viewId === "viewReview") loadReviewQueue();
+        if (viewId === "viewAudit") loadAuditLog();
+      }
 
-// Sidebar Tab Switcher
-function switchSidebarTab(btn) {
-  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+      async function executeAudit() {
+        const query = document.getElementById("tenderInput").value.trim();
+        const btn = document.getElementById("runAuditBtn");
+        const latencyEl = document.getElementById("simStageLatency");
+        btn.disabled = true;
+        btn.innerHTML = "<span>Simulating Pipeline...</span>";
 
-  btn.classList.add('active');
-  const viewId = btn.getAttribute('data-view');
-  const targetView = document.getElementById(viewId);
-  if (targetView) targetView.classList.add('active');
+        // Animate Header Tracker
+        const tAtom = document.getElementById("trackAtom");
+        const tRet = document.getElementById("trackRetrieval");
+        const tProof = document.getElementById("trackProof");
+        tAtom.className = "tracker-node active-lime";
+        tRet.className = "tracker-node";
+        tProof.className = "tracker-node";
 
-  // Trigger loads
-  if (viewId === 'viewCatalog') loadCatalog();
-  if (viewId === 'viewReview') loadReviewQueue();
-  if (viewId === 'viewAudit') loadAuditLog();
-}
+        // Reset 11-step simulation nodes
+        for (let i = 1; i <= 11; i++) {
+          const node = document.getElementById("sim" + i);
+          if (node) node.className = "sim-step-node";
+        }
 
-async function executeAudit() {
-  const query = document.getElementById('tenderInput').value.trim();
-  const btn = document.getElementById('runAuditBtn');
-  const latencyEl = document.getElementById('simStageLatency');
-  btn.disabled = true;
-  btn.innerHTML = '<span>Simulating Pipeline...</span>';
+        const stageNames = [
+          "Completeness Check",
+          "Technical Extraction",
+          "Requirement Atoms Gate",
+          "FAISS Dense Retrieval (Top-50)",
+          "BGE Reranking (Top-10)",
+          "ETOG Relationship Expansion",
+          "Lifecycle & Validity Check",
+          "MSSS Minimal Set Pruning",
+          "Proof Closure Verification",
+          "Tender Gap Invariant Audit",
+          "Grounded Clause Synthesis",
+        ];
 
-  // Animate Header Tracker
-  const tAtom = document.getElementById('trackAtom');
-  const tRet = document.getElementById('trackRetrieval');
-  const tProof = document.getElementById('trackProof');
-  tAtom.className = 'tracker-node active-lime';
-  tRet.className = 'tracker-node';
-  tProof.className = 'tracker-node';
+        const startTime = Date.now();
 
-  // Reset 11-step simulation nodes
-  for (let i = 1; i <= 11; i++) {
-    const node = document.getElementById('sim' + i);
-    if (node) node.className = 'sim-step-node';
-  }
+        // Progressive step-by-step pipeline execution
+        for (let i = 1; i <= 11; i++) {
+          const node = document.getElementById("sim" + i);
+          if (node) {
+            node.className = "sim-step-node active-sim";
+            latencyEl.textContent = `Stage ${i}/11: ${stageNames[i - 1]} • ${Date.now() - startTime}ms`;
+          }
 
-  const stageNames = [
-    "Completeness Check",
-    "Technical Extraction",
-    "Requirement Atoms Gate",
-    "FAISS Dense Retrieval (Top-50)",
-    "BGE Reranking (Top-10)",
-    "ETOG Relationship Expansion",
-    "Lifecycle & Validity Check",
-    "MSSS Minimal Set Pruning",
-    "Proof Closure Verification",
-    "Tender Gap Invariant Audit",
-    "Grounded Clause Synthesis"
-  ];
+          if (i === 4) {
+            tAtom.className = "tracker-node";
+            tRet.className = "tracker-node active-lime";
+          } else if (i === 9) {
+            tRet.className = "tracker-node";
+            tProof.className = "tracker-node active-lime";
+          }
 
-  const startTime = Date.now();
+          // Realistic processing cadence for demonstration
+          await new Promise((r) => setTimeout(r, 110));
 
-  // Progressive step-by-step pipeline execution
-  for (let i = 1; i <= 11; i++) {
-    const node = document.getElementById('sim' + i);
-    if (node) {
-      node.className = 'sim-step-node active-sim';
-      latencyEl.textContent = `Stage ${i}/11: ${stageNames[i-1]} • ${Date.now() - startTime}ms`;
-    }
+          if (node) {
+            node.className = "sim-step-node done-sim";
+          }
+        }
 
-    if (i === 4) {
-      tAtom.className = 'tracker-node';
-      tRet.className = 'tracker-node active-lime';
-    } else if (i === 9) {
-      tRet.className = 'tracker-node';
-      tProof.className = 'tracker-node active-lime';
-    }
+        latencyEl.textContent = `Simulation Complete • ${Date.now() - startTime}ms (11 Stages Verified)`;
 
-    // Realistic processing cadence for demonstration
-    await new Promise(r => setTimeout(r, 110));
+        try {
+          const res = await fetch("/api/recommend", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: query, demo_mode: true }),
+          });
 
-    if (node) {
-      node.className = 'sim-step-node done-sim';
-    }
-  }
+          const data = await res.json();
+          renderData(data);
+          showToast("11-Stage Pipeline Simulation Finished Successfully!");
+        } catch (err) {
+          showToast("Simulation completed in offline fallback mode.");
+        }
 
-  latencyEl.textContent = `Simulation Complete • ${Date.now() - startTime}ms (11 Stages Verified)`;
+        btn.disabled = false;
+        btn.innerHTML = "<span>Run AI Audit &rarr;</span>";
+      }
 
-  try {
-    const res = await fetch('/api/recommend', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: query, demo_mode: true })
-    });
+      function renderData(data) {
+        if (!data) return;
 
-    const data = await res.json();
-    renderData(data);
-    showToast("11-Stage Pipeline Simulation Finished Successfully!");
-  } catch (err) {
-    showToast("Simulation completed in offline fallback mode.");
-  }
+        const recs = data.recommendations || [];
+        const deck = document.getElementById("standardsCardDeck");
 
-  btn.disabled = false;
-  btn.innerHTML = '<span>Run AI Audit &rarr;</span>';
-}
-
-function renderData(data) {
-  if (!data) return;
-
-  const recs = data.recommendations || [];
-  const deck = document.getElementById('standardsCardDeck');
-  
-  if (recs.length > 0) {
-    deck.innerHTML = recs.map((r, idx) => {
-      const isFeatured = idx === 0;
-      return `
-        <div class="std-card ${isFeatured ? 'featured-lime' : 'neutral-matte'}">
+        if (recs.length > 0) {
+          deck.innerHTML = recs
+            .map((r, idx) => {
+              const isFeatured = idx === 0;
+              return `
+        <div class="std-card ${isFeatured ? "featured-lime" : "neutral-matte"}">
           <div>
             <div class="std-card-top">
               <div>
@@ -1860,8 +2616,8 @@ function renderData(data) {
             </div>
 
             <div class="std-tags-row">
-              <span class="mini-tag ${!isFeatured ? 'active-green' : ''}">${r.status}</span>
-              <span class="mini-tag">${r.certification || 'MANDATORY QCO'}</span>
+              <span class="mini-tag ${!isFeatured ? "active-green" : ""}">${r.status}</span>
+              <span class="mini-tag">${r.certification || "MANDATORY QCO"}</span>
               <span class="mini-tag">${r.confidence} CONFIDENCE</span>
             </div>
 
@@ -1874,64 +2630,216 @@ function renderData(data) {
           </div>
         </div>
       `;
-    }).join('');
-  }
+            })
+            .join("");
+        }
 
-  if (data.clause_draft) {
-    document.getElementById('clausePreviewText').textContent = data.clause_draft;
-  }
-}
+        if (data.clause_draft) {
+          document.getElementById("clausePreviewText").textContent =
+            data.clause_draft;
+        }
+      }
 
-async function loadCatalog() {
-  const tbody = document.getElementById('catalogTableBody');
-  tbody.innerHTML = '<tr><td colspan="7">Loading catalog data...</td></tr>';
-  try {
-    const res = await fetch('/api/standards');
-    const data = await res.json();
-    tbody.innerHTML = (data.items || []).map(s => `
+      async function loadCatalog() {
+        const tbody = document.getElementById("catalogTableBody");
+
+        tbody.innerHTML = `
+    <tr>
+      <td colspan="7" style="text-align:center; padding:30px;">
+        Loading catalog data...
+      </td>
+    </tr>
+  `;
+
+        try {
+          const res = await fetch("/api/standards");
+
+          if (!res.ok) {
+            throw new Error("Catalog request failed");
+          }
+
+          const data = await res.json();
+
+          tbody.innerHTML = (data.items || [])
+            .map(
+              (s) => `
       <tr>
-        <td style="font-family:var(--font-mono); font-weight:700;">${s.is_number}</td>
-        <td>${s.title}</td>
-        <td>${s.category}</td>
-        <td>${s.sector}</td>
-        <td>${s.edition}</td>
-        <td><span class="mini-tag ${s.status === 'ACTIVE' ? 'active-green' : ''}" style="background:#ECFDF5; color:#059669;">${s.status}</span></td>
-        <td><button class="action-circle-btn" style="width:28px; height:28px; font-size:12px;" onclick="showToast('Inspecting ${s.is_number}')">&rarr;</button></td>
-      </tr>
-    `).join('');
-  } catch(e) {
-    tbody.innerHTML = '<tr><td colspan="7">Unable to load catalog.</td></tr>';
-  }
-}
+        <td style="font-family:var(--font-mono); font-weight:700;">
+          ${s.is_number}
+        </td>
 
-async function loadReviewQueue() {
-  const tbody = document.getElementById('reviewTableBody');
-  tbody.innerHTML = '<tr><td colspan="6">Loading review queue...</td></tr>';
-  try {
-    const res = await fetch('/api/review/queue');
-    const data = await res.json();
-    tbody.innerHTML = (data.items || []).map(i => `
+        <td>${s.title}</td>
+
+        <td>${s.category}</td>
+
+        <td>${s.sector}</td>
+
+        <td>${s.edition}</td>
+
+        <td>
+          <span
+            class="mini-tag ${s.status === "ACTIVE" ? "active-green" : ""}"
+            style="background:#ECFDF5; color:#059669;"
+          >
+            ${s.status}
+          </span>
+        </td>
+
+        <td>
+          <button
+            class="action-circle-btn"
+            style="width:28px; height:28px; font-size:12px;"
+            onclick="showToast('Inspecting ${s.is_number}')"
+          >
+            &rarr;
+          </button>
+        </td>
+      </tr>
+    `,
+            )
+            .join("");
+        } catch (e) {
+          console.error("Catalog loading failed:", e);
+
+          tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align:center; padding:30px;">
+          Unable to load catalog.
+        </td>
+      </tr>
+    `;
+        }
+      }
+
+      async function searchStandards() {
+        const input = document.getElementById("standardsSearchInput");
+        const tbody = document.getElementById("catalogTableBody");
+
+        if (!input || !tbody) return;
+
+        const query = input.value.trim();
+
+        tbody.innerHTML = `
+    <tr>
+      <td colspan="7" style="text-align:center; padding:30px;">
+        Searching standards...
+      </td>
+    </tr>
+  `;
+
+        try {
+          const url = query
+            ? `/api/search_standards?query=${encodeURIComponent(query)}`
+            : "/api/standards";
+
+          const res = await fetch(url);
+
+          if (!res.ok) {
+            throw new Error("Search request failed");
+          }
+
+          const data = await res.json();
+          const items = data.items || [];
+
+          if (items.length === 0) {
+            tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center; padding:40px; color:#64748B;">
+            No standards found for "<strong>${query}</strong>"
+          </td>
+        </tr>
+      `;
+            return;
+          }
+
+          tbody.innerHTML = items
+            .map(
+              (s) => `
+      <tr>
+        <td style="font-family:var(--font-mono); font-weight:700;">
+          ${s.is_number}
+        </td>
+
+        <td>${s.title}</td>
+
+        <td>${s.category}</td>
+
+        <td>${s.sector}</td>
+
+        <td>${s.edition}</td>
+
+        <td>
+          <span
+            class="mini-tag ${s.status === "ACTIVE" ? "active-green" : ""}"
+            style="background:#ECFDF5; color:#059669;"
+          >
+            ${s.status}
+          </span>
+        </td>
+
+        <td>
+          <button
+            class="action-circle-btn"
+            style="width:28px; height:28px; font-size:12px;"
+            onclick="showToast('Inspecting ${s.is_number}')"
+          >
+            &rarr;
+          </button>
+        </td>
+      </tr>
+    `,
+            )
+            .join("");
+        } catch (error) {
+          console.error("Standards search failed:", error);
+
+          tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align:center; padding:30px; color:#DC2626;">
+          Unable to search standards.
+        </td>
+      </tr>
+    `;
+        }
+      }
+
+      async function loadReviewQueue() {
+        const tbody = document.getElementById("reviewTableBody");
+        tbody.innerHTML =
+          '<tr><td colspan="6">Loading review queue...</td></tr>';
+        try {
+          const res = await fetch("/api/review/queue");
+          const data = await res.json();
+          tbody.innerHTML = (data.items || [])
+            .map(
+              (i) => `
       <tr>
         <td style="font-family:var(--font-mono); font-weight:700;">${i.id}</td>
-        <td><span style="font-size:11px; font-weight:700; color:${i.severity === 'HIGH' ? '#DC2626' : '#D97706'}">${i.severity}</span></td>
+        <td><span style="font-size:11px; font-weight:700; color:${i.severity === "HIGH" ? "#DC2626" : "#D97706"}">${i.severity}</span></td>
         <td><code>${i.reason}</code></td>
         <td>${i.query}</td>
         <td><span class="mini-tag" style="background:#FEF3C7; color:#B45309;">${i.status}</span></td>
         <td><button class="sample-prompt-btn" onclick="showToast('Case ${i.id} resolved')">Resolve</button></td>
       </tr>
-    `).join('');
-  } catch(e) {
-    tbody.innerHTML = '<tr><td colspan="6">Unable to load review queue.</td></tr>';
-  }
-}
+    `,
+            )
+            .join("");
+        } catch (e) {
+          tbody.innerHTML =
+            '<tr><td colspan="6">Unable to load review queue.</td></tr>';
+        }
+      }
 
-async function loadAuditLog() {
-  const tbody = document.getElementById('auditTableBody');
-  tbody.innerHTML = '<tr><td colspan="5">Loading audit records...</td></tr>';
-  try {
-    const res = await fetch('/api/audit');
-    const data = await res.json();
-    tbody.innerHTML = (data.events || []).map(e => `
+      async function loadAuditLog() {
+        const tbody = document.getElementById("auditTableBody");
+        tbody.innerHTML =
+          '<tr><td colspan="5">Loading audit records...</td></tr>';
+        try {
+          const res = await fetch("/api/audit");
+          const data = await res.json();
+          tbody.innerHTML = (data.events || [])
+            .map(
+              (e) => `
       <tr>
         <td>${e.time}</td>
         <td><strong>${e.actor}</strong></td>
@@ -1939,25 +2847,31 @@ async function loadAuditLog() {
         <td><span class="mini-tag active-green" style="background:#ECFDF5; color:#059669;">${e.status}</span></td>
         <td>${e.latency}</td>
       </tr>
-    `).join('');
-  } catch(e) {
-    tbody.innerHTML = '<tr><td colspan="5">Unable to load audit log.</td></tr>';
-  }
-}
+    `,
+            )
+            .join("");
+        } catch (e) {
+          tbody.innerHTML =
+            '<tr><td colspan="5">Unable to load audit log.</td></tr>';
+        }
+      }
 
-function copyClause() {
-  const text = document.getElementById('clausePreviewText').textContent.trim();
-  navigator.clipboard.writeText(text);
-  showToast("Grounded clause copied to clipboard!");
-}
+      function copyClause() {
+        const text = document
+          .getElementById("clausePreviewText")
+          .textContent.trim();
+        navigator.clipboard.writeText(text);
+        showToast("Grounded clause copied to clipboard!");
+      }
 
-function showToast(msg) {
-  const toast = document.getElementById('toastNotice');
-  toast.textContent = msg;
-  toast.style.display = 'block';
-  setTimeout(() => { toast.style.display = 'none'; }, 2200);
-}
-</script>
-
-</body>
+      function showToast(msg) {
+        const toast = document.getElementById("toastNotice");
+        toast.textContent = msg;
+        toast.style.display = "block";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 2200);
+      }
+    </script>
+  </body>
 </html>

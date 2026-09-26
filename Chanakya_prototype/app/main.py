@@ -56,6 +56,10 @@ class RecommendRequest(BaseModel):
     text: str = Field(..., description="Procurement requirement text or tender excerpt")
     demo_mode: bool = Field(default=True, description="Enable simulated pipeline execution")
 
+class SearchStandardsRequest(BaseModel):
+    query: str = Field(..., description="Natural language procurement requirement")
+    demo_mode: bool = Field(default=True, description="Enable simulated pipeline execution")
+
 class FeedbackRequest(BaseModel):
     is_number: Optional[str] = Field(None, description="Target IS number if applicable")
     decision: str = Field(..., description="Feedback action: accept, correct, or review")
@@ -90,10 +94,44 @@ def get_demo_response():
 def list_standards():
     """Return synthetic standards catalog items."""
     standards = DATA.get("standards", [])
+
     return {
         "items": standards,
         "count": len(standards),
-        "disclaimer": "Synthetic demo records labeled IS DEMO-*"
+        "disclaimer": "Synthetic demo records labeled IS DEMO-*",
+    }
+
+
+@app.get("/api/search_standards")
+def search_standards(query: str = ""):
+    """Return standards matching a free-text query."""
+
+    query = query.strip().lower()
+
+    standards = DATA.get("standards", [])
+
+    if not query:
+        return {
+            "items": standards,
+            "count": len(standards),
+        }
+
+    matched = []
+
+    for s in standards:
+        searchable = (
+            f"{s.get('is_number', '')} "
+            f"{s.get('title', '')} "
+            f"{s.get('category', '')} "
+            f"{s.get('sector', '')}"
+        ).lower()
+
+        if query in searchable:
+            matched.append(s)
+
+    return {
+        "items": matched,
+        "count": len(matched),
     }
 
 @app.get("/api/standards/{is_number:path}")
@@ -383,6 +421,77 @@ def recommend(req: RecommendRequest):
         ]
         res["gaps"] = [{"status": "PRESENT", "severity": "INFO", "cited": "IS 694:2010", "required": "IS 694:2010", "message": "Compliant low-voltage electrification cable."}]
         res["clause_draft"] = "All building internal wiring conductors shall be FRLS PVC insulated single core copper cables conforming to IS 694:2010, rated 1100 V, carrying valid BIS certification under Scheme-I."
+
+    elif any(kw in low for kw in ["led", "street light", "luminaire", "10322", "16107"]):
+        res["extracted"] = {
+            "product": "outdoor led street light luminaire",
+            "material": "Pressure die-cast aluminium housing + optical lens",
+            "application": "municipal road & highway lighting",
+            "parameters": [{"name": "system wattage", "value": "90", "unit": "W"}, {"name": "ingress protection", "value": "IP 66", "unit": ""}],
+            "category": "luminaires & lighting",
+            "sector": "electrical engineering"
+        }
+        res["recommendations"] = [
+            {
+                "is_number": "IS 10322 (Part 5/Sec 3):2012",
+                "title": "Luminaires — Particular Requirements — Section 3: Luminaires for Road and Street Lighting",
+                "match": 98,
+                "confidence": "HIGH",
+                "necessity": "ESSENTIAL",
+                "status": "ACTIVE",
+                "currency": "Current (Reaffirmed 2022)",
+                "certification": "Scheme-II (CRS Registration) • Mandatory",
+                "coverage": ["roadway & street luminaires", "dielectric safety", "thermal endurance", "IP65/IP66 enclosure"],
+                "evidence": ["MeitY Compulsory Registration Order S.O. 2357(E)", "BIS CRS Gazette"],
+                "why": "Sole statutory safety standard for public street lighting fixtures. Mandates Scheme-II CRS registration under MeitY QCO."
+            },
+            {
+                "is_number": "IS 16107 (Part 2/Sec 1):2012",
+                "title": "Luminaires Performance — Particular Requirements — Section 1: LED Luminaires",
+                "match": 91,
+                "confidence": "HIGH",
+                "necessity": "CONDITIONAL",
+                "status": "ACTIVE",
+                "currency": "Current (Reaffirmed 2021)",
+                "certification": "Normative Test Protocol",
+                "coverage": ["photometric performance", "luminous efficacy lm/W", "driver power factor"],
+                "evidence": ["Normative companion for LED performance verification"],
+                "why": "Normative companion standard governing luminous efficacy and photometric verification protocols for 90W LED fixtures."
+            }
+        ]
+        res["gaps"] = [
+            {"status": "PRESENT", "severity": "INFO", "cited": "IS 10322 (Part 5/Sec 3):2012", "required": "IS 10322 (Part 5/Sec 3):2012", "message": "Street lighting luminaire complies with MeitY CRS requirements."}
+        ]
+        res["clause_draft"] = "All outdoor street lighting luminaires shall be 90W LED fixtures complying with IS 10322 (Part 5/Sec 3):2012 with valid BIS Compulsory Registration Scheme (CRS) marking under MeitY Gazette Order S.O. 2357(E). Luminous efficacy shall be verified as per IS 16107 (Part 2/Sec 1):2012."
+
+    elif any(kw in low for kw in ["helmet", "head protection", "hard hat", "2925"]):
+        res["extracted"] = {
+            "product": "industrial safety helmet",
+            "material": "Non-metallic high density polymer",
+            "application": "head protection for construction workers",
+            "parameters": [{"name": "shock absorption", "value": "< 5.0", "unit": "kN"}, {"name": "penetration test", "value": "pass", "unit": ""}],
+            "category": "personal protective equipment",
+            "sector": "industrial safety"
+        }
+        res["recommendations"] = [
+            {
+                "is_number": "IS 2925:1984",
+                "title": "Specification for Industrial Safety Helmets",
+                "match": 97,
+                "confidence": "HIGH",
+                "necessity": "ESSENTIAL",
+                "status": "ACTIVE",
+                "currency": "Current (Reaffirmed 2020)",
+                "certification": "Scheme-I (ISI Mark) • Mandatory",
+                "coverage": ["construction site head protection", "mechanical shock absorption", "penetration resistance", "flame retardance"],
+                "evidence": ["DPIIT Safety Helmets QCO Order S.O. 1165(E)"],
+                "why": "Mandatory standard under DPIIT Quality Control Order. Strictly enforces Scheme-I ISI Mark certification for industrial helmets."
+            }
+        ]
+        res["gaps"] = [
+            {"status": "PRESENT", "severity": "INFO", "cited": "IS 2925:1984", "required": "IS 2925:1984", "message": "Industrial safety helmet complies with mandatory DPIIT QCO norms."}
+        ]
+        res["clause_draft"] = "The supplied safety helmets shall strictly conform to IS 2925:1984 (Reaffirmed 2020) with mandatory BIS Scheme-I (ISI Mark) certification under DPIIT Order S.O. 1165(E). Manufacturer batch test certificates for shock absorption must be submitted."
 
     elif any(kw in low for kw in ["rubber", "lining", "vulcanized", "tank", "118"]):
         res["extracted"] = {
