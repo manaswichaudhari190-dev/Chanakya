@@ -1,0 +1,392 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Inter Variable", "Inter", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --font-mono: "Linear Mono", "Berkeley Mono", ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ============================================================
+   CHANAKYA — Linear.app exact design system
+   Tokens extracted from linear.app production CSS:
+     page bg #08090A · surface #0F1011 · panel #161718
+     borders rgba(255,255,255,0.05–0.12) / #23252A / #34343A
+     CTA #E5E5E6 pill on #08090A
+   Typography — Linear exact:
+     @font-face Inter Variable v4.1 (self-hosted, SIL OFL)
+     --font-regular: "Inter Variable", "SF Pro Display",
+       -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+       Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+       sans-serif
+     --font-monospace: "Berkeley Mono", ui-monospace, "SF Mono",
+       "Menlo", monospace
+     --font-settings: "cv01", "ss03"  (Linear's OpenType
+       geometric alternates + slanted 6/9 set)
+   Text — pure white only (per spec): #FFFFFF primary,
+     white/88 body, white/72 secondary, white/60 muted
+   ============================================================ */
+
+/* Linear's exact @font-face recipe — Inter Variable v4.1
+   (same file Linear serves: InterVariable.woff2?v=4.1) */
+@font-face {
+  font-family: "Inter Variable";
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/InterVariable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+  src: url("/fonts/InterVariable-Italic.woff2") format("woff2");
+}
+
+:root {
+  /* Linear's exact font custom properties */
+  --font-settings: "cv01", "ss03";
+  --font-regular: "Inter Variable", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --font-monospace: "Linear Mono", "Berkeley Mono", ui-monospace, "SF Mono", "SFMono-Regular", "Menlo", monospace;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background: #08090a;
+  font-family: var(--font-regular);
+}
+
+body {
+  color: #ffffff;
+  font-feature-settings: var(--font-settings);
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(92, 168, 255, 0.30);
+  color: #fff;
+}
+
+/* ---------- scrollbar ---------- */
+.chk-scroll::-webkit-scrollbar,
+.chk-scroll-x::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.chk-scroll::-webkit-scrollbar-track,
+.chk-scroll-x::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chk-scroll::-webkit-scrollbar-thumb,
+.chk-scroll-x::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+.chk-scroll::-webkit-scrollbar-thumb:hover,
+.chk-scroll-x::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ---------- typography helpers ---------- */
+.chk-display {
+  /* Linear exact: h1 tracking -1.408px @ 64px = -0.022em, weight 510 */
+  letter-spacing: -0.022em;
+  line-height: 1.02;
+  font-weight: 510;
+  color: #ffffff;
+}
+
+/* Linear's slashed-zero treatment for numeric displays:
+   font-feature-settings: var(--font-settings), "zero" */
+.chk-zero {
+  font-feature-settings: var(--font-settings), "zero";
+}
+
+.chk-mono {
+  font-family: var(--font-monospace);
+  font-feature-settings: var(--font-settings);
+}
+
+.chk-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* anchor navigation offset for the fixed navbar */
+section[id],
+footer[id] {
+  scroll-margin-top: 64px;
+}
+
+/* ---------- background grain (CSS-only noise) ---------- */
+.chk-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ---------- surfaces (Linear exact recipes) ---------- */
+/* Linear comment-card recipe: bg #0F1011 + 3% white overlay,
+   1px rgba(255,255,255,0.08) border */
+.chk-panel {
+  background-color: #0f1011;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+/* Linear card recipe: bg #161718 + 4% white overlay,
+   1px rgba(255,255,255,0.06) border */
+.chk-panel-deep {
+  background-color: #161718;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+}
+
+.chk-app-frame {
+  background: #0f1011;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+    0 30px 80px -20px rgba(0, 0, 0, 0.8),
+    0 4px 18px -6px rgba(0, 0, 0, 0.55);
+}
+
+/* ---------- glow borders ---------- */
+.chk-glow-border {
+  position: relative;
+  border-radius: 18px;
+  background-clip: padding-box;
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(#0f1011, #0f1011),
+    linear-gradient(140deg, rgba(255, 255, 255, 0.22), rgba(63, 184, 175, 0.14) 38%, rgba(255, 255, 255, 0.06) 62%, rgba(92, 168, 255, 0.28));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* ---------- graph animations ---------- */
+@keyframes chk-dash {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+.chk-edge {
+  stroke-dasharray: 3 7;
+  animation: chk-dash 1.6s linear infinite;
+}
+.chk-edge-slow {
+  stroke-dasharray: 4 10;
+  animation: chk-dash 3.4s linear infinite;
+}
+
+@keyframes chk-pulse-soft {
+  0%, 100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.chk-pulse {
+  animation: chk-pulse-soft 2.8s ease-in-out infinite;
+}
+
+@keyframes chk-breathe {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+.chk-breathe {
+  animation: chk-breathe 7s ease-in-out infinite;
+}
+
+@keyframes chk-float-y {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+.chk-float {
+  animation: chk-float-y 7.5s ease-in-out infinite;
+}
+
+@keyframes chk-spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.chk-spin-slow {
+  animation: chk-spin-slow 22s linear infinite;
+}
+
+/* ---------- hairline dividers ---------- */
+.chk-hairline {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09) 18%, rgba(255, 255, 255, 0.09) 82%, transparent);
+  height: 1px;
+}
+
+/* ---------- perspective wrapper for product shots ---------- */
+.chk-perspective {
+  perspective: 2200px;
+}
+
+/* ---------- mask fade at bottom of previews ---------- */
+.chk-fade-bottom {
+  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .chk-edge,
+  .chk-edge-slow,
+  .chk-pulse,
+  .chk-breathe,
+  .chk-float,
+  .chk-spin-slow {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
