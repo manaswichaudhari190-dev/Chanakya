@@ -44,7 +44,7 @@ export function Footer({ navigate }: FooterProps) {
   return (
     <footer
       id="resources"
-      className="relative mt-auto border-t border-white/[0.06] bg-[#08090A]"
+      className="relative mt-auto border-t border-white/[0.06] bg-[#000000]"
     >
       <div className="mx-auto max-w-[1200px] px-5 pb-10 pt-16 sm:px-8">
         <div className="grid gap-12 md:grid-cols-[1.4fr_repeat(3,1fr)]">

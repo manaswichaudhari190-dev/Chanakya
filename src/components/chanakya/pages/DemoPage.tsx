@@ -2244,9 +2244,9 @@ export function DemoPage({
     SIDEBAR_ITEMS.find((i) => i.id === activeItem)?.label ?? "Dashboard";
 
   return (
-    <div className="relative z-[1] flex min-h-screen flex-col bg-[#08090A]">
+    <div className="relative z-[1] flex min-h-screen flex-col bg-[#000000]">
       {/* ---------------- app top bar ---------------- */}
-      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#08090A]/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#000000]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-[50px] max-w-[1400px] items-center justify-between px-5">
           <div className="flex items-center gap-4">
             <button

@@ -12,34 +12,21 @@ import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, type ReactNode } from "react";
 
 /* ------------------------------------------------------------------ */
-/* Logo — original CHANAKYA mark (abstract "circuit pillar")          */
+/* Logo — CHANAKYA brand mark                                          */
 /* ------------------------------------------------------------------ */
 
 export function LogoMark({ size = 22 }: { size?: number }) {
   return (
-    <svg
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/chanakya_logo.png"
+      alt="CHANAKYA"
       width={size}
       height={size}
-      viewBox="0 0 24 24"
-      fill="none"
       aria-hidden="true"
-      className="shrink-0"
-    >
-      <rect x="0.75" y="0.75" width="22.5" height="22.5" rx="6" stroke="url(#chk-lg)" strokeWidth="1.2" />
-      <path
-        d="M7.5 17.5V6.8c0-.35.42-.53.67-.28l8.6 8.6c.25.25.73.07.73-.28V6.5"
-        stroke="url(#chk-lg)"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-      <circle cx="7.5" cy="19.2" r="1.15" fill="#3FB8AF" />
-      <defs>
-        <linearGradient id="chk-lg" x1="2" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5CA8FF" />
-          <stop offset="1" stopColor="#3FB8AF" />
-        </linearGradient>
-      </defs>
-    </svg>
+      className="shrink-0 object-contain"
+      style={{ width: size, height: size }}
+    />
   );
 }
 
