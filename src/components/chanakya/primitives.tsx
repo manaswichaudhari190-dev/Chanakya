@@ -374,37 +374,5 @@ export function MetaRow({
 /* ------------------------------------------------------------------ */
 
 export function AmbientBackground() {
-  return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      {/* top atmospheric glow */}
-      <div
-        className="chk-breathe absolute -top-[420px] left-1/2 h-[900px] w-[1400px] -translate-x-1/2 rounded-[full]"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(92,168,255,0.10), rgba(63,184,175,0.05) 45%, transparent 72%)",
-        }}
-      />
-      {/* faint grid */}
-      <div
-        className="absolute inset-0 opacity-[0.55]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)",
-          backgroundSize: "72px 72px",
-          maskImage:
-            "radial-gradient(ellipse 90% 60% at 50% 0%, black 30%, transparent 75%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 90% 60% at 50% 0%, black 30%, transparent 75%)",
-        }}
-      />
-      {/* second soft glow lower on the page */}
-      <div
-        className="absolute left-[70%] top-[160%] h-[800px] w-[900px] -translate-x-1/2 rounded-[full]"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(92,168,255,0.06), transparent 70%)",
-        }}
-      />
-    </div>
-  );
+  return null;
 }

@@ -106,15 +106,6 @@ export function ProductPreview() {
       aria-label="CHANAKYA application preview"
       className="relative px-4 pb-8 sm:px-8"
     >
-      {/* ambient glow behind the frame */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[8%] h-[560px] w-[min(1060px,96vw)] -translate-x-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(92,168,255,0.13), rgba(63,184,175,0.05) 52%, transparent 74%)",
-        }}
-      />
 
       <motion.div
         style={{ rotateX, scale, transformPerspective: 2200 }}

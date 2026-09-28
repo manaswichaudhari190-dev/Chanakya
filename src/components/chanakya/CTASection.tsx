@@ -19,16 +19,7 @@ export function CTASection({
     <section id="cta" className="relative pb-32 pt-16 sm:pb-40" aria-labelledby="cta-heading">
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <Reveal>
-          <div className="chk-glow-border relative overflow-hidden px-6 py-20 text-center sm:px-12 sm:py-24">
-            {/* radial glow */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[880px] max-w-[95%] -translate-x-1/2 -translate-y-1/2 rounded-full chk-breathe"
-              style={{
-                background:
-                  "radial-gradient(closest-side, rgba(92,168,255,0.10), rgba(63,184,175,0.06) 48%, transparent 72%)",
-              }}
-            />
+          <div className="chk-panel relative overflow-hidden px-6 py-20 text-center sm:px-12 sm:py-24">
             {/* hairline arcs */}
             <div
               aria-hidden

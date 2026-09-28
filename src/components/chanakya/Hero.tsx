@@ -32,28 +32,6 @@ export function Hero({ onPrimary }: { onPrimary: () => void }) {
       onMouseMove={onMouseMove}
       className="relative flex min-h-[92vh] flex-col items-center justify-center overflow-hidden px-5 pb-24 pt-40 sm:px-8"
     >
-      {/* cursor glow */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-[600px] w-[600px] rounded-full"
-        style={{
-          x: sx,
-          y: sy,
-          background:
-            "radial-gradient(closest-side, rgba(92,168,255,0.07), rgba(63,184,175,0.05) 46%, transparent 70%)",
-        }}
-      />
-
-      {/* beam behind heading */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[210px] h-[340px] w-[820px] max-w-[92vw] -translate-x-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(92,168,255,0.09), transparent 72%)",
-        }}
-      />
-
       <div className="relative z-10 mx-auto flex max-w-[1020px] flex-col items-center text-center">
         {/* eyebrow */}
         <motion.button

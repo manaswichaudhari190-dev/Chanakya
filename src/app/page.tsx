@@ -108,7 +108,7 @@ export default function Home() {
   const isLanding = activeView === "landing";
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#08090A] text-white">
+    <div className="relative flex min-h-screen flex-col bg-[#000000] text-white">
       {/* atmospheric gradients — landing only */}
       {isLanding && <AmbientBackground />}
 
